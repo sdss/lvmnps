@@ -72,10 +72,10 @@ async def offall(command):
         outlet.off()
     return command.finish(text="Turn off all of the outlet done!")
 
-class NPCActor(AMQPActor):
+class NpsActor(AMQPActor):
     def __init__(self):
         super().__init__(
-            name="npc_actor",
+            name="nps_actor",
             user="guest",
             password="guest",
             host="localhost",
@@ -85,7 +85,7 @@ class NPCActor(AMQPActor):
 
 
 async def run_actor():
-    actor = await NPCActor().start()
+    actor = await NpsActor().start()
     await actor.run_forever()
 
 
