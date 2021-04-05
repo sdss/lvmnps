@@ -40,5 +40,5 @@ async def status(command: Command):
             "state_8":switch[7].state,
         }
     )
-
+    
     return True

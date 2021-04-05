@@ -15,7 +15,7 @@ from clu.command import Command
 from npsactor.exceptions import NpsActorError
 
 #from ..tools import check_controller, error_controller, parallel_controllers
-from . import parser
+from npsactor.actor.commands import parser
 
 import dlipower
 
