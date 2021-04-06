@@ -13,7 +13,7 @@ import os
 import warnings
 from contextlib import suppress
 
-from .commands import parser as nps_command_parser
+from npsactor.actor.commands import parser as nps_command_parser
 from clu.actor import AMQPActor
 
 __all__ = ["NpsActor"]
@@ -35,9 +35,6 @@ class NpsActor(AMQPActor):
             port=5672,
             version="0.1.0",
             )
-
-        self.switch = switch
-        self.outlet_number = outlet_number
 
     async def start(self):
         await super().start()
