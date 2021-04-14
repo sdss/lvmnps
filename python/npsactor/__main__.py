@@ -30,7 +30,7 @@ def NpsActor(ctx, config_file, verbose):
     ctx.obj = {"verbose": verbose, "config_file": config_file}
 
 
-@NpsActor.group(cls=DaemonGroup, prog="actor", workdir=os.getcwd())
+@NpsActor.group(cls=DaemonGroup, prog="nps_actor", workdir=os.getcwd())
 @click.pass_context
 @cli_coro
 async def actor(ctx):
