@@ -9,7 +9,7 @@ NpsActor Reference
 Main
 ----
 
-.. automodule:: NpsActor.main
+.. automodule:: npsactor.main
    :members:
    :undoc-members:
    :show-inheritance:

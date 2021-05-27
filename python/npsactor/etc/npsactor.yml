@@ -1,0 +1,16 @@
+# A dictionary of controller name to NPS controller connection parameters.
+switches:
+    nps1:
+        host: 10.7.45.22
+        port: 80
+        iserid: 'admin'
+        password: 'rLXR3KxUqiCPGvA'
+
+timeouts:
+        switch_connect: 1
+
+# Actor configuration for the AMQPActor class
+actor:
+    name: npsactor
+    host: localhost
+    port: 5672
