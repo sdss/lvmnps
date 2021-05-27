@@ -14,7 +14,7 @@ import os
 from pkg_resources import parse_version
 
 try:
-    from NpsActor import __version__
+    from npsactor import __version__
 except ModuleNotFoundError:
     from sdsstools import get_package_version
     __version__ = get_package_version(__file__, 'sdss-npsactor') or 'dev'

@@ -36,12 +36,13 @@ python = "^3.7"
 sdss-tree = ">=2.15.2"
 sdss-access = ">=0.2.3"
 sdsstools = ">=0.4.0"
-Sphinx = {version="^3.0.0", optional=true}
+Sphinx = {version="^4.0.2", optional=true}
 sphinx_bootstrap_theme = { version=">=0.4.12", optional=true}
 daemonocle = "^1.1.1"
 click-default-group = "^1.2.2"
 dlipower = "^1.0.176"
 sdss-clu = "^1.0.3"
+sphinx-bootstrap-theme = "^0.7.1"
 
 [tool.poetry.dev-dependencies]
 ipython = ">=7.11.0"
