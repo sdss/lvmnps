@@ -11,55 +11,73 @@ from __future__ import annotations
 import click
 from clu.command import Command
 
-#from npsactor.controller.controller import NpsController
 from npsactor.exceptions import NpsActorError
 
-#from ..tools import check_controller, error_controller, parallel_controllers
 from npsactor.actor.commands import parser
+from npsactor.switch.dlipower import PowerSwitch
 
-import dlipower
-
-switch = dlipower.PowerSwitch(hostname="10.7.45.22",userid="admin",password='rLXR3KxUqiCPGvA')
 
 @parser.command()
 @click.argument("OUTLET", type=float)
-async def on(command:Command, outlet):
+async def on(command:Command, switches: dict[str, PowerSwitch], outlet):
     """Turn on the Outlet"""
 
     command.info(text="Turn on the outlet %d" % (outlet))
 
-    switch.on(outlet)
+    for switch in switches:
+        if switches[switch].name == 'nps1':
+            try:
+                switches[switch].on(outlet)
+            except NpsActorError as err:
+                return command.fail(error=str(err))
 
     return command.finish(text="Turn on the outlet %d done!" % (outlet))
 
 @parser.command()
 @click.argument("OUTLET", type=float)
-async def off(command:Command, outlet):
+async def off(command:Command, switches : dict[str, PowerSwitch], outlet):
     """Turn off the Outlet"""
 
     command.info(text="Turn off the outlet %d" % (outlet))
 
-    switch.off(outlet)
+    for switch in switches:
+        if switches[switch].name == 'nps1':
+            try:
+                switches[switch].off(outlet)
+            except NpsActorError as err:
+                return command.fail(error=str(err))
 
     return command.finish(text="Turn off the outlet %d done!" % (outlet))
 
 @parser.command()
-async def onall(command:Command):
+async def onall(command:Command, switches : dict[str, PowerSwitch]):
     """Turn on all Outlet"""
 
     command.info(text="Turn on all of the outlet")
 
-    for outlet in switch:
-        outlet.on()
+    for switch in switches:
+        if switches[switch].name == 'nps1':
+            try:
+                for outlet in switches[switch]:
+                    outlet.on()
+            except NpsActorError as err:
+                return command.fail(error=str(err))
+
     return command.finish(text="Turn on all of the outlet done!")
 
 @parser.command()
-async def offall(command:Command):
+async def offall(command:Command, switch : PowerSwitch):
     """Turn off all Outlet"""
 
     command.info(text="Turn off all of the outlet")
 
-    for outlet in switch:
-        outlet.off()
+    for switch in switches:
+        if switches[switch].name == 'nps1':
+            try:
+                for outlet in switches[switch]:
+                    outlet.off()
+            except NpsActorError as err:
+                return command.fail(error=str(err))
+    
     return command.finish(text="Turn off all of the outlet done!")
 

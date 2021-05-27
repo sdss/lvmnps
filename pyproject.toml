@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "sdss-NpsActor"
+name = "sdss-npsactor"
 version = "0.1.0-alpha.0"
 description = "Simple Template package for creating SDSS Python projects"
 authors = ["Changgon Kim <changgonkim@khu.ac.kr>"]
 license = "BSD-3-Clause"
 readme = "README.md"
-homepage = "https://github.com/sdss/NpsActor"
-repository = "https://github.com/sdss/NpsActor"
-documentation = "https://sdss-NpsActor.readthedocs.org"
+homepage = "https://github.com/sdss/npsactor"
+repository = "https://github.com/sdss/npsactor"
+documentation = "https://sdss-npsactor.readthedocs.org"
 keywords = ["astronomy", "software"]
 classifiers = [
     "Intended Audience :: Science/Research",
@@ -20,16 +20,16 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 packages = [
-    { include = "NpsActor", from = "python" }
+    { include = "npsactor", from = "python" }
 ]
-include = ["python/NpsActor/etc/*", "cextern/**/*", "LICENSE.md"]
+include = ["python/npsactor/etc/*", "cextern/**/*", "LICENSE.md"]
 
 [tool.poetry.build]
 script = "build.py"
 generate-setup-file = false
 
 [tool.poetry.scripts]
-NpsActor = "NpsActor.__main__:main"
+npsactor = "npsactor.__main__:npsactor"
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -41,6 +41,7 @@ sphinx_bootstrap_theme = { version=">=0.4.12", optional=true}
 daemonocle = "^1.1.1"
 click-default-group = "^1.2.2"
 dlipower = "^1.0.176"
+sdss-clu = "^1.0.3"
 
 [tool.poetry.dev-dependencies]
 ipython = ">=7.11.0"
@@ -73,11 +74,11 @@ lines_after_imports = 2
 use_parentheses = true
 
 [tool.pytest.ini_options]
-addopts = "--cov NpsActor --cov-report xml --cov-report html --cov-report term"
+addopts = "--cov npsactor --cov-report xml --cov-report html --cov-report term"
 
 [tool.coverage.run]
 branch = true
-include = ["python/NpsActor/*"]
+include = ["python/npsactor/*"]
 omit = [
     "*/__init__.py",
 ]

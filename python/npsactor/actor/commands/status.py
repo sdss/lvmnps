@@ -10,16 +10,25 @@ from __future__ import annotations
 
 from clu.command import Command
 from npsactor.actor.commands import parser
+from npsactor.switch import dlipower
+from npsactor.switch.dlipower import PowerSwitch
+from npsactor.exceptions import NpsActorError
+#import dlipower
 
-
-import dlipower
-
-switch = dlipower.PowerSwitch(hostname="10.7.45.22",userid="admin",password='rLXR3KxUqiCPGvA')
+#switch = dlipower.PowerSwitch(hostname="10.7.45.22",userid="admin",password='rLXR3KxUqiCPGvA')
 
 @parser.command()
-async def status(command: Command):
+async def status(command: Command, switches: dict[str, PowerSwitch]):
     """print the status of the NPS."""
-
+    
+    for switch in switches:
+        if switches[switch].name == 'nps1':
+            command.info(text='name is nps1')
+        try:
+            command.info(text="Status of the NPS", status = switches[switch].getstatus())
+        except NpsActorError as err:
+            return command.fail(error=str(err))
+    """
     command.info(
         status = {
             "outlet_1":switch[0].name,
@@ -40,5 +49,5 @@ async def status(command: Command):
             "state_8":switch[7].state,
         }
     )
-    
-    return True
+    """
+    return command.finish()
