@@ -9,10 +9,10 @@
 from __future__ import annotations
 
 from clu.command import Command
-from npsactor.actor.commands import parser
-from npsactor.switch import dlipower
-from npsactor.switch.dlipower import PowerSwitch
-from npsactor.exceptions import NpsActorError
+from lvmnps.actor.commands import parser
+from lvmnps.switch import dlipower
+from lvmnps.switch.dlipower import PowerSwitch
+from lvmnps.exceptions import NpsActorError
 #import dlipower
 
 #switch = dlipower.PowerSwitch(hostname="10.7.45.22",userid="admin",password='rLXR3KxUqiCPGvA')

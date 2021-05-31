@@ -13,13 +13,13 @@ import os
 import warnings
 from contextlib import suppress
 
-from npsactor.actor.commands import parser as nps_command_parser
+from lvmnps.actor.commands import parser as nps_command_parser
 from clu.actor import AMQPActor
-from npsactor.switch.dlipower import PowerSwitch
+from lvmnps.switch.dlipower import PowerSwitch
 
-__all__ = ["npsactor"]
+__all__ = ["lvmnps"]
 
-class npsactor(AMQPActor):
+class lvmnps(AMQPActor):
     """NPS actor.
     In addition to the normal arguments and keyword parameters for
     `~clu.actor.AMQPActor`, the class accepts the following parameters.
@@ -63,9 +63,9 @@ class npsactor(AMQPActor):
     def from_config(cls, config, *args, **kwargs):
         """Creates an actor from a configuration file."""
 
-        instance = super(npsactor, cls).from_config(config, *args, **kwargs)
+        instance = super(lvmnps, cls).from_config(config, *args, **kwargs)
 
-        assert isinstance(instance,npsactor)
+        assert isinstance(instance,lvmnps)
         assert isinstance(instance.config, dict)
 
         if "switches" in instance.config:

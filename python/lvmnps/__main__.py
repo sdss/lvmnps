@@ -6,7 +6,7 @@ from clu.tools import cli_coro
 
 from sdsstools.daemonizer import DaemonGroup
 
-from npsactor.actor.actor import npsactor as NpsActorInstance
+from lvmnps.actor.actor import lvmnps as NpsActorInstance
 
 
 @click.group(cls=DefaultGroup, default="actor", default_if_no_args=True)
@@ -24,29 +24,29 @@ from npsactor.actor.actor import npsactor as NpsActorInstance
     help="Debug mode. Use additional v for more details.",
 )
 @click.pass_context
-def npsactor(ctx, config_file, verbose):
+def lvmnps(ctx, config_file, verbose):
     """Nps controller"""
 
     ctx.obj = {"verbose": verbose, "config_file": config_file}
 
 
-@npsactor.group(cls=DaemonGroup, prog="nps_actor", workdir=os.getcwd())
+@lvmnps.group(cls=DaemonGroup, prog="nps_actor", workdir=os.getcwd())
 @click.pass_context
 @cli_coro
 async def actor(ctx):
     """Runs the actor."""
-    default_config_file = os.path.join(os.path.dirname(__file__), "etc/npsactor.yml")
+    default_config_file = os.path.join(os.path.dirname(__file__), "etc/lvmnps.yml")
     config_file = ctx.obj["config_file"] or default_config_file
 
-    npsactor_obj = NpsActorInstance.from_config(config_file)
+    lvmnps_obj = NpsActorInstance.from_config(config_file)
 
     if ctx.obj["verbose"]:
-        npsactor_obj.log.fh.setLevel(0)
-        npsactor_obj.log.sh.setLevel(0)
+        lvmnps_obj.log.fh.setLevel(0)
+        lvmnps_obj.log.sh.setLevel(0)
 
-    await npsactor_obj.start()
-    await npsactor_obj.run_forever()
+    await lvmnps_obj.start()
+    await lvmnps_obj.run_forever()
 
 if __name__ == "__main__":
-    npsactor()
+    lvmnps()
 

@@ -6,7 +6,7 @@ import warnings
 import click
 from clu.parsers.click import CluGroup, help_, ping, version
 
-from npsactor.exceptions import NpsActorUserWarning
+from lvmnps.exceptions import NpsActorUserWarning
 
 
 @click.group(cls=CluGroup)
@@ -32,6 +32,6 @@ files = [
 
 for file_ in files:
     modname = file_[0:-3].replace("/", ".")
-    mod = importlib.import_module("npsactor.actor.commands." + modname)
+    mod = importlib.import_module("lvmnps.actor.commands." + modname)
 
 os.chdir(cwd)
