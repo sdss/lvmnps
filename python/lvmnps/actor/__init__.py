@@ -6,6 +6,6 @@
 # @Filename: __init__.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
-from npsactor.actor.actor import npsactor
-from npsactor.actor.commands import parser
+from lvmnps.actor.actor import lvmnps
+from lvmnps.actor.commands import parser
 

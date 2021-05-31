@@ -11,10 +11,10 @@ from __future__ import annotations
 import click
 from clu.command import Command
 
-from npsactor.exceptions import NpsActorError
+from lvmnps.exceptions import NpsActorError
 
-from npsactor.actor.commands import parser
-from npsactor.switch.dlipower import PowerSwitch
+from lvmnps.actor.commands import parser
+from lvmnps.switch.dlipower import PowerSwitch
 
 
 @parser.command()

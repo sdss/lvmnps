@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "sdss-npsactor"
+name = "sdss-lvmnps"
 version = "0.1.0-alpha.0"
 description = "Simple Template package for creating SDSS Python projects"
 authors = ["Changgon Kim <changgonkim@khu.ac.kr>"]
 license = "BSD-3-Clause"
 readme = "README.md"
-homepage = "https://github.com/sdss/npsactor"
-repository = "https://github.com/sdss/npsactor"
-documentation = "https://sdss-npsactor.readthedocs.org"
+homepage = "https://github.com/sdss/lvmnps"
+repository = "https://github.com/sdss/lvmnps"
+documentation = "https://sdss-lvmnps.readthedocs.org"
 keywords = ["astronomy", "software"]
 classifiers = [
     "Intended Audience :: Science/Research",
@@ -20,16 +20,16 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 packages = [
-    { include = "npsactor", from = "python" }
+    { include = "lvmnps", from = "python" }
 ]
-include = ["python/npsactor/etc/*", "cextern/**/*", "LICENSE.md"]
+include = ["python/lvmnps/etc/*", "cextern/**/*", "LICENSE.md"]
 
 [tool.poetry.build]
 script = "build.py"
 generate-setup-file = false
 
 [tool.poetry.scripts]
-npsactor = "npsactor.__main__:npsactor"
+npsactor = "lvmnps.__main__:lvmnps"
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -59,6 +59,7 @@ codecov = ">=2.0.15"
 coverage = {version = ">=5.0", extras = ["toml"]}
 ipdb = ">=0.12.3"
 rstcheck = "^3.3.1"
+pylint = "^2.8.2"
 
 [tool.poetry.extras]
 docs = ["Sphinx", "sphinx_bootstrap_theme"]
@@ -67,7 +68,7 @@ docs = ["Sphinx", "sphinx_bootstrap_theme"]
 line_length = 79
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "SDSS", "FIRSTPARTY", "LOCALFOLDER"]
 default_section = "THIRDPARTY"
-known_first_party = "NpsActor"
+known_first_party = "lvmnps"
 known_sdss = ["sdsstools"]
 balanced_wrapping = true
 include_trailing_comma = false
@@ -75,11 +76,11 @@ lines_after_imports = 2
 use_parentheses = true
 
 [tool.pytest.ini_options]
-addopts = "--cov npsactor --cov-report xml --cov-report html --cov-report term"
+addopts = "--cov lvmnps --cov-report xml --cov-report html --cov-report term"
 
 [tool.coverage.run]
 branch = true
-include = ["python/npsactor/*"]
+include = ["python/lvmnps/*"]
 omit = [
     "*/__init__.py",
 ]
