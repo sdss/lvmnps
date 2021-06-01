@@ -226,10 +226,11 @@ class PowerSwitch(Device):
             return outlets[0]
         return outlets
     
-    def getstatus(self):
+    async def getstatus(self):
         i = 1
         data = {}
-        for item in self.statuslist():
+        list = await self.statuslist()
+        for item in list:
             out_name = "outlet_" + str(i)
             out_state = "state_" + str(i)
             data[out_name] = item[1]
