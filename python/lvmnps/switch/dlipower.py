@@ -322,6 +322,7 @@ class PowerSwitch(Device):
             return True
         return False
 
+
     def geturl(self, url='index.htm'):
         """
         Get a URL from the userid/password protected powerswitch page Return None on failure
