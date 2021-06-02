@@ -229,8 +229,8 @@ class PowerSwitch(Device):
     async def getstatus(self):
         i = 1
         data = {}
-        list = await self.statuslist()
-        for item in list:
+        #list = await self.statuslist()
+        for item in self.statuslist():
             out_name = "outlet_" + str(i)
             out_state = "state_" + str(i)
             data[out_name] = item[1]
