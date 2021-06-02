@@ -12,9 +12,10 @@ from urllib.parse import quote
 from clu.device import Device
 
 from bs4 import BeautifulSoup
-
+import httpx
 import asyncio
-import aiohttp
+
+
 
 
 logger = logging.getLogger(__name__)
@@ -123,6 +124,102 @@ class Outlet(object):
     def name(self, new_name):
         """ Set the name of the outlet """
         self.rename(new_name)
+        
+    def _call_it(params):   # pragma: no cover
+         """indirect caller for instance methods and multiprocessing"""
+         instance, name, args = params
+         kwargs = {}
+         return getattr(instance, name)(*args, **kwargs)
+
+
+class DLIPowerException(Exception):
+    """
+    An error occurred talking the the DLI Power switch
+    """
+    pass
+
+
+class Outlet(object):
+    """ the the DLI Power switch
+    """
+    pass
+
+
+class Outlet(object):
+    """
+    A power outlet class
+    """
+    use_description = True
+
+    def __init__(self, switch, outlet_number, description=None, state=None):
+        self.switch = switch
+        self.outlet_number = outlet_number
+        self.description = description
+        if not description:
+            self.description = str(outlet_number)
+        self._state = state
+
+    def __unicode__(self):
+        name = None
+        if self.use_description and self.description:  # pragma: no cover
+            name = '%s' % self.description
+        if not name:
+            name = '%d' % self.outlet_number
+        return '%s:%s' % (name, self._state)
+
+    def __str__(self):
+        return self.__unicode__()
+
+    def __repr__(self):
+        return "<dlipower_outlet '%s'>" % self.__unicode__()
+
+    def _repr_html_(self):  # pragma: no cover
+        """ Display representation as an html table when running in ipython """
+        return u"""<table>
+    <tr><th>Description</th><th>Outlet Number</th><th>State</th></tr>
+    <tr><td>{0:s}</td><td>{1:s}</td><td>{2:s}</td></tr>
+</table>""".format(self.description, self.outlet_number, self.state)
+
+    @property
+    def state(self):
+        """ Return the outlet state """
+        return self._state
+
+    @state.setter
+    def state(self, value):
+        """ Set the outlet state """
+        self._state = value
+        if value in ['off', 'OFF', '0']:
+            self.off()
+        if value in ['on', 'ON', '1']:
+            self.on()
+
+    def off(self):
+        """ Turn the outlet off """
+        return self.switch.off(self.outlet_number)
+
+    def on(self):
+        """ Turn the outlet on """
+        return self.switch.on(self.outlet_number)
+
+    def rename(self, new_name):
+        """
+        Rename the outlet
+        :param new_name: New name for the outlet
+        :return:
+        """
+        return self.switch.set_outlet_name(self.outlet_number, new_name)
+
+    @property
+    def name(self):
+        """ Return the name or description of the outlet """
+        return self.switch.get_outlet_name(self.outlet_number)
+
+    @name.setter
+    def name(self, new_name):
+        """ Set the name of the outlet """
+        self.rename(new_name)
+
 
 
 class PowerSwitch(Device):
@@ -168,22 +265,24 @@ class PowerSwitch(Device):
             self.scheme = 'https'
         self.base_url = '%s://%s' % (self.scheme, self.hostname)
         self._is_admin = True
-        self.session = requests.Session()
-        self.login()
+        self.client = httpx.AsyncClient()
+        login = self.login()
 
-    def __len__(self):
+    async def __len__(self):
         """
         :return: Number of outlets on the switch
         """
+        list = await self.statuslist()
         if self.__len == 0:
-            self.__len = len(self.statuslist())
+            self.__len = len(list)
         return self.__len
 
-    def __repr__(self):
+    async def __repr__(self):
         """
         display the representation
         """
-        if not self.statuslist():
+        list = await self.statuslist()
+        if not list:
             return "Digital Loggers Web Powerswitch " \
                    "%s (UNCONNECTED)" % self.hostname
         output = 'DLIPowerSwitch at %s\n' \
@@ -192,11 +291,12 @@ class PowerSwitch(Device):
             output += '%d\t%-15.15s\t%s\n' % (item[0], item[1], item[2])
         return output
 
-    def _repr_html_(self):
+    async def _repr_html_(self):
         """
         __repr__ in an html table format
         """
-        if not self.statuslist():
+        list = await self.statuslist()
+        if not list:
             return "Digital Loggers Web Powerswitch " \
                    "%s (UNCONNECTED)" % self.hostname
         output = '<table>' \
@@ -205,18 +305,18 @@ class PowerSwitch(Device):
                  '<th>Outlet Number</th>' \
                  '<th>Outlet Name</th>' \
                  '<th>Outlet State</th></tr>\n' % self.hostname
-        for item in self.statuslist():
+        for item in list:
             output += '<tr><td>%d</td><td>%s</td><td>%s</td></tr>\n' % (
                 item[0], item[1], item[2])
         output += '</table>\n'
         return output
 
-    def __getitem__(self, index):
+    async def __getitem__(self, index):
         outlets = []
         if isinstance(index, slice):
-            status = self.statuslist()[index.start:index.stop]
+            status = await self.statuslist()[index.start:index.stop]
         else:
-            status = [self.statuslist()[index]]
+            status = await [self.statuslist()[index]]
         for outlet_status in status:
             power_outlet = Outlet(
                 switch=self,
@@ -242,17 +342,17 @@ class PowerSwitch(Device):
         return data
 
 
-    def login(self):
+    async def login(self):
         self.secure_login = False
-        self.session = requests.Session()
+        self.client = httpx.AsyncClient()
         try:
-            response = self.session.get(self.base_url, verify=False, timeout=self.login_timeout, allow_redirects=False)
+            response = await self.client.get(self.base_url, verify=False, timeout=self.login_timeout, allow_redirects=False)
             if response.is_redirect:
                 self.base_url = response.headers['Location'].rstrip('/')
                 logger.debug(f'Redirecting to: {self.base_url}')
-                response = self.session.get(self.base_url, verify=False, timeout=self.login_timeout)
-        except (requests.exceptions.ConnectTimeout, requests.exceptions.ConnectionError):
-            self.session = None
+                response = await self.client.get(self.base_url, verify=False, timeout=self.login_timeout)
+        except (httpx.ConnectTimeout, httpx.ConnectError):
+            self.client = None
             return
         soup = BeautifulSoup(response.text, 'html.parser')
         fields = {}
@@ -273,10 +373,10 @@ class PowerSwitch(Device):
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
         try:
-            response = self.session.post('%s/login.tgi' % self.base_url, headers=headers, data=data, timeout=self.timeout, verify=False)
-        except requests.exceptions.ConnectTimeout:
+            response = await self.client.post('%s/login.tgi' % self.base_url, headers=headers, data=data, timeout=self.timeout, verify=False)
+        except httpx.TimeoutException:
             self.secure_login = False
-            self.session = None
+            self.client = None
             return
 
         if response.status_code == 200:
@@ -296,7 +396,7 @@ class PowerSwitch(Device):
             return config
         return CONFIG_DEFAULTS
 
-    def save_configuration(self):
+    async def save_configuration(self):
         """ Update the configuration file with the object's settings """
         # Get the configuration from the config file or set to the defaults
         config = self.load_configuration()
@@ -319,9 +419,10 @@ class PowerSwitch(Device):
         else:
             raise DLIPowerException('Unable to open configuration file for write')
 
-    def verify(self):
+    async def verify(self):
         """ Verify we can reach the switch, returns true if ok """
-        if self.geturl():
+        url = await self.geturl()
+        if url:
             return True
         return False
 
@@ -334,33 +435,29 @@ class PowerSwitch(Device):
         result = None
         request = None
         logger.debug(f'Requesting url: {full_url}')
-
         for i in range(0, self.retries):
             try:
-                if self.secure_login:
-                    async with aiohttp.ClientSession() as session:
-                        async with session.get(full_url, timeout=self.timeout, verify=False, allow_redirects=True) as res:
-                            pass
+                if self.secure_login and self.client:
+                    request = await self.client.get(full_url, timeout=self.timeout, verify=False, allow_redirects=True)
                 else:
-                    res = requests.get(full_url, auth=(self.userid, self.password,), timeout=self.timeout, verify=False, allow_redirects=True)  # nosec
-            except requests.exceptions.RequestException as e:
+                    request = httpx.get(full_url, auth=(self.userid, self.password,), timeout=self.timeout, verify=False, allow_redirects=True)  # nosec
+            except httpx.RequestError as e:
                 logger.warning("Request timed out - %d retries left.", self.retries - i - 1)
-                logger.exception("Caught exception %s", str(e))
+                logger.exception("Caught exception: An error occurred while requesting %s", str(e.request.url))
                 continue
-
-            if res.status_code == 200:
-                result = res.content
+            if request.status_code == 200:
+                result = request.content
                 break
-        logger.debug('Response code: %s', res.status_code)
+        logger.debug('Response code: %s', request.status_code)
         logger.debug(f'Response content: {result}')
         return result
 
-    def determine_outlet(self, outlet=None):
+    async def determine_outlet(self, outlet=None):
         """ Get the correct outlet number from the outlet passed in, this
             allows specifying the outlet by the name and making sure the
             returned outlet is an int
         """
-        outlets = self.statuslist()
+        outlets = await self.statuslist()
         if outlet and outlets and isinstance(outlet, str):
             for plug in outlets:
                 plug_name = plug[1]
@@ -374,41 +471,41 @@ class PowerSwitch(Device):
         except ValueError:
             raise DLIPowerException('Outlet name \'%s\' unknown' % outlet)
 
-    def get_outlet_name(self, outlet=0):
+    async def get_outlet_name(self, outlet=0):
         """ Return the name of the outlet """
-        outlet = self.determine_outlet(outlet)
-        outlets = self.statuslist()
+        outlet = await self.determine_outlet(outlet)
+        outlets = await self.statuslist()
         if outlets and outlet:
             for plug in outlets:
                 if int(plug[0]) == outlet:
                     return plug[1]
         return 'Unknown'
 
-    def set_outlet_name(self, outlet=0, name="Unknown"):
+    async def set_outlet_name(self, outlet=0, name="Unknown"):
         """ Set the name of an outlet """
-        self.determine_outlet(outlet)
-        self.geturl(
+        await self.determine_outlet(outlet)
+        await self.geturl(
             url='unitnames.cgi?outname%s=%s' % (outlet, quote(name))
         )
         return self.get_outlet_name(outlet) == name
 
-    def off(self, outlet=0):
+    async def off(self, outlet=0):
         """ Turn off a power to an outlet
             False = Success
             True = Fail
         """
-        self.geturl(url='outlet?%d=OFF' % self.determine_outlet(outlet))
+        await self.geturl(url='outlet?%d=OFF' % self.determine_outlet(outlet))
         return self.status(outlet) != 'OFF'
 
-    def on(self, outlet=0):
+    async def on(self, outlet=0):
         """ Turn on power to an outlet
             False = Success
             True = Fail
         """
-        self.geturl(url='outlet?%d=ON' % self.determine_outlet(outlet))
+        await self.geturl(url='outlet?%d=ON' % self.determine_outlet(outlet))
         return self.status(outlet) != 'ON'
 
-    def cycle(self, outlet=0):
+    async def cycle(self, outlet=0):
         """ Cycle power to an outlet
             False = Power off Success
             True = Power off Fail
@@ -452,30 +549,31 @@ class PowerSwitch(Device):
             self.__len = len(outlets)
         return outlets
 
-    def printstatus(self):
+    async def printstatus(self):
         """ Print the status off all the outlets as a table to stdout """
-        if not self.statuslist():
+        list = await self.statuslist()
+        if not list:
             print("Unable to communicate to the Web power switch at %s" % self.hostname)
             return None
         print('Outlet\t%-15.15s\tState' % 'Name')
-        for item in self.statuslist():
+        for item in list:
             print('%d\t%-15.15s\t%s' % (item[0], item[1], item[2]))
         return
 
-    def status(self, outlet=1):
+    async def status(self, outlet=1):
         """
         Return the status of an outlet, returned value will be one of:
         ON, OFF, Unknown
         """
-        outlet = self.determine_outlet(outlet)
-        outlets = self.statuslist()
+        outlet = await self.determine_outlet(outlet)
+        outlets = await self.statuslist()
         if outlets and outlet:
             for plug in outlets:
                 if plug[0] == outlet:
                     return plug[2]
         return 'Unknown'
 
-    def command_on_outlets(self, command, outlets):
+    async def command_on_outlets(self, command, outlets):
         """
         If a single outlet is passed, handle it as a single outlet and
         pass back the return code.  Otherwise run the operation on multiple

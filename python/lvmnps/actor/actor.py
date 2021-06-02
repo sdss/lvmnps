@@ -16,6 +16,7 @@ from contextlib import suppress
 from lvmnps.actor.commands import parser as nps_command_parser
 from clu.actor import AMQPActor
 from lvmnps.switch.dlipower import PowerSwitch
+from lvmnps.exceptions import NpsActorUserWarning
 
 __all__ = ["lvmnps"]
 

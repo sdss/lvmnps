@@ -44,6 +44,8 @@ dlipower = "^1.0.176"
 sdss-clu = "^1.0.3"
 sphinx-bootstrap-theme = "^0.7.1"
 aiohttp = "^3.7.4"
+httpx = "^0.18.1"
+asyncinit = "^0.2.4"
 
 [tool.poetry.dev-dependencies]
 ipython = ">=7.11.0"
