@@ -12,6 +12,7 @@ from urllib.parse import quote
 from clu.device import Device
 
 from bs4 import BeautifulSoup
+import httpx
 
 
 logger = logging.getLogger(__name__)
@@ -166,6 +167,7 @@ class PowerSwitch(Device):
         self.base_url = '%s://%s' % (self.scheme, self.hostname)
         self._is_admin = True
         self.session = requests.Session()
+        #self.client = httpx.AsyncClient()
         self.login()
 
     def __len__(self):
@@ -226,10 +228,11 @@ class PowerSwitch(Device):
             return outlets[0]
         return outlets
     
-    def getstatus(self):
+    async def getstatus(self):
         i = 1
         data = {}
-        for item in self.statuslist():
+        list = await self.statuslist()
+        for item in list:
             out_name = "outlet_" + str(i)
             out_state = "state_" + str(i)
             data[out_name] = item[1]
@@ -321,7 +324,7 @@ class PowerSwitch(Device):
             return True
         return False
 
-    def geturl(self, url='index.htm'):
+    async def geturl(self, url='index.htm'):
         """
         Get a URL from the userid/password protected powerswitch page Return None on failure
         """
@@ -412,11 +415,11 @@ class PowerSwitch(Device):
         self.on(outlet)
         return False
 
-    def statuslist(self):
+    async def statuslist(self):
         """ Return the status of all outlets in a list,
         each item will contain 3 items plugnumber, hostname and state  """
         outlets = []
-        url = self.geturl('index.htm')
+        url = await self.geturl('index.htm')
         if not url:
             return None
         soup = BeautifulSoup(url, "html.parser")

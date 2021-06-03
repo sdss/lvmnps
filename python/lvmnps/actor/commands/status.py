@@ -13,6 +13,7 @@ from lvmnps.actor.commands import parser
 from lvmnps.switch import dlipower
 from lvmnps.switch.dlipower import PowerSwitch
 from lvmnps.exceptions import NpsActorError
+from requests.api import get
 #import dlipower
 
 #switch = dlipower.PowerSwitch(hostname="10.7.45.22",userid="admin",password='rLXR3KxUqiCPGvA')
@@ -25,7 +26,8 @@ async def status(command: Command, switches: dict[str, PowerSwitch]):
         if switches[switch].name == 'nps1':
             command.info(text='name is nps1')
         try:
-            command.info(text="Status of the NPS", status = switches[switch].getstatus())
+            get = await switches[switch].getstatus()
+            command.info(text="Status of the NPS", status = get)
         except NpsActorError as err:
             return command.fail(error=str(err))
     """

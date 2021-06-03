@@ -43,6 +43,7 @@ click-default-group = "^1.2.2"
 dlipower = "^1.0.176"
 sdss-clu = "^1.0.3"
 sphinx-bootstrap-theme = "^0.7.1"
+httpx = "^0.18.1"
 
 [tool.poetry.dev-dependencies]
 ipython = ">=7.11.0"
