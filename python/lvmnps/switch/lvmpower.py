@@ -6,21 +6,15 @@
 # @Filename: lvmpower.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
-import hashlib
 import logging
-import multiprocessing
 import os
-import json
-import requests
-import requests.exceptions
 import time
 import urllib3
-from urllib.parse import quote
-
-from clu.device import Device
-
-from bs4 import BeautifulSoup
 import httpx
+
+from urllib.parse import quote
+from clu.device import Device
+from bs4 import BeautifulSoup
 
 
 logger = logging.getLogger(__name__)
@@ -46,7 +40,6 @@ class PowerSwitch():
         """
         Class initializaton
         """
-        #config = self.load_configuration()
         self.retries = retries
         self.userid = userid
         self.password = password
@@ -58,9 +51,8 @@ class PowerSwitch():
             self.scheme = 'https'
         self.base_url = '%s://%s' % (self.scheme, self.hostname)
         self._is_admin = True
-        self.session = requests.Session()
-        #self.client = httpx.AsyncClient()
-        #self.login()
+        #self.session = requests.Session()
+        self.client = httpx.AsyncClient()
     
     #functions for 'status' command
     async def getstatus(self):
@@ -134,12 +126,12 @@ class PowerSwitch():
 
 
     #functions for 'on/off' command
-    def determine_outlet(self, outlet=None):
+    async def determine_outlet(self, outlet=None):
         """ Get the correct outlet number from the outlet passed in, this
             allows specifying the outlet by the name and making sure the
             returned outlet is an int
         """
-        outlets = self.statuslist()
+        outlets = await self.statuslist()
         if outlet and outlets and isinstance(outlet, str):
             for plug in outlets:
                 plug_name = plug[1]
@@ -153,7 +145,7 @@ class PowerSwitch():
         except ValueError:
             raise DLIPowerException('Outlet name \'%s\' unknown' % outlet)
 
-    def off(self, outlet=0):
+    async def off(self, outlet=0):
         """ Turn off a power to an outlet
             False = Success
             True = Fail
@@ -161,7 +153,7 @@ class PowerSwitch():
         self.geturl(url='outlet?%d=OFF' % self.determine_outlet(outlet))
         return self.status(outlet) != 'OFF'
 
-    def on(self, outlet=0):
+    async def on(self, outlet=0):
         """ Turn on power to an outlet
             False = Success
             True = Fail
@@ -169,13 +161,13 @@ class PowerSwitch():
         self.geturl(url='outlet?%d=ON' % self.determine_outlet(outlet))
         return self.status(outlet) != 'ON'
 
-    def status(self, outlet=1):
+    async def status(self, outlet=1):
         """
         Return the status of an outlet, returned value will be one of:
         ON, OFF, Unknown
         """
-        outlet = self.determine_outlet(outlet)
-        outlets = self.statuslist()
+        outlet = await self.determine_outlet(outlet)
+        outlets = await self.statuslist()
         if outlets and outlet:
             for plug in outlets:
                 if plug[0] == outlet:
