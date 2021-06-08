@@ -380,7 +380,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "importlib-metadata"
-version = "4.4.0"
+version = "4.5.0"
 description = "Read metadata from Python packages"
 category = "main"
 optional = false
@@ -412,7 +412,7 @@ python-versions = "*"
 
 [[package]]
 name = "ipdb"
-version = "0.13.8"
+version = "0.13.9"
 description = "IPython-enabled pdb"
 category = "dev"
 optional = false
@@ -425,7 +425,7 @@ toml = {version = ">=0.10.2", markers = "python_version > \"3.6\""}
 
 [[package]]
 name = "ipython"
-version = "7.24.0"
+version = "7.24.1"
 description = "IPython: Productive Interactive Computing"
 category = "dev"
 optional = false
@@ -949,7 +949,7 @@ docs = ["Sphinx (>=2.1.0)", "sphinx-bootstrap-theme (>=0.4.12)", "recommonmark (
 
 [[package]]
 name = "sdss-clu"
-version = "1.1.2"
+version = "1.2.0"
 description = "A new protocol for SDSS actors."
 category = "main"
 optional = false
@@ -1486,8 +1486,8 @@ imagesize = [
     {file = "imagesize-1.2.0.tar.gz", hash = "sha256:b1f6b5a4eab1f73479a50fb79fcf729514a900c341d8503d62a62dbc4127a2b1"},
 ]
 importlib-metadata = [
-    {file = "importlib_metadata-4.4.0-py3-none-any.whl", hash = "sha256:960d52ba7c21377c990412aca380bf3642d734c2eaab78a2c39319f67c6a5786"},
-    {file = "importlib_metadata-4.4.0.tar.gz", hash = "sha256:e592faad8de1bda9fe920cf41e15261e7131bcf266c30306eec00e8e225c1dd5"},
+    {file = "importlib_metadata-4.5.0-py3-none-any.whl", hash = "sha256:833b26fb89d5de469b24a390e9df088d4e52e4ba33b01dc5e0e4f41b81a16c00"},
+    {file = "importlib_metadata-4.5.0.tar.gz", hash = "sha256:b142cc1dd1342f31ff04bb7d022492b09920cb64fed867cd3ea6f80fe3ebd139"},
 ]
 iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
@@ -1499,11 +1499,11 @@ invoke = [
     {file = "invoke-1.5.0.tar.gz", hash = "sha256:f0c560075b5fb29ba14dad44a7185514e94970d1b9d57dcd3723bec5fed92650"},
 ]
 ipdb = [
-    {file = "ipdb-0.13.8.tar.gz", hash = "sha256:8d368fa048a93ad6c1985d7f1d78d68580c879e4053fc15714bdcf2a1b042d06"},
+    {file = "ipdb-0.13.9.tar.gz", hash = "sha256:951bd9a64731c444fd907a5ce268543020086a697f6be08f7cc2c9a752a278c5"},
 ]
 ipython = [
-    {file = "ipython-7.24.0-py3-none-any.whl", hash = "sha256:f86788eef439891438af3498525094cc2acbdbea4f2aa2f8895782d4ff471341"},
-    {file = "ipython-7.24.0.tar.gz", hash = "sha256:a171caa3d3d4c819a1c0742e3abecfd5a2b8ab525ca1c9f114b40b76b0679ab1"},
+    {file = "ipython-7.24.1-py3-none-any.whl", hash = "sha256:d513e93327cf8657d6467c81f1f894adc125334ffe0e4ddd1abbb1c78d828703"},
+    {file = "ipython-7.24.1.tar.gz", hash = "sha256:9bc24a99f5d19721fb8a2d1408908e9c0520a17fff2233ffe82620847f17f1b6"},
 ]
 ipython-genutils = [
     {file = "ipython_genutils-0.2.0-py2.py3-none-any.whl", hash = "sha256:72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8"},
@@ -1905,8 +1905,8 @@ sdss-access = [
     {file = "sdss_access-1.1.1-py2.py3-none-any.whl", hash = "sha256:9cfc7fce0802fa0f16d73184304b31536343f574365616167e0c59a48d5bd001"},
 ]
 sdss-clu = [
-    {file = "sdss-clu-1.1.2.tar.gz", hash = "sha256:dc82af2072f0cc45a982fa208d4358a89476612a0e771932ebb326d968a0edae"},
-    {file = "sdss_clu-1.1.2-py3-none-any.whl", hash = "sha256:5e8af8f98c27ccc819b5cc68ef6402373078b5c11f2596030509bf5a84b937ff"},
+    {file = "sdss-clu-1.2.0.tar.gz", hash = "sha256:c8cfdd3601ab8f0ce2b1999088a00dd217fb859a42640ac8a00ac2a1422f4fee"},
+    {file = "sdss_clu-1.2.0-py3-none-any.whl", hash = "sha256:d6b86e13adb0e80ede226e7b8a3ceb576f476a872e6d65fcf856a54ff0c78bfd"},
 ]
 sdss-tree = [
     {file = "sdss-tree-3.0.7.tar.gz", hash = "sha256:7bd707fc200576429f9fbc914336417a447dd5e8571d38cae5f3d57336ad9199"},

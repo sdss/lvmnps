@@ -154,7 +154,7 @@ class PowerSwitch():
         return self.status(outlet) != 'OFF'
 
     async def on(self, outlet=0):
-        """ Turn on power to an outlet
+        """ Turn on power to an outletlvmnps.switch.lvmpower
             False = Success
             True = Fail
         """
