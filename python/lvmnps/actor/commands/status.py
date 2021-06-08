@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from clu.command import Command
 from lvmnps.actor.commands import parser
-from lvmnps.switch.dlipower import PowerSwitch
+from lvmnps.switch.lvmpower import PowerSwitch
 from lvmnps.exceptions import NpsActorError
 
 @parser.command()
