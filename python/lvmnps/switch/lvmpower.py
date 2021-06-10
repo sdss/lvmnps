@@ -174,23 +174,16 @@ class PowerSwitch(Device):
         full_url = "%s/%s" % (self.base_url, url)
         result = None
         request = None
-        logger.debug(f'Requesting url: {full_url}')
-        for i in range(0, self.retries):
-            try:
-                if self.secure_login and self.session:
-                    request = self.session.get(full_url, timeout=self.timeout, verify=False, allow_redirects=True)
-                else:
-                    request = requests.get(full_url, auth=(self.userid, self.password,), timeout=self.timeout, verify=False, allow_redirects=True)  # nosec
-            except requests.exceptions.RequestException as e:
-                logger.warning("Request timed out - %d retries left.", self.retries - i - 1)
-                logger.exception("Caught exception %s", str(e))
-                continue
-            if request.status_code == 200:
-                result = request.content
-                break
-        logger.debug('Response code: %s', request.status_code)
-        logger.debug(f'Response content: {result}')
-        return result
+        client = aiohttp.ClientSession()
+        try:
+            request = await client.get(full_url, allow_redirects=True)
+            result = await request.content.read()
+        except aiohttp.ClientError as e:
+            logger.warning("Request Error %s", str(e))
+
+        if request.status == 200:
+            await client.close()
+            return result
 
     async def statuslist(self):
         """ Return the status of all outlets in a list,
