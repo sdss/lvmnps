@@ -228,10 +228,10 @@ class PowerSwitch(Device):
             return outlets[0]
         return outlets
     
-    async def getstatus(self):
+    def getstatus(self):
         i = 1
         data = {}
-        list = await self.statuslist()
+        list = self.statuslist()
         for item in list:
             out_name = "outlet_" + str(i)
             out_state = "state_" + str(i)
@@ -324,7 +324,7 @@ class PowerSwitch(Device):
             return True
         return False
 
-    async def geturl(self, url='index.htm'):
+    def geturl(self, url='index.htm'):
         """
         Get a URL from the userid/password protected powerswitch page Return None on failure
         """
@@ -415,11 +415,11 @@ class PowerSwitch(Device):
         self.on(outlet)
         return False
 
-    async def statuslist(self):
+    def statuslist(self):
         """ Return the status of all outlets in a list,
         each item will contain 3 items plugnumber, hostname and state  """
         outlets = []
-        url = await self.geturl('index.htm')
+        url = self.geturl('index.htm')
         if not url:
             return None
         soup = BeautifulSoup(url, "html.parser")

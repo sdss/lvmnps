@@ -3,7 +3,7 @@ switches:
     nps1:
         host: 10.7.45.22
         port: 80
-        iserid: 'admin'
+        userid: 'admin'
         password: 'rLXR3KxUqiCPGvA'
 
 timeouts:
