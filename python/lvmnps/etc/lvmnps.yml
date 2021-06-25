@@ -1,10 +1,13 @@
 # A dictionary of controller name to NPS controller connection parameters.
 switches:
     nps1:
+        type: dli
         host: 10.7.45.22
         port: 80
-        iserid: 'admin'
+        user: 'admin'
         password: 'rLXR3KxUqiCPGvA'
+        numports: 8
+        ouo: False # only handle configured ports, see lvnmps_dummy.yml
 
 timeouts:
         switch_connect: 1
@@ -14,3 +17,4 @@ actor:
     name: lvmnps
     host: localhost
     port: 5672
+    log_dir: '~/tmp/log'

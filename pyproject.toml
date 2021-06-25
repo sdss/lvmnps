@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sdss-lvmnps"
-version = "0.1.0-alpha.0"
+version = "0.1.0"
 description = "Simple Template package for creating SDSS Python projects"
 authors = ["Changgon Kim <changgonkim@khu.ac.kr>"]
 license = "BSD-3-Clause"
@@ -77,7 +77,7 @@ lines_after_imports = 2
 use_parentheses = true
 
 [tool.pytest.ini_options]
-addopts = "--cov lvmnps --cov-report xml --cov-report html --cov-report term"
+#addopts = "--cov lvmnps --cov-report xml --cov-report html --cov-report term"
 
 [tool.coverage.run]
 branch = true

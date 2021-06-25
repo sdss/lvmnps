@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# @Author: Mingyeong YANG (mingyeong@khu.ac.kr)
+# @Author: Mingyeong YANG (mingyeong@khu.ac.kr), Florian Briegel (briegel@mpia.de)
 # @Date: 2021-03-22
-# @Filename: actor.py
+# @Filename: lvmnps/actor/actor.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from __future__ import annotations
@@ -15,9 +15,11 @@ from contextlib import suppress
 
 from lvmnps.actor.commands import parser as nps_command_parser
 from clu.actor import AMQPActor
-from lvmnps.switch.dlipower import PowerSwitch
+
+from lvmnps.switch.factory import powerSwitchFactory
 
 __all__ = ["lvmnps"]
+
 
 class lvmnps(AMQPActor):
     """NPS actor.
@@ -25,32 +27,33 @@ class lvmnps(AMQPActor):
     `~clu.actor.AMQPActor`, the class accepts the following parameters.
     Parameters (TBD)
     """
+
     parser = nps_command_parser # commands register..CK 20210402
 
     def __init__(
             self,
             *args,
-            switches: tuple[PowerSwitch, ...] = (),
             **kwargs
     ):
-        self.switches = {s.name: s for s in switches}
-        self.parser_args = [self.switches]
         super().__init__(*args, **kwargs)
 
     async def start(self):
+        await super().start()
 
         connect_timeout = self.config["timeouts"]["switch_connect"]
 
-        for switch in self.switches.values():
-            try:
-                await asyncio.wait_for(switch.start(), timeout=connect_timeout)
-            except asyncio.TimeoutError:
-                warnings.warn(
-                    f"Timeout out connecting to {switch.name!r}.",
-                    NpsActorUserWarning,
-                )
+        assert len(self.parser_args) == 1
 
-        await super().start()
+        for switch in self.parser_args[0]:
+             try:
+                self.log.debug(f"Start {switch.name} ...")
+                await asyncio.wait_for(switch.start(), timeout=connect_timeout)
+                
+             except Exception as ex:
+                self.log.error(f"Unexpected exception {type(ex)}: {ex}")
+
+        self.log.debug("Start done")
+
 
     async def stop(self):
         with suppress(asyncio.CancelledError):
@@ -59,25 +62,25 @@ class lvmnps(AMQPActor):
                 await task
         return super().stop()
 
+
     @classmethod
     def from_config(cls, config, *args, **kwargs):
         """Creates an actor from a configuration file."""
 
         instance = super(lvmnps, cls).from_config(config, *args, **kwargs)
-
-        assert isinstance(instance,lvmnps)
+ 
+        assert isinstance(instance, lvmnps)
         assert isinstance(instance.config, dict)
-
         if "switches" in instance.config:
-            switches = (
-                PowerSwitch(
-                    hostname=ctr["host"],
-                    port=ctr["port"],
-                    userid="admin",
-                    password=ctr["password"]
-                )
-                for (ctrname, ctr) in instance.config["switches"].items()
-            )
-            instance.switches = {s.name: s for s in switches}
-            instance.parser_args = [instance.switches]
+           switches = []
+           for (name, config) in instance.config["switches"].items():
+               instance.log.info(f"Instance {name}: {config}")
+               try:
+                  switches.append(powerSwitchFactory(name, config, instance.log))
+
+               except Exception as ex:
+                  instance.log.error(f"Error in power switch factory {type(ex)}: {ex}")
+           instance.parser_args = [switches]  
+            
         return instance
+
