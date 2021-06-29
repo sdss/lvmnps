@@ -33,7 +33,7 @@ Lvm Network Power Switch
                 desc: "PlaneWavemount Skye"
 
 ## Status return for all commands
-* if 'name' is not defined then the port name will be 'switch name.port number' eg nps_dummy_1.port1 otherwise 'name' from the config file will be used.
+* if 'name' is not defined then the port name will be 'switch name'.'port number' eg nps_dummy_1.port1 otherwise 'name' from the config file will be used.
 * STATE: 1: ON, 0: OFF, -1: UNKNOWN
 
              "STATUS": {
