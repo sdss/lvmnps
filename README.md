@@ -76,7 +76,7 @@ Lvm Network Power Switch
           }
       }
 
-* status command with port name
+* status command with port name skyw.what.ever
 
       lvmnps status skyw.what.ever
       12:07:12.349 lvmnps > 
@@ -88,3 +88,43 @@ Lvm Network Power Switch
                   "SWITCH": "nps_dummy_1",
                   "PORT": 4
         }
+
+* status command with switch name nps_dummy_1
+
+      12:12:21.349 lvmnps i {
+          "STATUS": {
+              "nps_dummy_1.port1": {
+                  "STATE": -1,
+                  "DESCR": "was 1",
+                  "SWITCH": "nps_dummy_1",
+                  "PORT": 1
+              },
+              "skye.what.ever": {
+                  "STATE": -1,
+                  "DESCR": "whatever is connected to skye",
+                  "SWITCH": "nps_dummy_1",
+                  "PORT": 2
+              },
+              "skyw.what.ever": {
+                  "STATE": -1,
+                  "DESCR": "Something @ skyw",
+                  "SWITCH": "nps_dummy_1",
+                  "PORT": 4
+              }
+          }
+      }
+     
+* status command with switch name nps_dummy_1 and port 4 returns
+
+      12:12:21.349 lvmnps i {
+          "STATUS": {
+              "skyw.what.ever": {
+                  "STATE": -1,
+                  "DESCR": "Something @ skyw",
+                  "SWITCH": "nps_dummy_1",
+                  "PORT": 4
+              }
+          }
+      }
+     
+
