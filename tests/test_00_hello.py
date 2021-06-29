@@ -5,7 +5,6 @@ from clu.parsers import command_parser
 from clu.testing import setup_test_actor, LegacyActor
 
 
-#import lvmnps.actor
 
 @command_parser.command()
 @click.argument('NAME', type=str)
