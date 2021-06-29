@@ -150,3 +150,8 @@ Lvm Network Power Switch
      
 
 * the commands on and off use the same addressing scheme as status
+
+## Test
+     poetry run pytest
+     poetry run pytest -p no:logging -s -vv 
+
