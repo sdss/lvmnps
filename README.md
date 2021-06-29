@@ -32,12 +32,24 @@ Lvm Network Power Switch
                 name: "skye.pwi"
                 desc: "PlaneWavemount Skye"
 
+## Status return for all commands
+* if 'name' is not defined then the port name will be 'switch name.port number' eg nps_dummy_1.port1 otherwise 'name' will be used.
+* STATE: 1: ON, 0: OFF, -1: UNKNOWN
+          "STATUS": {
+              "nps_dummy_1.port1": {
+                  "STATE": -1,
+                  "DESCR": "was 1",
+                  "SWITCH": "nps_dummy_1",
+                  "PORT": 1
+              },
+
 ## Run the example lvmnps_dummy
     #> cd lvmnps
     #> poetry run lvmnps -vvv -c $(pwd)/python/lvmnps/etc/lvmnps_dummy.yml start
 
     #> poetry run clu
 * status command without parameter returns all ports of all switches.    
+* the default is to return only configured ports, otherwise define 'ouo' false in the config file, see lvmnps_dummy.yml
     
       lvmnps status
       12:02:08.649 lvmnps > 
