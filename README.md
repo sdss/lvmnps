@@ -31,7 +31,60 @@ Lvm Network Power Switch
               1:  
                 name: "skye.pwi"
                 desc: "PlaneWavemount Skye"
-                
+
 ## Run the example lvmnps_dummy
-    cd lvmnps
-    poetry run lvmnps -vvv -c $(pwd)/python/lvmnps/etc/lvmnps_dummy.yml 
+    #> cd lvmnps
+    #> poetry run lvmnps -vvv -c $(pwd)/python/lvmnps/etc/lvmnps_dummy.yml start
+
+    #> poetry run clu
+* status command without parameter returns all ports of all switches.    
+    
+      lvmnps status
+      12:02:08.649 lvmnps > 
+      12:02:08.660 lvmnps i {
+          "STATUS": {
+              "nps_dummy_1.port1": {
+                  "STATE": -1,
+                  "DESCR": "was 1",
+                  "SWITCH": "nps_dummy_1",
+                  "PORT": 1
+              },
+              "skye.what.ever": {
+                  "STATE": -1,
+                  "DESCR": "whatever is connected to skye",
+                  "SWITCH": "nps_dummy_1",
+                  "PORT": 2
+              },
+              "skyw.what.ever": {
+                  "STATE": -1,
+                  "DESCR": "Something @ skyw",
+                  "SWITCH": "nps_dummy_1",
+                  "PORT": 4
+              },
+              "skye.pwi": {
+                  "STATE": -1,
+                  "DESCR": "PlaneWavemount Skye",
+                  "SWITCH": "skye.nps",
+                  "PORT": 1
+              },
+                  "skyw.pwi": {
+                  "STATE": -1,
+                  "DESCR": "PlaneWavemount Skyw",
+                  "SWITCH": "nps_dummy_3",
+                  "PORT": 1
+              }
+          }
+      }
+
+* status command with port name
+
+      lvmnps status skyw.what.ever
+      12:07:12.349 lvmnps > 
+      12:07:12.377 lvmnps i {
+          "STATUS": {
+              "skyw.what.ever": {
+                  "STATE": -1,
+                  "DESCR": "Something @ skyw",
+                  "SWITCH": "nps_dummy_1",
+                  "PORT": 4
+        }
