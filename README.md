@@ -23,7 +23,7 @@ Lvm Network Power Switch
             num: 8                # number of ports 
             ports: 
               1: 
-                name: "skye.pwi"  # should also be a unique name
+                name: "skyw.pwi"  # should also be a unique name
                 desc: "Something that make sense"
         should_be_a_unique_name:
             type: dummy
