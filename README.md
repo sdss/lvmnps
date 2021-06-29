@@ -35,7 +35,8 @@ Lvm Network Power Switch
 ## Status return for all commands
 * if 'name' is not defined then the port name will be 'switch name.port number' eg nps_dummy_1.port1 otherwise 'name' will be used.
 * STATE: 1: ON, 0: OFF, -1: UNKNOWN
-          "STATUS": {
+
+             "STATUS": {
               "nps_dummy_1.port1": {
                   "STATE": -1,
                   "DESCR": "was 1",
