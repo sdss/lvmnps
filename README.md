@@ -53,6 +53,7 @@ Lvm Network Power Switch
 * the default is to return only configured ports, otherwise define 'ouo' false in the config file, see lvmnps_dummy.yml
     
       lvmnps status
+      
       12:02:08.649 lvmnps > 
       12:02:08.660 lvmnps i {
           "STATUS": {
@@ -92,6 +93,7 @@ Lvm Network Power Switch
 * status command with port name skyw.what.ever
 
       lvmnps status skyw.what.ever
+      
       12:07:12.349 lvmnps > 
       12:07:12.377 lvmnps i {
           "STATUS": {
@@ -105,6 +107,7 @@ Lvm Network Power Switch
 * status command with switch name nps_dummy_1
 
       lvmnps status nps_dummy_1
+      
       12:07:12.349 lvmnps > 
       12:12:21.349 lvmnps i {
           "STATUS": {
@@ -132,6 +135,7 @@ Lvm Network Power Switch
 * status command with switch name nps_dummy_1 and port 4 returns
 
       lvmnps status nps_dummy_1 4
+      
       12:07:12.349 lvmnps > 
       12:12:21.349 lvmnps i {
           "STATUS": {
