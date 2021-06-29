@@ -104,6 +104,8 @@ Lvm Network Power Switch
 
 * status command with switch name nps_dummy_1
 
+      lvmnps status nps_dummy_1
+      12:07:12.349 lvmnps > 
       12:12:21.349 lvmnps i {
           "STATUS": {
               "nps_dummy_1.port1": {
@@ -129,6 +131,8 @@ Lvm Network Power Switch
      
 * status command with switch name nps_dummy_1 and port 4 returns
 
+      lvmnps status nps_dummy_1 4
+      12:07:12.349 lvmnps > 
       12:12:21.349 lvmnps i {
           "STATUS": {
               "skyw.what.ever": {
