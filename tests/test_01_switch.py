@@ -1,21 +1,12 @@
-import asyncio
-import logging
-import sys
-import os
-
 import pytest
 
-import click
+import os
 
-from sdsstools import get_logger, read_yaml_file
-from sdsstools.logger import SDSSLogger, get_logger
+from sdsstools.logger import get_logger
 
-from clu.parsers import command_parser
-from clu.testing import setup_test_actor, LegacyActor
-from clu.model import Model
-from clu import AMQPActor, JSONActor
+from clu.testing import setup_test_actor
+from clu import JSONActor
 
-#import lvmnps.actor
 from lvmnps.switch.factory import powerSwitchFactory
 
 from lvmnps.actor.commands import parser as nps_command_parser
@@ -24,7 +15,7 @@ from lvmnps.actor.commands import parser as nps_command_parser
 @pytest.fixture
 def switches():
     default_config_file = os.path.join(os.path.dirname(__file__), "lvmnps.yml")
-    default_config = LegacyActor._parse_config(default_config_file)
+    default_config = JSONActor._parse_config(default_config_file)
 
     assert("switches" in default_config)
 
@@ -36,7 +27,7 @@ def switches():
 
         except Exception as ex:
             print(f"Error in power switch factory {type(ex)}: {ex}")
-   
+
     return switches
 
 
@@ -45,29 +36,27 @@ async def send_command(actor, command_string):
     await command
     assert command.status.is_done
     assert actor.mock_replies[-1]['text'] == 'done'
-    
+
     status_reply = actor.mock_replies[-2]
     return status_reply["STATUS"]
+
 
 @pytest.mark.asyncio
 async def test_actor(switches):
 
-    test_actor = await setup_test_actor(JSONActor('lvmnp',
-                                                   host='localhost',
-                                                   port=9999))
+    test_actor = await setup_test_actor(JSONActor('lvmnp', host='localhost', port=9999))
 
     test_actor.parser = nps_command_parser
-    test_actor.parser_args = [switches]  
+    test_actor.parser_args = [switches]
 
     status = await send_command(test_actor, 'status')
-    assert len(status) == 5 
+    assert len(status) == 5
     assert status['nps_dummy_1.port1']['STATE'] == -1
-
 
     # switch nps_dummy_1 port1 'on'
     status = await send_command(test_actor, 'on nps_dummy_1.port1')
     assert status['nps_dummy_1.port1']['STATE'] == 1
-    
+
     # switch all ports on  nps_dummy_1 on
     status = await send_command(test_actor, 'on nps_dummy_1')
     assert status['nps_dummy_1.port1']['STATE'] == 1
@@ -91,6 +80,3 @@ async def test_actor(switches):
     assert status['skyw.what.ever']['STATE'] == 0
     assert status['skye.pwi']['STATE'] == 0
     assert status['skyw.pwi']['STATE'] == 0
-
-
-
