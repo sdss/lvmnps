@@ -37,10 +37,10 @@ class PowerSwitchBase(object):
 
     def config_get(self, key, default=None):
         """ DOESNT work for keys with dots !!! """
-        def getter(config, key, default=None):
+        def _get(config, key, d=None):
             k = key.split('.', maxsplit=1)
             c = config.get(k[0] if not k[0].isnumeric() else int(k[0]))  # keys can be numeric
-            return default if c is None else c if len(k) == 1  else getter(c, k[1], default) if type(c) == dict else default
+            return d if c is None else c if len(k)==1  else _get(c,k[1],d) if type(c)==dict else d
         return getter(self.config, key, default)
 
     def findOutletByName(self, name: str):
