@@ -7,9 +7,8 @@
 
 from sdsstools.logger import SDSSLogger
 
-from lvmnps.switch.powerswitchbase import PowerSwitchBase
-
 from lvmnps.switch.iboot.iboot import iBootInterface
+from lvmnps.switch.powerswitchbase import PowerSwitchBase
 
 
 __all__ = ['PowerSwitch']

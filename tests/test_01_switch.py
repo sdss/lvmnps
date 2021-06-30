@@ -1,15 +1,13 @@
-import pytest
-
 import os
+
+import pytest
+from clu import JSONActor
+from clu.testing import setup_test_actor
 
 from sdsstools.logger import get_logger
 
-from clu.testing import setup_test_actor
-from clu import JSONActor
-
-from lvmnps.switch.factory import powerSwitchFactory
-
 from lvmnps.actor.commands import parser as nps_command_parser
+from lvmnps.switch.factory import powerSwitchFactory
 
 
 @pytest.fixture

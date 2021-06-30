@@ -7,9 +7,9 @@
 
 from sdsstools.logger import SDSSLogger
 
+from lvmnps.switch.dli.dlipower import PowerSwitch as DliPowerSwitch
 from lvmnps.switch.powerswitchbase import PowerSwitchBase
 
-from lvmnps.switch.dli.dlipower import PowerSwitch as DliPowerSwitch
 
 # Todo: Dont inherit clu.Device in lvmnps.switch.dli.dlipower.PowerSwitch if you are not using it.
 

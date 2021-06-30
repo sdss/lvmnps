@@ -32,6 +32,7 @@ import logging
 import socket
 import struct
 
+
 HELLO_STR = 'hello-000'
 
 HEADER_STRUCT = struct.Struct('<B21s21sBBH')

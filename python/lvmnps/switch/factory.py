@@ -5,13 +5,12 @@
 # @Filename: lvmnps/switch/__init__.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
-from .exceptions import PowerException
-
-from .dummy.powerswitch import PowerSwitch as DummyPowerSwitch
-from .dli.powerswitch import PowerSwitch as DliPowerSwitch
-from .iboot.powerswitch import PowerSwitch as IBootPowerSwitch
-
 from sdsstools.logger import SDSSLogger
+
+from .dli.powerswitch import PowerSwitch as DliPowerSwitch
+from .dummy.powerswitch import PowerSwitch as DummyPowerSwitch
+from .exceptions import PowerException
+from .iboot.powerswitch import PowerSwitch as IBootPowerSwitch
 
 
 def powerSwitchFactory(name: str, config: dict, log: SDSSLogger):

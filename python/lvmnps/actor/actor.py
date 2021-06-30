@@ -11,10 +11,11 @@ from __future__ import annotations
 import asyncio
 from contextlib import suppress
 
-from lvmnps.actor.commands import parser as nps_command_parser
 from clu.actor import AMQPActor
 
+from lvmnps.actor.commands import parser as nps_command_parser
 from lvmnps.switch.factory import powerSwitchFactory
+
 
 __all__ = ["lvmnps"]
 

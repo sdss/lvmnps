@@ -9,6 +9,7 @@ from sdsstools.logger import SDSSLogger
 
 from lvmnps.switch.powerswitchbase import PowerSwitchBase
 
+
 __all__ = ['PowerSwitch']
 
 

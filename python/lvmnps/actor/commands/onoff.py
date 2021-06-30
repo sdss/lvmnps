@@ -11,9 +11,9 @@ from __future__ import annotations
 import click
 from clu.command import Command
 
+from lvmnps.actor.commands import parser
 from lvmnps.exceptions import NpsActorError
 
-from lvmnps.actor.commands import parser
 
 # from lvmnps.switch.dli.powerswitch import PowerSwitch
 

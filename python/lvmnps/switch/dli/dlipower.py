@@ -1,17 +1,16 @@
 import hashlib
+import json
 import logging
 import multiprocessing
 import os
-import json
-import requests
-import requests.exceptions
 import time
-import urllib3
 from urllib.parse import quote
 
-from clu.device import Device
-
+import requests
+import requests.exceptions
+import urllib3
 from bs4 import BeautifulSoup
+from clu.device import Device
 
 
 logger = logging.getLogger(__name__)
