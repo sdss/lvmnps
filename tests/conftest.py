@@ -30,7 +30,6 @@ rabbitmq_proc = factories.rabbitmq_proc(host='127.0.0.1',
                                         ctl=f"{os.path.dirname(rabbitmq_local_proc)}/rabbitmqctl")
 
 
-
 @pytest.fixture
 async def amqp_actor(rabbitmq, event_loop):
 
