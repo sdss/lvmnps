@@ -326,11 +326,13 @@ class PowerSwitch(object):
         self.secure_login = False
         self.session = requests.Session()
         try:
-            response = self.session.get(self.base_url, verify=False, timeout=self.login_timeout, allow_redirects=False)
+            response = self.session.get(self.base_url, verify=False,
+                                        timeout=self.login_timeout, allow_redirects=False)
             if response.is_redirect:
                 self.base_url = response.headers['Location'].rstrip('/')
                 logger.debug(f'Redirecting to: {self.base_url}')
-                response = self.session.get(self.base_url, verify=False, timeout=self.login_timeout)
+                response = self.session.get(self.base_url, verify=False,
+                                            timeout=self.login_timeout)
         except (requests.exceptions.ConnectTimeout, requests.exceptions.ConnectionError):
             self.session = None
             return
@@ -345,7 +347,8 @@ class PowerSwitch(object):
         fields['Username'] = self.userid
         fields['Password'] = self.password
 
-        form_response = fields['Challenge'] + fields['Username'] + fields['Password'] + fields['Challenge']
+        form_response = fields['Challenge'] + fields['Username']
+        form_response += fields['Password'] + fields['Challenge']
 
         m = hashlib.md5()  # nosec - The switch we are talking to uses md5 hashes
         m.update(form_response.encode())
@@ -353,7 +356,8 @@ class PowerSwitch(object):
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
         try:
-            response = self.session.post('%s/login.tgi' % self.base_url, headers=headers, data=data, timeout=self.timeout, verify=False)
+            response = self.session.post('%s/login.tgi' % self.base_url, headers=headers,
+                                         data=data, timeout=self.timeout, verify=False)
         except requests.exceptions.ConnectTimeout:
             self.secure_login = False
             self.session = None
@@ -416,9 +420,13 @@ class PowerSwitch(object):
         for i in range(0, self.retries):
             try:
                 if self.secure_login and self.session:
-                    request = self.session.get(full_url, timeout=self.timeout, verify=False, allow_redirects=True)
+                    request = self.session.get(full_url, timeout=self.timeout,
+                                               verify=False, allow_redirects=True)
                 else:
-                    request = requests.get(full_url, auth=(self.userid, self.password,), timeout=self.timeout, verify=False, allow_redirects=True)  # nosec
+                    request = requests.get(full_url,
+                                           auth=(self.userid, self.password,),
+                                           verify=False,
+                                           allow_redirects=True)  # nosec
             except requests.exceptions.RequestException as e:
                 logger.warning("Request timed out - %d retries left.", self.retries - i - 1)
                 logger.exception("Caught exception %s", str(e))

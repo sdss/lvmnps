@@ -15,7 +15,7 @@ more information.
 
 import pytest
 from clu import AMQPActor, AMQPClient
-from pytest_rabbitmq import factories
+# from pytest_rabbitmq import factories
 
 
 # rabbitmq_local_proc = shutil.which('rabbitmq-server', path="/usr/local/sbin:/usr/sbin")
