@@ -78,7 +78,7 @@ lines_after_imports = 2
 use_parentheses = true
 
 [tool.pytest.ini_options]
-#addopts = "--cov lvmnps --cov-report xml --cov-report html --cov-report term"
+addopts = "--cov lvmnps --cov-report xml --cov-report html --cov-report term"
 
 [tool.coverage.run]
 branch = true
