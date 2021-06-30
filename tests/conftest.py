@@ -10,14 +10,13 @@ underlying directories. See https://docs.pytest.org/en/2.7.3/plugins.html for
 more information.
 """
 
-import pytest
-from clu import AMQPActor, AMQPClient
-
-
 import os
 import shutil
 
+import pytest
+from clu import AMQPActor, AMQPClient
 from pytest_rabbitmq import factories
+
 
 rabbitmq_local_proc = shutil.which('rabbitmq-server', path="/usr/local/sbin:/usr/sbin")
 rabbitmq_local_plugindir = '/usr/lib64/rabbitmq/lib/rabbitmq_server-3.8.11/plugins/'
