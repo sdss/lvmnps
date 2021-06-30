@@ -10,14 +10,15 @@ underlying directories. See https://docs.pytest.org/en/2.7.3/plugins.html for
 more information.
 """
 
-import os
-
 import pytest
 from clu import AMQPActor, AMQPClient
-from pytest_rabbitmq import factories
+
 
 """
+import os
 import shutil
+
+from pytest_rabbitmq import factories
 
 rabbitmq_local_proc = shutil.which('rabbitmq-server', path="/usr/local/sbin:/usr/sbin")
 rabbitmq_local_plugindir = '/usr/lib64/rabbitmq/lib/rabbitmq_server-3.8.11/plugins/'
@@ -29,6 +30,7 @@ rabbitmq_proc = factories.rabbitmq_proc(host='127.0.0.1',
                                         server=rabbitmq_local_proc,
                                         ctl=f"{os.path.dirname(rabbitmq_local_proc)}/rabbitmqctl")
 """
+
 
 @pytest.fixture
 async def amqp_actor(rabbitmq, event_loop):
