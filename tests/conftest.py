@@ -14,7 +14,6 @@ import pytest
 from clu import AMQPActor, AMQPClient
 
 
-"""
 import os
 import shutil
 
@@ -29,7 +28,7 @@ rabbitmq_proc = factories.rabbitmq_proc(host='127.0.0.1',
                                         plugindir=rabbitmq_local_plugindir,
                                         server=rabbitmq_local_proc,
                                         ctl=f"{os.path.dirname(rabbitmq_local_proc)}/rabbitmqctl")
-"""
+
 
 
 @pytest.fixture
