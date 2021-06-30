@@ -12,7 +12,6 @@ import click
 from clu.command import Command
 
 from lvmnps.actor.commands import parser
-from lvmnps.switch.outlet import Outlet
 from lvmnps.switch.exceptions import *
 
 

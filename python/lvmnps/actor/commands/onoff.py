@@ -15,7 +15,7 @@ from lvmnps.exceptions import NpsActorError
 
 from lvmnps.actor.commands import parser
 
-from lvmnps.switch.dli.powerswitch import PowerSwitch
+#from lvmnps.switch.dli.powerswitch import PowerSwitch
 
 
 
