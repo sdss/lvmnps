@@ -25,7 +25,8 @@ async def status(command: Command, switches: [], name: str, portnum: int):
 
     for switch in switches:
         try:
-            status |= await switch.statusAsJson(name, portnum)
+            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
+            status = dict(list(status.items()) + list((await switch.statusAsJson(name, portnum)).items()))
 
         except PowerException as ex:
             return command.fail(error=str(ex))
