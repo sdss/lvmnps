@@ -99,16 +99,16 @@ Outlet	Name           	State
 """
 
 import hashlib
+import json
 import logging
 import multiprocessing
 import os
-import json
-import requests
-import requests.exceptions
 import time
-import urllib3
 from urllib.parse import quote
 
+import requests
+import requests.exceptions
+import urllib3
 from bs4 import BeautifulSoup
 
 
