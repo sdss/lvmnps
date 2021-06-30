@@ -24,12 +24,11 @@ class PowerSwitch(PowerSwitchBase):
         super().__init__(name, config, log)
 
         self.hostname = self.config_get('hostname')
-        self.port = self.config_get('port', 80)
         self.username = self.config_get('user', 'admin')
         self.password = self.config_get('password', 'admin')
+        self.use_https = self.config_get('use_https', False)
 
-        self.dli = DliPowerSwitch(name=self.name, hostname=self.hostname,
-                                  port=self.port, userid=self.username, password=self.password)
+        self.dli = None
 
     async def start(self):
         if not await self.isReachable():
@@ -39,7 +38,6 @@ class PowerSwitch(PowerSwitchBase):
 
     async def stop(self):
         try:
-            # await self.dli.stop()
             pass
 
         except Exception as ex:
@@ -50,11 +48,17 @@ class PowerSwitch(PowerSwitchBase):
 
     async def isReachable(self):
         try:
-            # return self.dli.is_connected()
-            return self.dli.login()
+            if not self.dli:
+                self.dli = DliPowerSwitch(userid=self.username, password=self.password, hostname=self.hostname, use_https=self.use_https)
+#                reachable = self.statuslist()
+                reachable = self.dli.verify()
+                if not reachable:
+                    self.dli = None
+            return reachable    
 
         except Exception as ex:
             self.log.error(f"Unexpected exception {type(ex)}: {ex}")
+            self.dli = None
             return False
 
     async def update(self, outlets):
@@ -63,11 +67,8 @@ class PowerSwitch(PowerSwitchBase):
         try:
             if await self.isReachable():
                 # get a list [] of port states, use outlets for a subset.
-                # relays = self.iboot.get_relays()
                 for o in outlets:
-                    # set the states into internal store.
-                    # o.setState(relays[o.portnum-1])
-                    pass
+                    o.setState(switch.status(o.portnum))
             else:
                 for o in outlets:
                     o.setState(-1)
@@ -82,8 +83,7 @@ class PowerSwitch(PowerSwitchBase):
             if await self.isReachable():
                 # either loop over the outlets or pass the outlet list.
                 for o in outlets:
-                    # self.iboot.switch(o.portnum, state)
-                    pass
+                    switch.on(o.portnum) if state else switch.off(o.portnum)
 
             await self.update(outlets)
 

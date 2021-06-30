@@ -1,0 +1,22 @@
+# A dictionary of controller name to NPS controller connection parameters.
+switches:
+    dwighthubbard:
+        type: dli
+        host: lpc.digital-loggers.com
+        use_https: False
+        user: 'admin'
+        password: '4321'
+        numports: 8
+        ouo: False # handle also unconfigured ports
+
+        
+        
+timeouts:
+        switch_connect: 1
+
+# Actor configuration for the AMQPActor class
+actor:
+    name: lvmnps
+    host: localhost
+    port: 5672
+    log_dir: '~/tmp/log'
