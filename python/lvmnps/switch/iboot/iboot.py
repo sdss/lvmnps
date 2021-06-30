@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 
-'''Copyright (c) 2013, Luke Fitzgerald
+'''
+Copyright (c) 2013, Luke Fitzgerald
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -24,7 +25,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The views and conclusions contained in the software and documentation are those
-of the authors and should not be interpreted as representing official policies, 
+of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.'''
 
 import logging
@@ -102,13 +103,13 @@ class DXPCommand(object):
         payload = self._build_payload()
         request = header + payload
         self.interface.socket.sendall(request)
-        #self.interface.socket.sendall(bytes(request, 'utf-8'))
+        # self.interface.socket.sendall(bytes(request, 'utf-8'))
         return self._get_response()
 
     def _do_payloadless_request(self):
         request = self._build_header()
         self.interface.socket.sendall(request)
-        #self.interface.socket.sendall(bytes(request, 'utf-8'))
+        # self.interface.socket.sendall(bytes(request, 'utf-8'))
         return self._get_response()
 
 
@@ -188,7 +189,7 @@ class GetRelaysRequest(IOCommand):
             return None
 
         self.interface.increment_seq_num()
-        #return [True if ord(str(relay_status)) == 1 else False
+        # return [True if ord(str(relay_status)) == 1 else False
         return [True if relay_status == 1 else False
                 for relay_status in response]
 
@@ -218,11 +219,11 @@ class iBootInterface(object):
         self.seq_num = None
         self.socket = None
         if log:
-           self.logger = log
-        else: 
-           logging.basicConfig()
-           self.logger = logging.getLogger('iBootInterface')
-           self.logger.setLevel(logging.DEBUG)
+            self.logger = log
+        else:
+            logging.basicConfig()
+            self.logger = logging.getLogger('iBootInterface')
+            self.logger.setLevel(logging.DEBUG)
 
     def get_seq_num(self):
         seq_num = self.seq_num
@@ -248,7 +249,7 @@ class iBootInterface(object):
         except socket.error:
             self.logger.error('Socket error')
             return False
-        
+
         return True
 
     def _get_initial_seq_num(self):
@@ -263,7 +264,7 @@ class iBootInterface(object):
     def disconnect(self):
         try:
             self.socket.close()
-        except:
+        except socket.error:
             pass
 
     def switch(self, relay, on):
@@ -324,6 +325,7 @@ class iBootInterface(object):
             return False
         finally:
             self.disconnect()
+
 
 if __name__ == '__main__':
     interface = iBootInterface('192.168.0.105', 'admin', 'admin')

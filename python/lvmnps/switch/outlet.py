@@ -20,9 +20,9 @@ class Outlet(object):
         self.inuse = bool(name) or bool(description)
         self.state = state
 
-    def __str__ (self):
+    def __str__(self):
         return f"#{self.portnum}:{self.name}={self.state}"
-    
+
     def __repr__(self):
         return self.__str__()
 
@@ -32,17 +32,17 @@ class Outlet(object):
             return 0
         if value in ['on', 'ON', '1', 1, True]:
             return 1
-        return -1    
+        return -1
 
     def setState(self, value):
         self.state = Outlet.parse(value)
 
     def isOn(self):
         return self.state == 1
-    
+
     def isOff(self):
         return self.state == 0
-    
+
     def isValid(self):
         return self.state == -1
 
@@ -52,4 +52,4 @@ class Outlet(object):
             'DESCR': self.description,
             'SWITCH': self.swname,
             'PORT': self.portnum,
-       }
+        }

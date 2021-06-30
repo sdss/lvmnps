@@ -12,7 +12,7 @@ import click
 from clu.command import Command
 
 from lvmnps.actor.commands import parser
-from lvmnps.switch.exceptions import *
+from lvmnps.switch.exceptions import PowerException
 
 
 @parser.command()
@@ -24,15 +24,14 @@ async def status(command: Command, switches: [], name: str, portnum: int):
     status = {}
 
     for switch in switches:
-         try:
+        try:
             status |= await switch.statusAsJson(name, portnum)
-           
-         except PowerException as ex:
+
+        except PowerException as ex:
             return command.fail(error=str(ex))
-         
+
     command.info(
-         STATUS=status
+        STATUS=status
     )
 
     return command.finish("done")
-

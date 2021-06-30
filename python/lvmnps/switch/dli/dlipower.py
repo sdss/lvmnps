@@ -12,7 +12,6 @@ from urllib.parse import quote
 from clu.device import Device
 
 from bs4 import BeautifulSoup
-import httpx
 
 
 logger = logging.getLogger(__name__)
@@ -167,7 +166,7 @@ class PowerSwitch(Device):
         self.base_url = '%s://%s' % (self.scheme, self.hostname)
         self._is_admin = True
         self.session = requests.Session()
-        #self.client = httpx.AsyncClient()
+        # self.client = httpx.AsyncClient()
         self.login()
 
     def __len__(self):
@@ -227,7 +226,7 @@ class PowerSwitch(Device):
         if len(outlets) == 1:
             return outlets[0]
         return outlets
-    
+
     async def getstatus(self):
         i = 1
         data = {}
@@ -237,23 +236,24 @@ class PowerSwitch(Device):
             out_state = "state_" + str(i)
             data[out_name] = item[1]
             data[out_state] = item[2]
-            i+=1
+            i += 1
         return data
-
 
     def login(self):
         self.secure_login = False
         self.session = requests.Session()
         try:
-            response = self.session.get(self.base_url, verify=False, timeout=self.login_timeout, allow_redirects=False)
+            response = self.session.get(self.base_url, verify=False,
+                                        timeout=self.login_timeout, allow_redirects=False)
             if response.is_redirect:
                 self.base_url = response.headers['Location'].rstrip('/')
                 logger.debug(f'Redirecting to: {self.base_url}')
-                response = self.session.get(self.base_url, verify=False, timeout=self.login_timeout)
+                response = self.session.get(self.base_url, verify=False,
+                                            timeout=self.login_timeout)
         except (requests.exceptions.ConnectTimeout, requests.exceptions.ConnectionError):
             self.session = None
-            return False # @wasndas
-        
+            return False  # @wasndas
+
         soup = BeautifulSoup(response.text, 'html.parser')
         fields = {}
         for field in soup.find_all('input'):
@@ -265,7 +265,8 @@ class PowerSwitch(Device):
         fields['Username'] = self.userid
         fields['Password'] = self.password
 
-        form_response = fields['Challenge'] + fields['Username'] + fields['Password'] + fields['Challenge']
+        form_response = fields['Challenge'] + fields['Username'] + \
+            fields['Password'] + fields['Challenge']
 
         m = hashlib.md5()  # nosec - The switch we are talking to uses md5 hashes
         m.update(form_response.encode())
@@ -273,18 +274,22 @@ class PowerSwitch(Device):
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
         try:
-            response = self.session.post('%s/login.tgi' % self.base_url, headers=headers, data=data, timeout=self.timeout, verify=False)
+            response = self.session.post(
+                '%s/login.tgi' % self.base_url,
+                headers=headers,
+                data=data,
+                timeout=self.timeout,
+                verify=False)
         except requests.exceptions.ConnectTimeout:
             self.secure_login = False
             self.session = None
-            return False # @wasndas
+            return False  # @wasndas
 
         if response.status_code == 200:
             if 'Set-Cookie' in response.headers:
                 self.secure_login = True
 
-        return True # @wasndas
-
+        return True  # @wasndas
 
     def load_configuration(self):
         """ Return a configuration dictionary """
@@ -339,9 +344,14 @@ class PowerSwitch(Device):
         for i in range(0, self.retries):
             try:
                 if self.secure_login and self.session:
-                    request = self.session.get(full_url, timeout=self.timeout, verify=False, allow_redirects=True)
+                    request = self.session.get(
+                        full_url, timeout=self.timeout, verify=False, allow_redirects=True)
                 else:
-                    request = requests.get(full_url, auth=(self.userid, self.password,), timeout=self.timeout, verify=False, allow_redirects=True)  # nosec
+                    request = requests.get(full_url, auth=(
+                        self.userid, self.password,),
+                        timeout=self.timeout,
+                        verify=False,
+                        allow_redirects=True)  # nosec
             except requests.exceptions.RequestException as e:
                 logger.warning("Request timed out - %d retries left.", self.retries - i - 1)
                 logger.exception("Caught exception %s", str(e))

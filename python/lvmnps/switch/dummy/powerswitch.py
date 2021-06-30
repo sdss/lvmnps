@@ -7,8 +7,6 @@
 
 from sdsstools.logger import SDSSLogger
 
-from lvmnps.switch.exceptions import *
-from lvmnps.switch.outlet import Outlet
 from lvmnps.switch.powerswitchbase import PowerSwitchBase
 
 __all__ = ['PowerSwitch']
@@ -20,24 +18,20 @@ class PowerSwitch(PowerSwitchBase):
     def __init__(self, name: str, config: [], log: SDSSLogger):
         super().__init__(name, config, log)
 
-    
     async def start(self):
         if not await self.isReachable():
             self.log.warning(f"{self.name} not reachable on start up")
         await self.update(self.outlets)
-    
 
     async def stop(self):
-        self.log.debug("For a moment, nothing happened. Then, after a second or so, nothing continued to happen ...")
-    
+        self.log.debug("For a moment, nothing happened. Then, after a second or so, "
+                       "nothing continued to happen ...")
 
     async def isReachable(self):
-        return True   
-
+        return True
 
     async def update(self, outlets):
         pass
-
 
     async def switch(self, state, outlets):
         for o in outlets:

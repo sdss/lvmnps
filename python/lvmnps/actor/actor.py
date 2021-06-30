@@ -9,8 +9,6 @@
 from __future__ import annotations
 
 import asyncio
-import os
-import warnings
 from contextlib import suppress
 
 from lvmnps.actor.commands import parser as nps_command_parser
@@ -28,7 +26,7 @@ class lvmnps(AMQPActor):
     Parameters (TBD)
     """
 
-    parser = nps_command_parser # commands register..CK 20210402
+    parser = nps_command_parser  # commands register..CK 20210402
 
     def __init__(
             self,
@@ -45,15 +43,14 @@ class lvmnps(AMQPActor):
         assert len(self.parser_args) == 1
 
         for switch in self.parser_args[0]:
-             try:
+            try:
                 self.log.debug(f"Start {switch.name} ...")
                 await asyncio.wait_for(switch.start(), timeout=connect_timeout)
-                
-             except Exception as ex:
+
+            except Exception as ex:
                 self.log.error(f"Unexpected exception {type(ex)}: {ex}")
 
         self.log.debug("Start done")
-
 
     async def stop(self):
         with suppress(asyncio.CancelledError):
@@ -62,25 +59,23 @@ class lvmnps(AMQPActor):
                 await task
         return super().stop()
 
-
     @classmethod
     def from_config(cls, config, *args, **kwargs):
         """Creates an actor from a configuration file."""
 
         instance = super(lvmnps, cls).from_config(config, *args, **kwargs)
- 
+
         assert isinstance(instance, lvmnps)
         assert isinstance(instance.config, dict)
         if "switches" in instance.config:
-           switches = []
-           for (name, config) in instance.config["switches"].items():
-               instance.log.info(f"Instance {name}: {config}")
-               try:
-                  switches.append(powerSwitchFactory(name, config, instance.log))
+            switches = []
+            for (name, config) in instance.config["switches"].items():
+                instance.log.info(f"Instance {name}: {config}")
+                try:
+                    switches.append(powerSwitchFactory(name, config, instance.log))
 
-               except Exception as ex:
-                  instance.log.error(f"Error in power switch factory {type(ex)}: {ex}")
-           instance.parser_args = [switches]  
-            
+                except Exception as ex:
+                    instance.log.error(f"Error in power switch factory {type(ex)}: {ex}")
+            instance.parser_args = [switches]
+
         return instance
-
