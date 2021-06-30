@@ -25,7 +25,8 @@ async def switch_control(switches: [], on: bool, name: str, portnum: int):
         try:
             await switch.setState(on, name, portnum)
             # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-            status = dict(list(status.items()) + list((await switch.statusAsJson(name, portnum)).items()))
+            status = dict(list(status.items()) +
+                          list((await switch.statusAsJson(name, portnum)).items()))
 
         except NpsActorError as err:
             return {str(err)}
