@@ -20,12 +20,12 @@ from clu import AMQPActor, AMQPClient
 from pytest_rabbitmq import factories
 
 rabbitmq_local_proc = shutil.which('rabbitmq-server', path="/usr/local/sbin:/usr/sbin")
-
+rabbitmq_local_plugindir = '/usr/lib64/rabbitmq/lib/rabbitmq_server-3.8.11/plugins/'
 rabbitmq_proc = factories.rabbitmq_proc(host='127.0.0.1',
                                         port=None,
                                         node="test",
                                         logsdir='/tmp/rabbitmq/logs',
-                                        plugindir='/usr/lib64/rabbitmq/lib/rabbitmq_server-3.8.11/plugins/',
+                                        plugindir=rabbitmq_local_plugindir,
                                         server=rabbitmq_local_proc,
                                         ctl=f"{os.path.dirname(rabbitmq_local_proc)}/rabbitmqctl")
 
