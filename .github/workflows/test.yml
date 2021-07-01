@@ -3,17 +3,18 @@
 
 name: Test
 
-on: push
-      branches: [main]
-      paths-ignore:
-        - '*.md'
-        - '*.rst'
-    pull_request:
-      branches: [main]
-      paths-ignore:
-        - '*.md'
-        - '*.rst'
-      
+ on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '*.md'
+      - '*.rst'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - '*.md'
+      - '*.rst'
+     
 jobs:
   test:
 
