@@ -13,7 +13,7 @@ Lvm Network Power Switch
 - CLU Actor based interface
 - Supports a Dummy PDU
 - Supports [iBOOT g2](https://dataprobe.com/iboot-g2/)
-- Supports DLI...
+- Supports [Digital Loggers Web Power](https://github.com/dwighthubbard/python-dlipower)
 
 ## Config file structure
 
