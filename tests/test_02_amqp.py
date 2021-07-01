@@ -11,6 +11,8 @@
 # import sys
 
 import pytest
+
+
 # from clu import REPLY, AMQPActor, CluError, CommandError
 # from clu.client import AMQPReply
 # from clu.model import Model

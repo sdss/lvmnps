@@ -15,8 +15,6 @@ import shutil
 
 import pytest
 from clu import AMQPActor, AMQPClient
-
-
 from pytest_rabbitmq import factories
 
 
