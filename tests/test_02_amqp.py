@@ -6,22 +6,23 @@
 # @Filename: test_actor.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
-# import asyncio
-# import logging
-# import sys
+'''
+import asyncio
+import logging
+import sys
 
 import pytest
 
 
-# from clu import REPLY, AMQPActor, CluError, CommandError
-# from clu.client import AMQPReply
-# from clu.model import Model
+from clu import REPLY, AMQPActor, CluError, CommandError
+from clu.client import AMQPReply
+from clu.model import Model
 
 
-# from asynctest import CoroutineMock
+from asynctest import CoroutineMock
 
 
-# pytestmark = [pytest.mark.asyncio]
+pytestmark = [pytest.mark.asyncio]
 
 
 @pytest.fixture
@@ -45,7 +46,6 @@ def test_actor(amqp_actor):
     assert amqp_actor.name == "amqp_actor"
 
 
-'''
 async def test_client_send_command(amqp_client, amqp_actor):
 
     cmd = await amqp_client.send_command("amqp_actor", "ping")
