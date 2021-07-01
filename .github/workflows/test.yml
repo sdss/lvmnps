@@ -50,7 +50,7 @@ jobs:
 
     - name: Test with pytest
       run: |
-        pip install pytest pytest-cov pytest-asyncio pytest-mock asynctest pytest-sugar python-rabbitmq
+        pip install pytest pytest-cov pytest-asyncio pytest-mock asynctest pytest-sugar
         pip install coverage[toml]
         pytest
 
