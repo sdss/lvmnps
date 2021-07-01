@@ -18,7 +18,7 @@ Lvm Network Power Switch
 ## Config file structure
 
     switches:
-        name_your_switch_here:
+        name_your_switch_here:    # should be a unique name
             type: dummy           # currently dummy, iboot, dli
             num: 8                # number of ports 
             ports: 
