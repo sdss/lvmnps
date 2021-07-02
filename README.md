@@ -50,7 +50,7 @@ Lvm Network Power Switch
 
     #> poetry run clu
 * status command without parameter returns all ports of all switches.    
-* the default is to return only configured ports, otherwise define 'ouo' false in the config file, see lvmnps_dummy.yml
+* the default is to return only configured ports, otherwise define 'ouo' false in the config file, see [lvmnps_dummy.yml](https://github.com/sdss/lvmnps/blob/master/python/lvmnps/etc/lvmnps_dummy.yml)
     
       lvmnps status
       
