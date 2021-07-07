@@ -14,7 +14,11 @@ from clu.command import Command
 from lvmnps.exceptions import NpsActorError
 
 from lvmnps.actor.commands import parser
+<<<<<<< HEAD
 from lvmnps.switch.dli.dlipower import PowerSwitch
+=======
+from lvmnps.switch.lvmpower import PowerSwitch
+>>>>>>> 6fb77e8498290755cbe8025a8dc5681b3e4ef294
 
 
 @parser.command()
@@ -27,7 +31,7 @@ async def on(command:Command, switches: dict[str, PowerSwitch], outlet):
     for switch in switches:
         if switches[switch].name == 'nps1':
             try:
-                switches[switch].on(outlet)
+                await switches[switch].on(outlet)
             except NpsActorError as err:
                 return command.fail(error=str(err))
 
@@ -43,7 +47,7 @@ async def off(command:Command, switches : dict[str, PowerSwitch], outlet):
     for switch in switches:
         if switches[switch].name == 'nps1':
             try:
-                switches[switch].off(outlet)
+                await switches[switch].off(outlet)
             except NpsActorError as err:
                 return command.fail(error=str(err))
 
@@ -59,14 +63,14 @@ async def onall(command:Command, switches : dict[str, PowerSwitch]):
         if switches[switch].name == 'nps1':
             try:
                 for outlet in switches[switch]:
-                    outlet.on()
+                    await outlet.on()
             except NpsActorError as err:
                 return command.fail(error=str(err))
 
     return command.finish(text="Turn on all of the outlet done!")
 
 @parser.command()
-async def offall(command:Command, switch : PowerSwitch):
+async def offall(command:Command, switches : PowerSwitch):
     """Turn off all Outlet"""
 
     command.info(text="Turn off all of the outlet")
@@ -75,7 +79,7 @@ async def offall(command:Command, switch : PowerSwitch):
         if switches[switch].name == 'nps1':
             try:
                 for outlet in switches[switch]:
-                    outlet.off()
+                    await outlet.off()
             except NpsActorError as err:
                 return command.fail(error=str(err))
     

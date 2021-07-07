@@ -113,6 +113,7 @@ import requests
 import requests.exceptions
 import urllib3
 from bs4 import BeautifulSoup
+import httpx
 
 
 logger = logging.getLogger(__name__)
@@ -267,6 +268,7 @@ class PowerSwitch(object):
         self.base_url = '%s://%s' % (self.scheme, self.hostname)
         self._is_admin = True
         self.session = requests.Session()
+        #self.client = httpx.AsyncClient()
         self.login()
         
         
@@ -339,6 +341,22 @@ class PowerSwitch(object):
         if len(outlets) == 1:
             return outlets[0]
         return outlets
+<<<<<<< HEAD:python/lvmnps/switch/dli/dlipower.py
+=======
+    
+    def getstatus(self):
+        i = 1
+        data = {}
+        list = self.statuslist()
+        for item in list:
+            out_name = "outlet_" + str(i)
+            out_state = "state_" + str(i)
+            data[out_name] = item[1]
+            data[out_state] = item[2]
+            i+=1
+        return data
+
+>>>>>>> 6fb77e8498290755cbe8025a8dc5681b3e4ef294:python/lvmnps/switch/dlipower.py
 
     def login(self):
         self.secure_login = False

@@ -10,11 +10,16 @@ from __future__ import annotations
 
 from clu.command import Command
 from lvmnps.actor.commands import parser
+<<<<<<< HEAD
 from lvmnps.exceptions import NpsActorError
 from requests.api import get
 from lvmnps.switch.dli.dlipower import PowerSwitch
 
 #switch = dlipower.PowerSwitch(hostname="10.7.45.22",userid="admin",password='rLXR3KxUqiCPGvA')
+=======
+from lvmnps.switch.lvmpower import PowerSwitch
+from lvmnps.exceptions import NpsActorError
+>>>>>>> 6fb77e8498290755cbe8025a8dc5681b3e4ef294
 
 @parser.command()
 async def status(command: Command, switches: dict[str, PowerSwitch]):
@@ -24,30 +29,13 @@ async def status(command: Command, switches: dict[str, PowerSwitch]):
         if switches[switch].name == 'nps1':
             command.info(text='name is nps1')
         try:
+<<<<<<< HEAD
             get = switches[switch].getstatus()
+=======
+            get = await switches[switch].getstatus()
+>>>>>>> 6fb77e8498290755cbe8025a8dc5681b3e4ef294
             command.info(text="Status of the NPS", status = get)
         except NpsActorError as err:
             return command.fail(error=str(err))
-    """
-    command.info(
-        status = {
-            "outlet_1":switch[0].name,
-            "state_1":switch[0].state,
-            "outlet_2":switch[1].name,
-            "state_2":switch[1].state,
-            "outlet_3":switch[2].name,
-            "state_3":switch[2].state,
-            "outlet_4":switch[3].name,
-            "state_4":switch[3].state,
-            "outlet_5":switch[4].name,
-            "state_5":switch[4].state,
-            "outlet_6":switch[5].name,
-            "state_6":switch[5].state,
-            "outlet_7":switch[6].name,
-            "state_7":switch[6].state,
-            "outlet_8":switch[7].name,
-            "state_8":switch[7].state,
-        }
-    )
-    """
+
     return command.finish()

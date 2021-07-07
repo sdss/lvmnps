@@ -15,7 +15,12 @@ from contextlib import suppress
 
 from lvmnps.actor.commands import parser as nps_command_parser
 from clu.actor import AMQPActor
+<<<<<<< HEAD
 from lvmnps.switch.dli.dlipower import PowerSwitch
+=======
+from lvmnps.switch.lvmpower import PowerSwitch
+from lvmnps.exceptions import NpsActorUserWarning
+>>>>>>> 6fb77e8498290755cbe8025a8dc5681b3e4ef294
 
 __all__ = ["lvmnps"]
 
@@ -49,7 +54,10 @@ class lvmnps(AMQPActor):
                     NpsActorUserWarning,
                 )
 
+<<<<<<< HEAD
        
+=======
+>>>>>>> 6fb77e8498290755cbe8025a8dc5681b3e4ef294
     async def stop(self):
         with suppress(asyncio.CancelledError):
             for task in self._fetch_log_jobs:
