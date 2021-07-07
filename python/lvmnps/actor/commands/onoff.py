@@ -14,7 +14,7 @@ from clu.command import Command
 from lvmnps.exceptions import NpsActorError
 
 from lvmnps.actor.commands import parser
-from lvmnps.switch.dlipower import PowerSwitch
+from lvmnps.switch.dli.dlipower import PowerSwitch
 
 
 @parser.command()

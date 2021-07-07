@@ -1,18 +1,118 @@
+#!/usr/bin/python
+# Copyright (c) 2009-2015, Dwight Hubbard
+# Copyrights licensed under the New BSD License
+# See the accompanying LICENSE.txt file for terms.
+
+#modified by MY
+
+"""
+Digital Loggers Web Power Switch Management
+
+The module provides a python class named
+powerswitch that allows managing the web power
+switch from python programs.
+
+When run as a script this acts as a command line utility to
+manage the DLI Power switch.
+
+Notes
+-----
+This module has been tested against the following
+Digital Loggers Power network power switches:
+  WebPowerSwitch II
+  WebPowerSwitch III
+  WebPowerSwitch IV
+  WebPowerSwitch V
+  Ethernet Power Controller III
+
+Examples
+--------
+
+*Connecting to a Digital Loggers Power switch*
+
+>>> from dlipower import PowerSwitch
+>>> switch = PowerSwitch(hostname='lpc.digital-loggers.com', userid='admin', password='4321')
+
+*Getting the power state (status) from the switch*
+Printing the switch object will print a table with the
+Outlet Number, Name and Power State
+
+>>> switch
+DLIPowerSwitch at lpc.digital-loggers.com
+Outlet	Name           	State
+1	Battery Charger	     OFF
+2	K3 Power ON    	     ON
+3	Cisco Router   	     OFF
+4	WISP access poi	     ON
+5	Shack Computer 	     OFF
+6	Router         	     OFF
+7	2TB Drive      	     ON
+8	Cable Modem1   	     ON
+
+*Getting the name and powerswitch of the first outlet*
+The PowerSwitch has a series of Outlet objects, they
+will display their name and state if printed.
+
+>>> switch[0]
+<dlipower_outlet 'Traffic light:OFF'>
+
+*Renaming the first outlet*
+Changing the "name" attribute of an outlet will
+rename the outlet on the powerswitch.
+
+>>> switch[0].name = 'Battery Charger'
+>>> switch[0]
+<dlipower_outlet 'Battery Charger:OFF'>
+
+*Turning the first outlet on*
+Individual outlets can be accessed uses normal
+list slicing operators.
+
+>>> switch[0].on()
+False
+>>> switch[0]
+<dlipower_outlet 'Battery Charger:ON'>
+
+*Turning all outlets off*
+The PowerSwitch() object supports iterating over
+the available outlets.
+
+>>> for outlet in switch:
+...     outlet.off()
+...
+False
+False
+False
+False
+False
+False
+False
+False
+>>> switch
+DLIPowerSwitch at lpc.digital-loggers.com
+Outlet	Name           	State
+1	Battery Charger	OFF
+2	K3 Power ON    	OFF
+3	Cisco Router   	OFF
+4	WISP access poi	OFF
+5	Shack Computer 	OFF
+6	Router         	OFF
+7	2TB Drive      	OFF
+8	Cable Modem1   	OFF
+"""
+
 import hashlib
+import json
 import logging
 import multiprocessing
 import os
-import json
-import requests
-import requests.exceptions
 import time
-import urllib3
 from urllib.parse import quote
 
-from clu.device import Device
-
+import requests
+import requests.exceptions
+import urllib3
 from bs4 import BeautifulSoup
-import httpx
 
 
 logger = logging.getLogger(__name__)
@@ -123,7 +223,7 @@ class Outlet(object):
         self.rename(new_name)
 
 
-class PowerSwitch(Device):
+class PowerSwitch(object):
     """ Powerswitch class to manage the Digital Loggers Web power switch """
     __len = 0
     login_timeout = 2.0
@@ -131,11 +231,11 @@ class PowerSwitch(Device):
 
     def __init__(self, userid=None, password=None, hostname=None, timeout=None,
                  cycletime=None, retries=None, use_https=False, name=None, port=None):
-        Device.__init__(self, hostname, port)
-        self.name = name
         """
         Class initializaton
         """
+        self.name = name
+        
         if not retries:
             retries = RETRIES
         config = self.load_configuration()
@@ -167,8 +267,20 @@ class PowerSwitch(Device):
         self.base_url = '%s://%s' % (self.scheme, self.hostname)
         self._is_admin = True
         self.session = requests.Session()
-        #self.client = httpx.AsyncClient()
         self.login()
+        
+        
+    def getstatus(self):
+        i = 1
+        data = {}
+        list = self.statuslist()
+        for item in list:
+            out_name = "outlet_" + str(i)
+            out_state = "state_" + str(i)
+            data[out_name] = item[1]
+            data[out_state] = item[2]
+            i+=1
+        return data
 
     def __len__(self):
         """
@@ -227,29 +339,18 @@ class PowerSwitch(Device):
         if len(outlets) == 1:
             return outlets[0]
         return outlets
-    
-    async def getstatus(self):
-        i = 1
-        data = {}
-        list = await self.statuslist()
-        for item in list:
-            out_name = "outlet_" + str(i)
-            out_state = "state_" + str(i)
-            data[out_name] = item[1]
-            data[out_state] = item[2]
-            i+=1
-        return data
-
 
     def login(self):
         self.secure_login = False
         self.session = requests.Session()
         try:
-            response = self.session.get(self.base_url, verify=False, timeout=self.login_timeout, allow_redirects=False)
+            response = self.session.get(self.base_url, verify=False,
+                                        timeout=self.login_timeout, allow_redirects=False)
             if response.is_redirect:
                 self.base_url = response.headers['Location'].rstrip('/')
                 logger.debug(f'Redirecting to: {self.base_url}')
-                response = self.session.get(self.base_url, verify=False, timeout=self.login_timeout)
+                response = self.session.get(self.base_url, verify=False,
+                                            timeout=self.login_timeout)
         except (requests.exceptions.ConnectTimeout, requests.exceptions.ConnectionError):
             self.session = None
             return
@@ -264,7 +365,8 @@ class PowerSwitch(Device):
         fields['Username'] = self.userid
         fields['Password'] = self.password
 
-        form_response = fields['Challenge'] + fields['Username'] + fields['Password'] + fields['Challenge']
+        form_response = fields['Challenge'] + fields['Username']
+        form_response += fields['Password'] + fields['Challenge']
 
         m = hashlib.md5()  # nosec - The switch we are talking to uses md5 hashes
         m.update(form_response.encode())
@@ -272,7 +374,8 @@ class PowerSwitch(Device):
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
         try:
-            response = self.session.post('%s/login.tgi' % self.base_url, headers=headers, data=data, timeout=self.timeout, verify=False)
+            response = self.session.post('%s/login.tgi' % self.base_url, headers=headers,
+                                         data=data, timeout=self.timeout, verify=False)
         except requests.exceptions.ConnectTimeout:
             self.secure_login = False
             self.session = None
@@ -324,7 +427,7 @@ class PowerSwitch(Device):
             return True
         return False
 
-    async def geturl(self, url='index.htm'):
+    def geturl(self, url='index.htm'):
         """
         Get a URL from the userid/password protected powerswitch page Return None on failure
         """
@@ -335,9 +438,13 @@ class PowerSwitch(Device):
         for i in range(0, self.retries):
             try:
                 if self.secure_login and self.session:
-                    request = self.session.get(full_url, timeout=self.timeout, verify=False, allow_redirects=True)
+                    request = self.session.get(full_url, timeout=self.timeout,
+                                               verify=False, allow_redirects=True)
                 else:
-                    request = requests.get(full_url, auth=(self.userid, self.password,), timeout=self.timeout, verify=False, allow_redirects=True)  # nosec
+                    request = requests.get(full_url,
+                                           auth=(self.userid, self.password,),
+                                           verify=False,
+                                           allow_redirects=True)  # nosec
             except requests.exceptions.RequestException as e:
                 logger.warning("Request timed out - %d retries left.", self.retries - i - 1)
                 logger.exception("Caught exception %s", str(e))
@@ -415,11 +522,11 @@ class PowerSwitch(Device):
         self.on(outlet)
         return False
 
-    async def statuslist(self):
+    def statuslist(self):
         """ Return the status of all outlets in a list,
         each item will contain 3 items plugnumber, hostname and state  """
         outlets = []
-        url = await self.geturl('index.htm')
+        url = self.geturl('index.htm')
         if not url:
             return None
         soup = BeautifulSoup(url, "html.parser")
