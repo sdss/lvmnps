@@ -12,10 +12,9 @@ import asyncio
 from contextlib import suppress
 
 from clu.actor import AMQPActor
-from lvmnps.switch.dli.dlipower import PowerSwitch
+from lvmnps.switch.lvmpower import LVMPowerSwitch as PowerSwitch
 from lvmnps.exceptions import NpsActorUserWarning
 from lvmnps.actor.commands import parser as nps_command_parser
-from lvmnps.switch.factory import powerSwitchFactory
 
 __all__ = ["lvmnps"]
 
@@ -66,14 +65,16 @@ class lvmnps(AMQPActor):
         assert isinstance(instance, lvmnps)
         assert isinstance(instance.config, dict)
         if "switches" in instance.config:
-            switches = []
-            for (name, config) in instance.config["switches"].items():
-                instance.log.info(f"Instance {name}: {config}")
-                try:
-                    switches.append(powerSwitchFactory(name, config, instance.log))
-
-                except Exception as ex:
-                    instance.log.error(f"Error in power switch factory {type(ex)}: {ex}")
-            instance.parser_args = [switches]
+            switches = (
+                PowerSwitch(
+                    hostname=ctr["host"],
+                    port=ctr["port"],
+                    userid="admin",
+                    password=ctr["password"]
+                )
+                for (ctrname, ctr) in instance.config["switches"].items()
+            )
+            instance.switches = {s.name: s for s in switches}
+            instance.parser_args = [instance.switches]
 
         return instance

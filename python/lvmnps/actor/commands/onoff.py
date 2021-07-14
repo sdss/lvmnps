@@ -14,63 +14,41 @@ from clu.command import Command
 from lvmnps.actor.commands import parser
 from lvmnps.exceptions import NpsActorError
 from lvmnps.actor.commands import parser
-from lvmnps.switch.dli.dlipower import PowerSwitch
 
-# from lvmnps.switch.dli.powerswitch import PowerSwitch
+#from lvmnps.switch.dli.dlipower import PowerSwitch
+from lvmnps.switch.lvmpower import LVMPowerSwitch as PowerSwitch
 
-async def switch_control(switches: [], on: bool, name: str, portnum: int):
-    status = {}
+
+@parser.command()
+@click.argument("NAME", type=str, default="")
+@click.argument("OUTLET", type=int, default=0)
+async def on(command: Command, switches: dict[str, PowerSwitch], name: str, outlet: int):
+    """Turn on the Outlet"""
+
+    command.info(text="Turn on the outlet %d" % (outlet))
 
     for switch in switches:
         try:
-            await switch.setState(on, name, portnum)
-            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-            status = dict(list(status.items()) +
-                          list((await switch.statusAsJson(name, portnum)).items()))
-
+            await switches[switch].on(name, outlet)
         except NpsActorError as err:
-            return {str(err)}
+                return command.fail(error=str(err))
 
-    return status
+    return command.finish(text="Turn on the outlet %d done!" % (outlet))
 
 
 @parser.command()
 @click.argument("NAME", type=str, default="")
-@click.argument("PORTNUM", type=int, default=0)
-async def on(command: Command, switches: [], name: str, portnum: int):
+@click.argument("OUTLET", type=int, default=0)
+async def off(command: Command, switches: dict[str, PowerSwitch], name: str, outlet: int):
     """Turn on the Outlet"""
 
-    command.info(STATUS=await switch_control(switches, True, name, portnum))
+    command.info(text="Turn off the outlet %d" % (outlet))
 
-    return command.finish(text="done")
+    for switch in switches:
+        try:
+            await switches[switch].off(name, outlet)
+        except NpsActorError as err:
+                return command.fail(error=str(err))
 
+    return command.finish(text="Turn off the outlet %d done!" % (outlet))
 
-@parser.command()
-@click.argument("NAME", type=str, default="")
-@click.argument("PORTNUM", type=int, default=0)
-async def off(command: Command, switches: [], name: str, portnum: int):
-    """Turn off the Outlet"""
-
-    command.info(STATUS=await switch_control(switches, False, name, portnum))
-
-    return command.finish(text="done")
-
-
-@parser.command()
-@click.argument("NAME", type=str, default="")
-async def onall(command: Command, switches: [], name: str):
-    """Turn on all Outlet"""
-
-    command.info(STATUS=await switch_control(switches, True, 0, name))
-
-    return command.finish(text="done")
-
-
-@parser.command()
-@click.argument("NAME", type=str, default="")
-async def offall(command: Command, switches: [], name: str):
-    """Turn off all Outlet"""
-
-    command.info(STATUS=await switch_control(switches, False, 0, name))
-
-    return command.finish(text="done")
