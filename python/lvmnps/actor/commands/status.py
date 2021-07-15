@@ -13,10 +13,8 @@ from clu.command import Command
 
 from lvmnps.actor.commands import parser
 from lvmnps.exceptions import NpsActorError
-#from requests.api import get
-from lvmnps.switch.lvmpower import LVMPowerSwitch as PowerSwitch
 
-#switch = dlipower.PowerSwitch(hostname="10.7.45.22",userid="admin",password='rLXR3KxUqiCPGvA')
+from lvmnps.switch.lvmpower import LVMPowerSwitch as PowerSwitch
 
 @parser.command()
 async def status(command: Command, switches: dict[str, PowerSwitch]):
@@ -24,8 +22,10 @@ async def status(command: Command, switches: dict[str, PowerSwitch]):
     
     for switch in switches:
         try:
+            await switches[switch].add_client()
             get = await switches[switch].getstatus()
             command.info(text="Status of the NPS", status = get)
+            await switches[switch].close()
         except NpsActorError as err:
             return command.fail(error=str(err))
 

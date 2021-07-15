@@ -65,6 +65,10 @@ class LVMPowerSwitch(object):
         if login.status_code != 200:
             raise Exception(f"Error response {login.status_code} while requesting {login_url}.")
 
+    async def close(self):
+        """Close the Connection with URL"""
+        await self.clients[self.host].aclose()
+
 
     async def geturl(self, url='index.htm'):
         """Get a URL"""
@@ -87,29 +91,56 @@ class LVMPowerSwitch(object):
         return result
 
 
-    async def on(self, outlet_number:int=0):
+    async def on(self, name:str='Outlet 0', outlet_number:int=0):
         """Turn on power to an outlet
            False = Success
            True = Fail
         """
-        if outlet_number!=0:
-            await self.geturl(url='outlet?%d=ON' % outlet_number)
+        outlets = await self.statuslist()
+        len = range(0, 7)
+
+        if outlet_number != 0:
+             await self.geturl(url='outlet?%s=ON' % outlet_number)
         else:
-            await self.geturl(url='outlet?%s=ON' % 'a')
+            for plug in len:
+                if name == outlets[plug][1]:
+                    plug_number = outlets[plug][0]
+                    await self.geturl(url='outlet?%s=ON' % plug_number)
 
 
-    async def off(self, outlet_number:int=0):
+    async def onall(self):
+        """Turn on all outlets"""
+        await self.geturl(url='outlet?%s=ON' % 'a')
+
+
+    async def outlet(self):
+        outlet = await self. statuslist()
+        print(outlet)
+
+
+    async def off(self, name:str='Oetlet 0', outlet_number:int=0):
         """Turn on power to an outlet
            False = Success
            True = Fail
         """
-        if outlet_number!=0:
-            await self.geturl(url='outlet?%d=OFF' % outlet_number)
+        outlets = await self.statuslist()
+        len = range(0, 7)
+
+        if outlet_number != 0:
+             await self.geturl(url='outlet?%s=OFF' % outlet_number)
         else:
-            await self.geturl(url='outlet?%s=OFF' % 'a')
+            for plug in len:
+                if name == outlets[plug][1]:
+                    plug_number = outlets[plug][0]
+                    await self.geturl(url='outlet?%s=OFF' % plug_number)
 
 
-    async def cycle(self, outlet_number:int=0):
+    async def offall(self):
+        """Turn off all outlets"""
+        await self.geturl(url='outlet?%s=OFF' % 'a')
+
+
+    async def cycle(self, outlet_number:int):
         """cycle power to an outlet"""
 
         if outlet_number!=0:
@@ -155,9 +186,9 @@ class LVMPowerSwitch(object):
             columns = temp.findAll('td')
             if len(columns) == 5:
                 plugnumber = columns[0].string
-                hostname = columns[1].string
+                name = columns[1].string
                 state = columns[2].find('font').string.upper()
-                outlets.append([int(plugnumber), hostname, state])
+                outlets.append([int(plugnumber), name, state])
 
         return outlets
 
