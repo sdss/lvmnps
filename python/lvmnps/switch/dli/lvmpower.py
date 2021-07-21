@@ -13,9 +13,9 @@ import httpx
 from bs4 import BeautifulSoup
 
 
-class LVMPowerSwitch(object):
+class PowerSwitch(object):
 
-    def __init__(self, hostname=None, userid=None, password=None, name=None, port=None):
+    def __init__(self, userid=None, password=None, hostname=None, name=None, port=None, use_https=False):
         """
         Class initialization
         """
@@ -68,6 +68,13 @@ class LVMPowerSwitch(object):
     async def close(self):
         """Close the Connection with URL"""
         await self.clients[self.host].aclose()
+
+
+    async def verify(self):
+        """ Verify we can reach the switch, returns true if ok """
+        if await self.geturl():
+            return True
+        return False
 
 
     async def geturl(self, url='index.htm'):

@@ -12,21 +12,28 @@ import click
 from clu.command import Command
 
 from lvmnps.actor.commands import parser
-from lvmnps.exceptions import NpsActorError
+from lvmnps.switch.exceptions import PowerException
 
-from lvmnps.switch.lvmpower import LVMPowerSwitch as PowerSwitch
 
 @parser.command()
-async def status(command: Command, switches: dict[str, PowerSwitch]):
+@click.argument("NAME", type=str, default="")
+@click.argument("PORTNUM", type=int, default=0)
+async def status(command: Command, switches: [], name: str, portnum: int):
     """print the status of the NPS."""
-    
+
+    status = {}
+
     for switch in switches:
         try:
-            await switches[switch].add_client()
-            get = await switches[switch].getstatus()
-            command.info(text="Status of the NPS", status = get)
-            await switches[switch].close()
-        except NpsActorError as err:
-            return command.fail(error=str(err))
+            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
+            status = dict(list(status.items()) +
+                          list((await switch.statusAsJson(name, portnum)).items()))
 
-    return command.finish()
+        except PowerException as ex:
+            return command.fail(error=str(ex))
+
+    command.info(
+        STATUS=status
+    )
+
+    return command.finish("done")

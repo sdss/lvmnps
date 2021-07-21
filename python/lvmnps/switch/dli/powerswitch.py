@@ -7,7 +7,7 @@
 
 from sdsstools.logger import SDSSLogger
 
-from lvmnps.switch.dli.dlipower import PowerSwitch as DliPowerSwitch
+from lvmnps.switch.dli.lvmpower import PowerSwitch as DliPowerSwitch
 from lvmnps.switch.powerswitchbase import PowerSwitchBase
 
 
@@ -52,7 +52,7 @@ class PowerSwitch(PowerSwitchBase):
                 self.dli = DliPowerSwitch(userid=self.username, password=self.password,
                                           hostname=self.hostname, use_https=self.use_https)
 #                reachable = self.statuslist()
-                reachable = self.dli.verify()
+                reachable = await self.dli.verify()
                 if not reachable:
                     self.dli = None
             return reachable

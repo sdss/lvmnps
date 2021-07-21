@@ -2,9 +2,6 @@
 # Copyright (c) 2009-2015, Dwight Hubbard
 # Copyrights licensed under the New BSD License
 # See the accompanying LICENSE.txt file for terms.
-
-#modified by MY
-
 """
 Digital Loggers Web Power Switch Management
 
@@ -230,12 +227,10 @@ class PowerSwitch(object):
     secure_login = False
 
     def __init__(self, userid=None, password=None, hostname=None, timeout=None,
-                 cycletime=None, retries=None, use_https=False, name=None, port=None):
+                 cycletime=None, retries=None, use_https=False):
         """
         Class initializaton
         """
-        self.name = name
-        
         if not retries:
             retries = RETRIES
         config = self.load_configuration()
@@ -268,19 +263,6 @@ class PowerSwitch(object):
         self._is_admin = True
         self.session = requests.Session()
         self.login()
-        
-        
-    def getstatus(self):
-        i = 1
-        data = {}
-        list = self.statuslist()
-        for item in list:
-            out_name = "outlet_" + str(i)
-            out_state = "state_" + str(i)
-            data[out_name] = item[1]
-            data[out_state] = item[2]
-            i+=1
-        return data
 
     def __len__(self):
         """

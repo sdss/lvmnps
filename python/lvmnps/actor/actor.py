@@ -12,9 +12,10 @@ import asyncio
 from contextlib import suppress
 
 from clu.actor import AMQPActor
-from lvmnps.switch.lvmpower import LVMPowerSwitch as PowerSwitch
-from lvmnps.exceptions import NpsActorUserWarning
+
 from lvmnps.actor.commands import parser as nps_command_parser
+from lvmnps.switch.factory import powerSwitchFactory
+
 
 __all__ = ["lvmnps"]
 
@@ -36,18 +37,21 @@ class lvmnps(AMQPActor):
         super().__init__(*args, **kwargs)
 
     async def start(self):
+        #await super().start()
+
         connect_timeout = self.config["timeouts"]["switch_connect"]
 
         assert len(self.parser_args) == 1
 
         for switch in self.parser_args[0]:
             try:
-                await asyncio.wait_for(super().start(), timeout=connect_timeout)
-            except asyncio.TimeoutError:
-                warnings.warn(
-                    f"Timeout out connecting to {switch.name!r}.",
-                    NpsActorUserWarning,
-                )
+                self.log.debug(f"Start {switch.name} ...")
+                await asyncio.wait_for(await super().start(), timeout=connect_timeout)
+
+            except Exception as ex:
+                self.log.error(f"Unexpected exception {type(ex)}: {ex}")
+
+        self.log.debug("Start done")
 
     async def stop(self):
         with suppress(asyncio.CancelledError):
@@ -65,16 +69,14 @@ class lvmnps(AMQPActor):
         assert isinstance(instance, lvmnps)
         assert isinstance(instance.config, dict)
         if "switches" in instance.config:
-            switches = (
-                PowerSwitch(
-                    hostname=ctr["host"],
-                    port=ctr["port"],
-                    userid="admin",
-                    password=ctr["password"]
-                )
-                for (ctrname, ctr) in instance.config["switches"].items()
-            )
-            instance.switches = {s.name: s for s in switches}
-            instance.parser_args = [instance.switches]
+            switches = []
+            for (name, config) in instance.config["switches"].items():
+                instance.log.info(f"Instance {name}: {config}")
+                try:
+                    switches.append(powerSwitchFactory(name, config, instance.log))
+
+                except Exception as ex:
+                    instance.log.error(f"Error in power switch factory {type(ex)}: {ex}")
+            instance.parser_args = [switches]
 
         return instance
