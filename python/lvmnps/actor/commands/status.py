@@ -14,11 +14,13 @@ from clu.command import Command
 from lvmnps.actor.commands import parser
 from lvmnps.switch.exceptions import PowerException
 
+from lvmnps.switch.dli.powerswitch import PowerSwitch
+
 
 @parser.command()
 @click.argument("NAME", type=str, default="")
 @click.argument("PORTNUM", type=int, default=0)
-async def status(command: Command, switches: [], name: str, portnum: int):
+async def status(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """print the status of the NPS."""
 
     status = {}

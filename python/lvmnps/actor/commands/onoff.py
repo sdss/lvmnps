@@ -15,7 +15,7 @@ from lvmnps.actor.commands import parser
 from lvmnps.exceptions import NpsActorError
 
 
-# from lvmnps.switch.dli.powerswitch import PowerSwitch
+from lvmnps.switch.dli.powerswitch import PowerSwitch
 
 
 async def switch_control(switches: [], on: bool, name: str, portnum: int):

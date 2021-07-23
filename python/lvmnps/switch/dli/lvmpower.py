@@ -98,21 +98,23 @@ class PowerSwitch(object):
         return result
 
 
-    async def on(self, name:str='Outlet 0', outlet_number:int=0):
+    async def on(self, outlet_number:int=0):
         """Turn on power to an outlet
            False = Success
            True = Fail
         """
         outlets = await self.statuslist()
+        outlets_dict = await self.outletdictionary()
         len = range(0, 7)
+        point = outlet_number-1
 
-        if outlet_number != 0:
-             await self.geturl(url='outlet?%s=ON' % outlet_number)
-        else:
-            for plug in len:
-                if name == outlets[plug][1]:
-                    plug_number = outlets[plug][0]
-                    await self.geturl(url='outlet?%s=ON' % plug_number)
+        if outlets[point][2] == 'ON':
+            raise ValueError(f"The Outlet {outlet_number} is already {outlets[point][2]}")
+        elif outlets[point][2] == 'OFF':
+            try:
+                await self.geturl(url='outlet?%s=ON' % outlet_number)
+            except:
+                raise ValueError(f"Argument {outlet_number} not defined.")
 
 
     async def onall(self):
@@ -125,21 +127,23 @@ class PowerSwitch(object):
         print(outlet)
 
 
-    async def off(self, name:str='Oetlet 0', outlet_number:int=0):
+    async def off(self, outlet_number:int=0):
         """Turn on power to an outlet
            False = Success
            True = Fail
         """
         outlets = await self.statuslist()
+        outlets_dict = await self.outletdictionary()
         len = range(0, 7)
+        point = outlet_number-1
 
-        if outlet_number != 0:
-             await self.geturl(url='outlet?%s=OFF' % outlet_number)
-        else:
-            for plug in len:
-                if name == outlets[plug][1]:
-                    plug_number = outlets[plug][0]
-                    await self.geturl(url='outlet?%s=OFF' % plug_number)
+        if outlets[point][2] == 'OFF':
+            raise ValueError(f"The Outlet {outlet_number} is already {outlets[point][2]}")
+        elif outlets[point][2] == 'ON':
+            try:
+                await self.geturl(url='outlet?%s=OFF' % outlet_number)
+            except:
+                raise ValueError(f"Argument {outlet_number} not defined.")
 
 
     async def offall(self):
@@ -198,6 +202,20 @@ class PowerSwitch(object):
                 outlets.append([int(plugnumber), name, state])
 
         return outlets
+
+    async def outletdictionary(self):
+        """ Return the status of all outlets in a dictionary,
+        each item will contain 2 items plugnumber, hostname"""
+        
+        outlets = await self.statuslist()
+        outlets_dict = {}
+
+        num = range(0,7)
+        for n in num:
+            name = outlets[n][1]
+            outlets_dict[name] = n + 1
+            
+        return outlets_dict
 
     async def printstatus(self):
         """ Print the status off all the outlets as a table to stdout """
