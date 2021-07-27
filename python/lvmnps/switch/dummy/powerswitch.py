@@ -5,6 +5,8 @@
 # @Filename: lvmnps/switch/dummy/powerswitch.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
+import time
+
 from sdsstools.logger import SDSSLogger
 
 from lvmnps.switch.powerswitchbase import PowerSwitchBase
@@ -18,6 +20,7 @@ class PowerSwitch(PowerSwitchBase):
 
     def __init__(self, name: str, config: [], log: SDSSLogger):
         super().__init__(name, config, log)
+        self.delay= self.config_get(f"delay", 0.0)
 
     async def start(self):
         if not await self.isReachable():
@@ -36,4 +39,6 @@ class PowerSwitch(PowerSwitchBase):
 
     async def switch(self, state, outlets):
         for o in outlets:
+            time.sleep(self.delay)
+            self.log.debug(f'{outlets}')
             o.setState(state)

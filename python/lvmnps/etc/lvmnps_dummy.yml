@@ -3,6 +3,7 @@ switches:
     nps_dummy_1:
         type: dummy
         num: 8
+        #delay: 1.0
         ports:
           1: 
             desc: "was 1"
