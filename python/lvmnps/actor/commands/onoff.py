@@ -15,10 +15,7 @@ from clu.command import Command
 
 from lvmnps.actor.commands import parser
 from lvmnps.exceptions import NpsActorError
-from lvmnps.actor.commands import parser
-from lvmnps.switch.dli.dlipower import PowerSwitch
 
-# from lvmnps.switch.dli.powerswitch import PowerSwitch
 
 async def switch_control(switches: [], on: bool, name: str, portnum: int):
     try:
@@ -27,7 +24,7 @@ async def switch_control(switches: [], on: bool, name: str, portnum: int):
             tasks.append(asyncio.create_task(switch.setState(on, name, portnum)))
 
         await asyncio.gather(*tasks)
-            
+
         status = {}
         for switch in switches:
             # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
@@ -35,7 +32,7 @@ async def switch_control(switches: [], on: bool, name: str, portnum: int):
                           list((await switch.statusAsJson(name, portnum)).items()))
 
     except NpsActorError as err:
-            return {str(err)}
+        return {str(err)}
 
     return status
 
