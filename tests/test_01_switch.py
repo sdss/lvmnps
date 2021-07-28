@@ -12,7 +12,7 @@ from lvmnps.switch.factory import powerSwitchFactory
 
 @pytest.fixture
 def switches():
-    default_config_file = os.path.join(os.path.dirname(__file__), "lvmnps.yml")
+    default_config_file = os.path.join(os.path.dirname(__file__), "test_01_switch.yml")
     default_config = JSONActor._parse_config(default_config_file)
 
     assert("switches" in default_config)
