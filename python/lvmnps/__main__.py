@@ -29,6 +29,7 @@ def lvmnps(ctx, config_file, verbose):
 
     ctx.obj = {"verbose": verbose, "config_file": config_file}
 
+
 @lvmnps.group(cls=DaemonGroup, prog="nps_actor", workdir=os.getcwd())
 @click.pass_context
 @cli_coro
