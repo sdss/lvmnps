@@ -12,10 +12,10 @@ import asyncio
 from contextlib import suppress
 
 from clu.actor import AMQPActor
-from lvmnps.switch.dli.dlipower import PowerSwitch
-from lvmnps.exceptions import NpsActorUserWarning
+
 from lvmnps.actor.commands import parser as nps_command_parser
 from lvmnps.switch.factory import powerSwitchFactory
+
 
 __all__ = ["lvmnps"]
 
@@ -37,18 +37,21 @@ class lvmnps(AMQPActor):
         super().__init__(*args, **kwargs)
 
     async def start(self):
+        await super().start()
+
         connect_timeout = self.config["timeouts"]["switch_connect"]
 
         assert len(self.parser_args) == 1
 
         for switch in self.parser_args[0]:
             try:
-                await asyncio.wait_for(super().start(), timeout=connect_timeout)
-            except asyncio.TimeoutError:
-                warnings.warn(
-                    f"Timeout out connecting to {switch.name!r}.",
-                    NpsActorUserWarning,
-                )
+                self.log.debug(f"Start {switch.name} ...")
+                await asyncio.wait_for(switch.start(), timeout=connect_timeout)
+
+            except Exception as ex:
+                self.log.error(f"Unexpected exception {type(ex)}: {ex}")
+
+        self.log.debug("Start done")
 
     async def stop(self):
         with suppress(asyncio.CancelledError):
