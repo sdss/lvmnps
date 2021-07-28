@@ -28,6 +28,7 @@ The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.'''
 
+import asyncio
 import logging
 import socket
 import struct
@@ -82,14 +83,15 @@ class DXPCommand(object):
 
         return self.PAYLOAD_STRUCT.pack(*pack_args)
 
-    def _get_response(self, socket):
+    async def _get_response(self, socket):
         """
         Parse the response from the request
         """
         raise Exception('get_response method not implemented')
 
-    def _get_boolean_response(self):
-        response = self.interface.socket.recv(1)
+    async def _get_boolean_response(self):
+        # response = self.interface.socket.recv(1)
+        response = await self.interface.loop.sock_recv(self.interface.socket, 1)
         if not response:
             return False
 
@@ -99,19 +101,22 @@ class DXPCommand(object):
     def _parse_bool(self, string):
         return not struct.unpack('?', string)[0]
 
-    def do_request(self):
+    async def do_request(self):
         header = self._build_header()
         payload = self._build_payload()
         request = header + payload
-        self.interface.socket.sendall(request)
+        # self.interface.socket.sendall(request)
         # self.interface.socket.sendall(bytes(request, 'utf-8'))
-        return self._get_response()
+        await self.interface.loop.sock_sendall(self.interface.socket, request)
 
-    def _do_payloadless_request(self):
+        return await self._get_response()
+
+    async def _do_payloadless_request(self):
         request = self._build_header()
-        self.interface.socket.sendall(request)
+        # self.interface.socket.sendall(request)
         # self.interface.socket.sendall(bytes(request, 'utf-8'))
-        return self._get_response()
+        await self.interface.loop.sock_sendall(self.interface.socket, request)
+        return await self._get_response()
 
 
 class IOCommand(DXPCommand):
@@ -135,8 +140,8 @@ class RelayCommand(IOCommand):
         'NO_CHANGE': 2
     }
 
-    def _get_response(self):
-        return self._get_boolean_response()
+    async def _get_response(self):
+        return await self._get_boolean_response()
 
 
 class ChangeRelayCommand(RelayCommand):
@@ -181,11 +186,13 @@ class ChangeRelaysCommand(RelayCommand):
 class GetRelaysRequest(IOCommand):
     DESCRIPTOR = 'GET_RELAYS'
 
-    def do_request(self):
-        return self._do_payloadless_request()
+    async def do_request(self):
+        return await self._do_payloadless_request()
 
-    def _get_response(self):
-        response = self.interface.socket.recv(self.interface.num_relays)
+    async def _get_response(self):
+        # response = self.interface.socket.recv(self.interface.num_relays)
+        response = await self.interface.loop.sock_recv(self.interface.socket,
+                                                       self.interface.num_relays)
         if not response:
             return None
 
@@ -225,6 +232,7 @@ class iBootInterface(object):
             logging.basicConfig()
             self.logger = logging.getLogger('iBootInterface')
             self.logger.setLevel(logging.DEBUG)
+        self.loop = asyncio.get_event_loop()
 
     def get_seq_num(self):
         seq_num = self.seq_num
@@ -234,27 +242,30 @@ class iBootInterface(object):
     def increment_seq_num(self):
         self.seq_num += 1
 
-    def connect(self):
+    async def connect(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.settimeout(SOCKET_TIMEOUT)
 
         try:
-            self.socket.connect((self.ip, self.port))
+            # self.socket.connect((self.ip, self.port))
+            await self.loop.sock_connect(self.socket, (self.ip, self.port))
         except socket.error:
             self.logger.error('Socket failed to connect')
             return False
 
         try:
-            self.socket.sendall(bytes(HELLO_STR, 'utf-8'))
-            return self._get_initial_seq_num()
+            # self.socket.sendall(bytes(HELLO_STR, 'utf-8'))
+            await self.loop.sock_sendall(self.socket, bytes(HELLO_STR, 'utf-8'))
+            return await self._get_initial_seq_num()
         except socket.error:
             self.logger.error('Socket error')
             return False
 
         return True
 
-    def _get_initial_seq_num(self):
-        response = self.socket.recv(2)
+    async def _get_initial_seq_num(self):
+        # response = self.socket.recv(2)
+        response = await self.loop.sock_recv(self.socket, 2)
 
         if not response:
             return False
@@ -268,19 +279,19 @@ class iBootInterface(object):
         except socket.error:
             pass
 
-    def switch(self, relay, on):
+    async def switch(self, relay, on):
         """Switch the given relay on or off"""
-        self.connect()
+        await self.connect()
         request = ChangeRelayCommand(self, relay, on)
 
         try:
-            return request.do_request()
+            return await request.do_request()
         except socket.error:
             return False
         finally:
             self.disconnect()
 
-    def switch_multiple(self, relay_state_dict):
+    async def switch_multiple(self, relay_state_dict):
         """
         Change the state of multiple relays at once
 
@@ -288,13 +299,13 @@ class iBootInterface(object):
             {1: True}
         where the key is the relay and the value is the new state
         """
-        self.connect()
+        await self.connect()
 
         for relay, new_state in list(relay_state_dict.items()):
             request = ChangeRelayCommand(self, relay, new_state)
 
             try:
-                result = request.do_request()
+                result = await request.do_request()
 
                 if not result:
                     return False
@@ -305,23 +316,23 @@ class iBootInterface(object):
         self.disconnect()
         return True
 
-    def get_relays(self):
-        self.connect()
+    async def get_relays(self):
+        await self.connect()
         request = GetRelaysRequest(self)
 
         try:
-            return request.do_request()
+            return await request.do_request()
         except socket.error:
             return False
         finally:
             self.disconnect()
 
-    def pulse_relay(self, relay, on, length):
-        self.connect()
+    async def pulse_relay(self, relay, on, length):
+        await self.connect()
         request = PulseRelayRequest(self, relay, on, length)
 
         try:
-            return request.do_request()
+            return await request.do_request()
         except socket.error:
             return False
         finally:
