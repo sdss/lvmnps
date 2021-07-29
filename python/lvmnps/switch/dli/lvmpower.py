@@ -13,28 +13,58 @@ import httpx
 from bs4 import BeautifulSoup
 
 
+CONFIG_DEFAULTS = {
+    'userid': 'admin',
+    'password': 'irlab',
+    'hostname': '163.180.145.123'
+}
+
+
 class PowerSwitch(object):
 
     def __init__(self, userid=None, password=None, hostname=None, name=None, port=None, use_https=False):
         """
         Class initialization
         """
+        self.__len = 0
 
-        self.host = hostname
-        self.userid = userid
-        self.password = password
+        config = self.load_configuration()
+        if userid:
+            self.userid = userid
+        else:
+            self.userid = config['userid']
+        if password:
+            self.password = password
+        else:
+            self.password = config['password']
+        if hostname:
+            self.hostname = hostname
+        else:
+            self.hostname = config['hostname']
         self.port = port
         self.name = name
 
         self.scheme = 'http'
-        self.base_url = '%s://%s' % (self.scheme, self.host)
+        self.base_url = '%s://%s' % (self.scheme, self.hostname)
         self.clients = {}
+
+    def load_configuration(self):
+        """ Return a configuration dictionary """
+        return CONFIG_DEFAULTS
+
+    async def __len__(self):
+        """
+        :return: Number of outlets on the switch
+        """
+        if self.__len == 0:
+            self.__len = len(await self.statuslist())
+        return self.__len
 
     async def add_client(self):
         """Access the url object"""
         
         auth = httpx.DigestAuth(self.userid, self.password)
-        self.clients[self.host] = httpx.AsyncClient(
+        self.clients[self.hostname] = httpx.AsyncClient(
             auth=auth,
             base_url=self.base_url,
             headers={},
@@ -54,7 +84,7 @@ class PowerSwitch(object):
                 }
 
         try:
-            login = await self.clients[self.host].post(
+            res = await self.clients[self.hostname].post(
                 url=login_url,
                 data=data,
                 headers=headers,
@@ -62,12 +92,12 @@ class PowerSwitch(object):
         except httpx.RequestError as exc:
             print(f"An error occurred while requesting {login_url!r}.")
 
-        if login.status_code != 200:
-            raise Exception(f"Error response {login.status_code} while requesting {login_url}.")
+        if res.status_code != 200:
+            raise Exception(f"Error response {res.status_code} while requesting {login_url}.")
 
     async def close(self):
         """Close the Connection with URL"""
-        await self.clients[self.host].aclose()
+        await self.clients[self.hostname].aclose()
 
 
     async def verify(self):
@@ -80,28 +110,67 @@ class PowerSwitch(object):
     async def geturl(self, url='index.htm'):
         """Get a URL"""
         
+        await self.add_client()
         await self.login()
         full_url = "%s/%s" % (self.base_url, url)
 
-        if self.host not in self.clients:
-            raise ValueError(f"Client for host {self.host} not defined.")
+        if self.hostname not in self.clients:
+            raise ValueError(f"Client for hostname {self.hostname} not defined.")
         
-        response = await self.clients[self.host].get(url=full_url)
+        res = await self.clients[self.hostname].get(url=full_url)
         
-        if response.status_code != 200:
-            raise RuntimeError(f"GET returned code {response.status_code}.")
+        if res.status_code != 200:
+            raise RuntimeError(f"GET returned code {res.status_code}.")
         else:
-            result = response.content
+            result = res.content
 
-        #await self.clients[self.host].aclose()
+        await self.close()
 
         return result
 
+    async def determine_outlet(self, outlet=None):
+        """ Get the correct outlet number from the outlet passed in, this
+            allows specifying the outlet by the name and making sure the
+            returned outlet is an int
+        """
+        outlets = await self.statuslist()
+        if outlet and outlets and isinstance(outlet, str):
+            for plug in outlets:
+                plug_name = plug[1]
+                if plug_name and plug_name.strip() == outlet.strip():
+                    return int(plug[0])
+        try:
+            outlet_int = int(outlet)
+            v_len = await self.__len__()
+            if outlet_int <= 0 or outlet_int > v_len:
+                raise Exception('Outlet number %d out of range' % outlet_int)
+            return outlet_int
+        except ValueError:
+            raise Exception('Outlet name \'%s\' unknown' % outlet)
+
+
+    async def status(self, outlet=1):
+        """
+        Return the status of an outlet, returned value will be one of:
+        ON, OFF, Unknown
+        """
+        outlet = await self.determine_outlet(outlet)
+        outlets = await self.statuslist()
+        if outlets and outlet:
+            for plug in outlets:
+                if plug[0] == outlet:
+                    return plug[2]
+        return 'Unknown'
 
     async def on(self, outlet_number:int=0):
         """Turn on power to an outlet
            False = Success
            True = Fail
+        """
+
+        await self.geturl(url='outlet?%d=ON' % await self.determine_outlet(outlet_number))
+        return await self.status(outlet_number) != 'ON'
+
         """
         outlets = await self.statuslist()
         outlets_dict = await self.outletdictionary()
@@ -112,25 +181,26 @@ class PowerSwitch(object):
             raise ValueError(f"The Outlet {outlet_number} is already {outlets[point][2]}")
         elif outlets[point][2] == 'OFF':
             try:
-                await self.geturl(url='outlet?%s=ON' % outlet_number)
+                await self.geturl(url='outlet?%d=ON' % self.determine_outlet(outlet_number))
+                return self.status(outlet_number) != 'ON'
             except:
                 raise ValueError(f"Argument {outlet_number} not defined.")
-
+        """
 
     async def onall(self):
         """Turn on all outlets"""
         await self.geturl(url='outlet?%s=ON' % 'a')
 
 
-    async def outlet(self):
-        outlet = await self. statuslist()
-        print(outlet)
-
-
     async def off(self, outlet_number:int=0):
         """Turn on power to an outlet
            False = Success
            True = Fail
+        """
+
+        await self.geturl(url='outlet?%d=OFF' % await self.determine_outlet(outlet_number))
+        return await self.status(outlet_number) != 'OFF'
+
         """
         outlets = await self.statuslist()
         outlets_dict = await self.outletdictionary()
@@ -141,10 +211,11 @@ class PowerSwitch(object):
             raise ValueError(f"The Outlet {outlet_number} is already {outlets[point][2]}")
         elif outlets[point][2] == 'ON':
             try:
-                await self.geturl(url='outlet?%s=OFF' % outlet_number)
+                await self.geturl(url='outlet?%d=OFF' % self.determine_outlet(outlet_number))
+                return self.status(outlet_number) != 'OFF'
             except:
                 raise ValueError(f"Argument {outlet_number} not defined.")
-
+        """
 
     async def offall(self):
         """Turn off all outlets"""
@@ -226,3 +297,4 @@ class PowerSwitch(object):
         for item in await self.statuslist():
             print('%d\t%-15.15s\t%s' % (item[0], item[1], item[2]))
         return
+        

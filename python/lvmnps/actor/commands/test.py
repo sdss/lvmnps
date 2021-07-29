@@ -3,7 +3,7 @@
 #
 # @Author: Mingyeong YANG (mingyeong@khu.ac.kr)
 # @Date: 2021-03-22
-# @Filename: status.py
+# @Filename: test.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from __future__ import annotations
@@ -19,25 +19,20 @@ from lvmnps.switch.dli.powerswitch import PowerSwitch
 
 
 @parser.command()
-@click.argument("NAME", type=str, default="")
-@click.argument("PORTNUM", type=int, default=0)
-async def status(command: Command, switches: PowerSwitch, name: str, portnum: int):
+async def test(command: Command, switches: PowerSwitch):
     """print the status of the NPS."""
-
-    status = {}
-    #dli = DliPowerSwitch()
 
     for switch in switches:
         try:
-            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-            status = dict(list(status.items()) +
-                          list((await switch.statusAsJson(name, portnum)).items()))
-
+            #command.info(host=switch.hostname)
+            #command.info(user=switch.username)
+            #command.info(password=switch.password)
+            command.info(Reachable=await switch.isReachable())
+            #command.info(start=await switch.start())
+        
         except PowerException as ex:
             return command.fail(error=str(ex))
-
-    command.info(
-        STATUS=status
-    )
+    
+    #switches.start()
 
     return command.finish("done")

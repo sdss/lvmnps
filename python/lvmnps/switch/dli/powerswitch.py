@@ -46,36 +46,47 @@ class PowerSwitch(PowerSwitchBase):
 
         self.log.debug("So Long, and Thanks for All the Fish ...")
 
+    async def close(self):
+        try:
+            await self.dli.close()
+        
+        except Exception as ex:
+            self.log.error(f"Unexpected exception {type(ex)}: {ex}")
+
     async def isReachable(self):
         try:
             if not self.dli:
-                self.dli = DliPowerSwitch(userid=self.username, password=self.password,
+                self.dli = DliPowerSwitch(name=self.name, userid=self.username, password=self.password,
                                           hostname=self.hostname, use_https=self.use_https)
 #                reachable = self.statuslist()
                 reachable = await self.dli.verify()
+
                 if not reachable:
                     self.dli = None
             return reachable
 
         except Exception as ex:
-            self.log.error(f"Unexpected exception {type(ex)}: {ex}")
+            self.log.error(f"Unexpected exception is {type(ex)}: {ex}")
             self.dli = None
             return False
 
     async def update(self, outlets):
         # outlets contains all targeted ports
         self.log.debug(f"{outlets}")
+        #flag = await self.isReachable()
         try:
             if await self.isReachable():
                 # get a list [] of port states, use outlets for a subset.
+                #print("is inside reachable")
                 for o in outlets:
-                    o.setState(self.dli.status(o.portnum))
+                    o.setState(await self.dli.status(o.portnum))
             else:
                 for o in outlets:
                     o.setState(-1)
 
         except Exception as ex:
-            self.log.error(f"Unexpected exception {type(ex)}: {ex}")
+            self.log.error(f"Unexpected exception for {type(ex)}: {ex}")
+
 
     async def switch(self, state, outlets):
         # outlets contains all targeted ports
@@ -89,4 +100,4 @@ class PowerSwitch(PowerSwitchBase):
             await self.update(outlets)
 
         except Exception as ex:
-            self.log.error(f"Unexpected exception {type(ex)}: {ex}")
+            self.log.error(f"Unexpected exception to {type(ex)}: {ex}")

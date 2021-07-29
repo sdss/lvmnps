@@ -124,8 +124,8 @@ CONFIG_DEFAULTS = {
     'timeout': TIMEOUT,
     'cycletime': CYCLETIME,
     'userid': 'admin',
-    'password': '4321',
-    'hostname': '192.168.0.100'
+    'password': 'irlab',
+    'hostname': '163.180.145.123'
 }
 CONFIG_FILE = os.path.expanduser('~/.dlipower.conf')
 
