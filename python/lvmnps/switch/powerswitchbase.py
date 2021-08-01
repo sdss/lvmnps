@@ -70,8 +70,8 @@ class PowerSwitchBase(object):
         return []
 
     async def setState(self, state, name: str = "", portnum: int = 0):
-        if portnum > self.numports:
-            return []
+        #if portnum > self.numports:
+        #    return []
         return await self.switch(Outlet.parse(state),
                                  self.collectOutletsByNameAndPort(name, portnum))
 

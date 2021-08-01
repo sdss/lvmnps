@@ -37,7 +37,7 @@ class lvmnps(AMQPActor):
         super().__init__(*args, **kwargs)
 
     async def start(self):
-        #await super().start()
+        await super().start()
 
         connect_timeout = self.config["timeouts"]["switch_connect"]
 
@@ -46,7 +46,7 @@ class lvmnps(AMQPActor):
         for switch in self.parser_args[0]:
             try:
                 self.log.debug(f"Start {switch.name} ...")
-                await asyncio.wait_for(await super().start(), timeout=connect_timeout)
+                await asyncio.wait_for(switch.start(), timeout=connect_timeout)
 
             except Exception as ex:
                 self.log.error(f"Unexpected exception {type(ex)}: {ex}")

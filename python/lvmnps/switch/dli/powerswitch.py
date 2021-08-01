@@ -46,12 +46,6 @@ class PowerSwitch(PowerSwitchBase):
 
         self.log.debug("So Long, and Thanks for All the Fish ...")
 
-    async def close(self):
-        try:
-            await self.dli.close()
-        
-        except Exception as ex:
-            self.log.error(f"Unexpected exception {type(ex)}: {ex}")
 
     async def isReachable(self):
         try:
