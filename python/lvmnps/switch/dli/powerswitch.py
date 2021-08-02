@@ -6,6 +6,7 @@
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from sdsstools.logger import SDSSLogger
+import datetime
 
 from lvmnps.switch.dli.lvmpower import PowerSwitch as DliPowerSwitch
 from lvmnps.switch.powerswitchbase import PowerSwitchBase
@@ -72,8 +73,11 @@ class PowerSwitch(PowerSwitchBase):
             if await self.isReachable():
                 # get a list [] of port states, use outlets for a subset.
                 #print("is inside reachable")
-                for o in outlets:
-                    o.setState(await self.dli.status(o.portnum))
+                current_time = datetime.datetime.now()
+                print(f"after isReachable  :  {current_time}")
+
+                current_time = datetime.datetime.now()
+                print(f"after setState  :  {current_time}")
             else:
                 for o in outlets:
                     o.setState(-1)

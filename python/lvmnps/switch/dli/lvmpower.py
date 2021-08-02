@@ -11,6 +11,7 @@ from __future__ import annotations
 import asyncio
 import httpx
 from bs4 import BeautifulSoup
+import datetime
 
 
 CONFIG_DEFAULTS = {
@@ -154,8 +155,16 @@ class PowerSwitch(object):
         Return the status of an outlet, returned value will be one of:
         ON, OFF, Unknown
         """
+        current_time = datetime.datetime.now()
+        print(f"before determine_outlet  :  {current_time}")
         outlet = await self.determine_outlet(outlet)
+        current_time = datetime.datetime.now()
+        print(f"after determine_outlet  :  {current_time}")
+
         outlets = await self.statuslist()
+        current_time = datetime.datetime.now()
+        print(f"after statuslist  :  {current_time}")
+        
         if outlets and outlet:
             for plug in outlets:
                 if plug[0] == outlet:

@@ -6,6 +6,7 @@
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from abc import abstractmethod
+import datetime
 
 from sdsstools.logger import SDSSLogger
 
@@ -70,19 +71,38 @@ class PowerSwitchBase(object):
         return []
 
     async def setState(self, state, name: str = "", portnum: int = 0):
-        #if portnum > self.numports:
-        #    return []
+        if portnum > self.numports:
+            return []
+        current_time = datetime.datetime.now()
+        print(f"in setState  :  {current_time}")
         return await self.switch(Outlet.parse(state),
                                  self.collectOutletsByNameAndPort(name, portnum))
 
     async def statusAsJson(self, name: str = "", portnum: int = 0):
         # name: can be a switch or an outlet name
+        current_time = datetime.datetime.now()
+        print(f"before collectOutletsByNameAndPort  :  {current_time}")
+
         outlets = self.collectOutletsByNameAndPort(name, portnum)
+
+        current_time = datetime.datetime.now()
+        print(f"after collectOutletsByNameAndPort  :  {current_time}")
         #print(outlets)
+        
+        current_time = datetime.datetime.now()
+        print(f"before update  :  {current_time}")
         await self.update(outlets)
+        current_time = datetime.datetime.now()
+        print(f"after update  :  {current_time}")
+
         status = {}
+        current_time = datetime.datetime.now()
+        print(f"before toJson  :  {current_time}")
         for o in outlets:
             status[f'{o.name}'] = o.toJson()
+        current_time = datetime.datetime.now()
+        print(f"after toJson  :  {current_time}")
+
         return status
 
     @abstractmethod
