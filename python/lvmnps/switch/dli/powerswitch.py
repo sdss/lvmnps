@@ -76,6 +76,11 @@ class PowerSwitch(PowerSwitchBase):
                 current_time = datetime.datetime.now()
                 print(f"after isReachable  :  {current_time}")
 
+                currentstatus = await self.dli.statusdictionary()
+                #print(currentstatus)
+                for o in outlets:
+                    o.setState(currentstatus[o.portnum])
+                
                 current_time = datetime.datetime.now()
                 print(f"after setState  :  {current_time}")
             else:

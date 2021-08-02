@@ -129,47 +129,7 @@ class PowerSwitch(object):
 
         return result
 
-    async def determine_outlet(self, outlet=None):
-        """ Get the correct outlet number from the outlet passed in, this
-            allows specifying the outlet by the name and making sure the
-            returned outlet is an int
-        """
-        outlets = await self.statuslist()
-        if outlet and outlets and isinstance(outlet, str):
-            for plug in outlets:
-                plug_name = plug[1]
-                if plug_name and plug_name.strip() == outlet.strip():
-                    return int(plug[0])
-        try:
-            outlet_int = int(outlet)
-            v_len = await self.__len__()
-            if outlet_int <= 0 or outlet_int > v_len:
-                raise Exception('Outlet number %d out of range' % outlet_int)
-            return outlet_int
-        except ValueError:
-            raise Exception('Outlet name \'%s\' unknown' % outlet)
 
-
-    async def status(self, outlet=1):
-        """
-        Return the status of an outlet, returned value will be one of:
-        ON, OFF, Unknown
-        """
-        current_time = datetime.datetime.now()
-        print(f"before determine_outlet  :  {current_time}")
-        outlet = await self.determine_outlet(outlet)
-        current_time = datetime.datetime.now()
-        print(f"after determine_outlet  :  {current_time}")
-
-        outlets = await self.statuslist()
-        current_time = datetime.datetime.now()
-        print(f"after statuslist  :  {current_time}")
-        
-        if outlets and outlet:
-            for plug in outlets:
-                if plug[0] == outlet:
-                    return plug[2]
-        return 'Unknown'
 
     async def on(self, outlet_number:int=0):
         """Turn on power to an outlet
@@ -294,6 +254,20 @@ class PowerSwitch(object):
         for n in num:
             name = outlets[n][1]
             outlets_dict[name] = n + 1
+            
+        return outlets_dict
+
+    async def statusdictionary(self):
+        """ Return the status of all outlets in a dictionary,
+        each item will contain 2 items plugnumber, status"""
+        
+        outlets = await self.statuslist()
+        outlets_dict = {}
+
+        num = range(0,8)
+        for n in num:
+            plugnumber = outlets[n][0]
+            outlets_dict[plugnumber] = outlets[n][2]
             
         return outlets_dict
 
