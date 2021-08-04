@@ -2,10 +2,10 @@
 switches:
     nps1:
         type: dli
-        host: 10.7.45.22
+        hostname: 163.180.145.123
         port: 80
-        userid: 'admin'
-        password: 'rLXR3KxUqiCPGvA'
+        user: 'admin'
+        password: 'irlab'
         numports: 8
         ouo: False # only handle configured ports, see lvnmps_dummy.yml
 

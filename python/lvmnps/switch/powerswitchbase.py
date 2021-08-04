@@ -6,6 +6,7 @@
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from abc import abstractmethod
+import datetime
 
 from sdsstools.logger import SDSSLogger
 
@@ -40,6 +41,8 @@ class PowerSwitchBase(object):
         def g(config, key, d=None):
             k = key.split('.', maxsplit=1)
             c = config.get(k[0] if not k[0].isnumeric() else int(k[0]))  # keys can be numeric
+            #print(k)
+            #print(c)
             return d if c is None else c if len(k) < 2 else g(c, k[1], d) if type(c) is dict else d
         return g(self.config, key, default)
 
@@ -70,16 +73,36 @@ class PowerSwitchBase(object):
     async def setState(self, state, name: str = "", portnum: int = 0):
         if portnum > self.numports:
             return []
+        current_time = datetime.datetime.now()
+        print(f"in setState  :  {current_time}")
         return await self.switch(Outlet.parse(state),
                                  self.collectOutletsByNameAndPort(name, portnum))
 
     async def statusAsJson(self, name: str = "", portnum: int = 0):
         # name: can be a switch or an outlet name
+        current_time = datetime.datetime.now()
+        print(f"before collectOutletsByNameAndPort  :  {current_time}")
+
         outlets = self.collectOutletsByNameAndPort(name, portnum)
+
+        current_time = datetime.datetime.now()
+        print(f"after collectOutletsByNameAndPort  :  {current_time}")
+        #print(outlets)
+        
+        current_time = datetime.datetime.now()
+        print(f"before update  :  {current_time}")
         await self.update(outlets)
+        current_time = datetime.datetime.now()
+        print(f"after update  :  {current_time}")
+
         status = {}
+        current_time = datetime.datetime.now()
+        print(f"before toJson  :  {current_time}")
         for o in outlets:
             status[f'{o.name}'] = o.toJson()
+        current_time = datetime.datetime.now()
+        print(f"after toJson  :  {current_time}")
+
         return status
 
     @abstractmethod
@@ -102,3 +125,4 @@ class PowerSwitchBase(object):
     @abstractmethod
     async def switch(self, state, outlets):
         pass
+

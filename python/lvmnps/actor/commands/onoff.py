@@ -17,7 +17,9 @@ from lvmnps.actor.commands import parser
 from lvmnps.exceptions import NpsActorError
 
 
-async def switch_control(switches: [], on: bool, name: str, portnum: int):
+
+async def switch_control(switches: PowerSwitch, on: bool, name: str, portnum: int):
+
     try:
         tasks = []
         for switch in switches:
@@ -40,7 +42,7 @@ async def switch_control(switches: [], on: bool, name: str, portnum: int):
 @parser.command()
 @click.argument("NAME", type=str, default="")
 @click.argument("PORTNUM", type=int, default=0)
-async def on(command: Command, switches: [], name: str, portnum: int):
+async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """Turn on the Outlet"""
 
     command.info(STATUS=await switch_control(switches, True, name, portnum))
@@ -51,7 +53,7 @@ async def on(command: Command, switches: [], name: str, portnum: int):
 @parser.command()
 @click.argument("NAME", type=str, default="")
 @click.argument("PORTNUM", type=int, default=0)
-async def off(command: Command, switches: [], name: str, portnum: int):
+async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """Turn off the Outlet"""
 
     command.info(STATUS=await switch_control(switches, False, name, portnum))
@@ -61,7 +63,7 @@ async def off(command: Command, switches: [], name: str, portnum: int):
 
 @parser.command()
 @click.argument("NAME", type=str, default="")
-async def onall(command: Command, switches: [], name: str):
+async def onall(command: Command, switches: PowerSwitch, name: str):
     """Turn on all Outlet"""
 
     command.info(STATUS=await switch_control(switches, True, 0, name))
@@ -71,7 +73,7 @@ async def onall(command: Command, switches: [], name: str):
 
 @parser.command()
 @click.argument("NAME", type=str, default="")
-async def offall(command: Command, switches: [], name: str):
+async def offall(command: Command, switches: PowerSwitch, name: str):
     """Turn off all Outlet"""
 
     command.info(STATUS=await switch_control(switches, False, 0, name))
