@@ -10,18 +10,6 @@ underlying directories. See https://docs.pytest.org/en/2.7.3/plugins.html for
 more information.
 """
 
-<<<<<<< HEAD
-import asyncio
-import pytest
-
-from clu import AMQPActor
-from lvmnps.actor.actor import lvmnps
-
-@pytest.fixture
-async def test_lvmnps(AMQPActor):
-
-    actor = AMQPActor(name="amqp_actor", schema=DATA_DIR / "schema.json", port=port)
-=======
 # import os
 # import shutil
 
@@ -49,14 +37,11 @@ async def amqp_actor(rabbitmq, event_loop):
     port = rabbitmq.args["port"]
 
     actor = AMQPActor(name="amqp_actor", port=port)
->>>>>>> c6127d7c23f1506d311d73102d4a785db57ba241
     await actor.start()
 
     yield actor
 
     await actor.stop()
-<<<<<<< HEAD
-=======
 
 
 @pytest.fixture
@@ -70,4 +55,3 @@ async def amqp_client(rabbitmq, amqp_actor, event_loop):
     yield client
 
     await client.stop()
->>>>>>> c6127d7c23f1506d311d73102d4a785db57ba241

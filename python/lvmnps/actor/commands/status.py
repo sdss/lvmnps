@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# @Author: Mingyeong YANG (mingyeong@khu.ac.kr)
-# @Date: 2021-03-22
+# @Author: Florian Briegel (briegel@mpia.de)
+# @Date: 2021-07-28
 # @Filename: status.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
@@ -15,8 +15,6 @@ import datetime
 
 from lvmnps.actor.commands import parser
 from lvmnps.switch.exceptions import PowerException
-
-from lvmnps.switch.dli.powerswitch import PowerSwitch
 
 
 @parser.command()
@@ -41,9 +39,9 @@ async def status(command: Command, switches: PowerSwitch, name: str, portnum: in
             status = dict(list(status.items()) +
                           list((current_status.items())))
 
+
         except PowerException as ex:
             return command.fail(error=str(ex))
-
 
     print("-----print-----")
     command.info(
@@ -51,5 +49,6 @@ async def status(command: Command, switches: PowerSwitch, name: str, portnum: in
     )
     current_time = datetime.datetime.now()
     print(f"after command status  :  {current_time}")
+
 
     return command.finish("done")

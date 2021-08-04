@@ -2,6 +2,11 @@
 # Copyright (c) 2009-2015, Dwight Hubbard
 # Copyrights licensed under the New BSD License
 # See the accompanying LICENSE.txt file for terms.
+
+
+# modified by MY
+
+
 """
 Digital Loggers Web Power Switch Management
 
@@ -231,6 +236,8 @@ class PowerSwitch(object):
         """
         Class initializaton
         """
+        self.name = name
+        
         if not retries:
             retries = RETRIES
         config = self.load_configuration()
@@ -263,6 +270,7 @@ class PowerSwitch(object):
         self._is_admin = True
         self.session = requests.Session()
         self.login()
+
 
     def __len__(self):
         """

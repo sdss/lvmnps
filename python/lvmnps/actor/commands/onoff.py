@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# @Author: Mingyeong YANG (mingyeong@khu.ac.kr)
-# @Date: 2021-03-22
+# @Author: Florian Briegel (briegel@mpia.de)
+# @Date: 2021-07-28
 # @Filename: onoff.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from __future__ import annotations
+
+import asyncio
 
 import click
 from clu.command import Command
@@ -15,21 +17,24 @@ from lvmnps.actor.commands import parser
 from lvmnps.exceptions import NpsActorError
 
 
-from lvmnps.switch.dli.powerswitch import PowerSwitch
-
 
 async def switch_control(switches: PowerSwitch, on: bool, name: str, portnum: int):
-    status = {}
 
-    for switch in switches:
-        try:
-            await switch.setState(on, name, portnum)
+    try:
+        tasks = []
+        for switch in switches:
+            tasks.append(asyncio.create_task(switch.setState(on, name, portnum)))
+
+        await asyncio.gather(*tasks)
+
+        status = {}
+        for switch in switches:
             # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
             status = dict(list(status.items()) +
                           list((await switch.statusAsJson(name, portnum)).items()))
 
-        except NpsActorError as err:
-            return {str(err)}
+    except NpsActorError as err:
+        return {str(err)}
 
     return status
 
