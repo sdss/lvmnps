@@ -15,7 +15,7 @@ import datetime
 
 from lvmnps.actor.commands import parser
 from lvmnps.switch.exceptions import PowerException
-
+from lvmnps.switch.dli.powerswitch import PowerSwitch
 
 @parser.command()
 @click.argument("NAME", type=str, default="")
