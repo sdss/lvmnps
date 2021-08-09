@@ -6,7 +6,6 @@ lvmnps's documentation
   :start-line: 2
 
 
-
 Contents
 --------
 
