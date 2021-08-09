@@ -27,7 +27,6 @@ class PowerSwitch(object):
         """
         Class initialization
         """
-        self.__len = 0
 
         config = self.load_configuration()
         if userid:
@@ -53,13 +52,6 @@ class PowerSwitch(object):
         """ Return a configuration dictionary """
         return CONFIG_DEFAULTS
 
-    async def __len__(self):
-        """
-        :return: Number of outlets on the switch
-        """
-        if self.__len == 0:
-            self.__len = len(await self.statuslist())
-        return self.__len
 
     async def add_client(self):
         """Access the url object"""
@@ -142,21 +134,6 @@ class PowerSwitch(object):
         currentstatus = await self.dli.statusdictionary()
         return currentstatus[outlet_number] != 'ON'
 
-        """
-        outlets = await self.statuslist()
-        outlets_dict = await self.outletdictionary()
-        len = range(0, 7)
-        point = outlet_number-1
-
-        if outlets[point][2] == 'ON':
-            raise ValueError(f"The Outlet {outlet_number} is already {outlets[point][2]}")
-        elif outlets[point][2] == 'OFF':
-            try:
-                await self.geturl(url='outlet?%d=ON' % self.determine_outlet(outlet_number))
-                return self.status(outlet_number) != 'ON'
-            except:
-                raise ValueError(f"Argument {outlet_number} not defined.")
-        """
 
     async def onall(self):
         """Turn on all outlets"""
@@ -173,22 +150,6 @@ class PowerSwitch(object):
 
         currentstatus = await self.dli.statusdictionary()
         return currentstatus[outlet_number] != 'OFF'
-
-        """
-        outlets = await self.statuslist()
-        outlets_dict = await self.outletdictionary()
-        len = range(0, 7)
-        point = outlet_number-1
-
-        if outlets[point][2] == 'OFF':
-            raise ValueError(f"The Outlet {outlet_number} is already {outlets[point][2]}")
-        elif outlets[point][2] == 'ON':
-            try:
-                await self.geturl(url='outlet?%d=OFF' % self.determine_outlet(outlet_number))
-                return self.status(outlet_number) != 'OFF'
-            except:
-                raise ValueError(f"Argument {outlet_number} not defined.")
-        """
 
     async def offall(self):
         """Turn off all outlets"""

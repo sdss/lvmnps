@@ -103,9 +103,11 @@ class PowerSwitchBase(object):
         print(f"before toJson  :  {current_time}")
         for o in outlets:
             status[f'{o.name}'] = o.toJson()
+
         current_time = datetime.datetime.now()
         print(f"after toJson  :  {current_time}")
 
+        print(status)
         return status
 
     @abstractmethod
