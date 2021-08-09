@@ -84,10 +84,10 @@ In another terminal, type `clu` and `lvmnps ping` for test.
 ```
 $ clu
 lvmnps ping
-07:41:22.636 lvmnps > 
-07:41:22.645 lvmnps : {
-    "text": "Pong."
-    }
+     07:41:22.636 lvmnps > 
+     07:41:22.645 lvmnps : {
+         "text": "Pong."
+         }
 ```
 
 Stop `lvmnps` actor.
