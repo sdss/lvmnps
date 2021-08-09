@@ -44,7 +44,7 @@
 
 <span class="kn">from</span> <span class="nn">sdsstools.logger</span> <span class="kn">import</span> <span class="n">SDSSLogger</span>
 
-<span class="kn">from</span> <span class="nn">lvmnps.switch.dli.lvmpower</span> <span class="kn">import</span> <span class="n">PowerSwitch</span> <span class="k">as</span> <span class="n">DliPowerSwitch</span>
+<span class="kn">from</span> <span class="nn">lvmnps.switch.dli.dlipower</span> <span class="kn">import</span> <span class="n">PowerSwitch</span> <span class="k">as</span> <span class="n">DliPowerSwitch</span>
 <span class="kn">from</span> <span class="nn">lvmnps.switch.powerswitchbase</span> <span class="kn">import</span> <span class="n">PowerSwitchBase</span>
 
 
@@ -89,7 +89,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">dli</span> <span class="o">=</span> <span class="n">DliPowerSwitch</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">,</span>
                                           <span class="n">hostname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="n">use_https</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_https</span><span class="p">)</span>
 <span class="c1">#                reachable = self.statuslist()</span>
-                <span class="n">reachable</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">dli</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
+                <span class="n">reachable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dli</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">reachable</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">dli</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">return</span> <span class="n">reachable</span>

@@ -49,10 +49,10 @@
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">suppress</span>
 
 <span class="kn">from</span> <span class="nn">clu.actor</span> <span class="kn">import</span> <span class="n">AMQPActor</span>
-
+<span class="kn">from</span> <span class="nn">lvmnps.switch.dli.dlipower</span> <span class="kn">import</span> <span class="n">PowerSwitch</span>
+<span class="kn">from</span> <span class="nn">lvmnps.exceptions</span> <span class="kn">import</span> <span class="n">NpsActorUserWarning</span>
 <span class="kn">from</span> <span class="nn">lvmnps.actor.commands</span> <span class="kn">import</span> <span class="n">parser</span> <span class="k">as</span> <span class="n">nps_command_parser</span>
 <span class="kn">from</span> <span class="nn">lvmnps.switch.factory</span> <span class="kn">import</span> <span class="n">powerSwitchFactory</span>
-
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;lvmnps&quot;</span><span class="p">]</span>
 
@@ -74,21 +74,18 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="lvmnps.start"><a class="viewcode-back" href="../../../lvmnps.html#lvmnps.actor.actor.lvmnps.start">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1">#await super().start()</span>
-
         <span class="n">connect_timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;timeouts&quot;</span><span class="p">][</span><span class="s2">&quot;switch_connect&quot;</span><span class="p">]</span>
 
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parser_args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
 
         <span class="k">for</span> <span class="n">switch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start </span><span class="si">{</span><span class="n">switch</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> ...&quot;</span><span class="p">)</span>
                 <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wait_for</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="n">connect_timeout</span><span class="p">)</span>
-
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected exception </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start done&quot;</span><span class="p">)</span></div>
+            <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Timeout out connecting to </span><span class="si">{</span><span class="n">switch</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2">.&quot;</span><span class="p">,</span>
+                    <span class="n">NpsActorUserWarning</span><span class="p">,</span>
+                <span class="p">)</span></div>
 
 <div class="viewcode-block" id="lvmnps.stop"><a class="viewcode-back" href="../../../lvmnps.html#lvmnps.actor.actor.lvmnps.stop">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">):</span>
@@ -149,7 +146,7 @@
 <h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../lvmnps.html">lvmnps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../switch.html">Powerswitch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../switch.html">switch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Commands.html">Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Exceptions.html">Exceptions</a></li>
 </ul>
