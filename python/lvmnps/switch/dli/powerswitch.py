@@ -98,7 +98,7 @@ class PowerSwitch(PowerSwitchBase):
             if await self.isReachable():
                 # either loop over the outlets or pass the outlet list.
                 for o in outlets:
-                    self.dli.on(o.portnum) if state else self.dli.off(o.portnum)
+                    await self.dli.on(o.portnum) if state else await self.dli.off(o.portnum)
 
             await self.update(outlets)
 

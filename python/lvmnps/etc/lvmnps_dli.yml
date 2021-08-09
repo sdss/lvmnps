@@ -1,14 +1,101 @@
 # A dictionary of controller name to NPS controller connection parameters.
 switches:
-    dwighthubbard:
+    DLI-NPS-01:
         type: dli
-        host: lpc.digital-loggers.com
+        name: LVM-PSU-01
+        hostname: 10.7.45.22
         use_https: False
         user: 'admin'
-        password: '4321'
+        password: 'rLXR3KxUqiCPGvA'
         numports: 8
         ouo: False # handle also unconfigured ports
+        ports:
+          num: 1  
+          1:
+            name: "LVM-ARCHON-02"
+            desc: "Archon controller"
+          num: 2
+          2:
+            name: "-"
+            desc: ""
+          num: 3
+          3:
+            name: "Hg-Ar Lamp"
+            desc: "spectral calibrationh lamp"
+          num: 4
+          4:
+            name: "MI-150 Light Source"
+            desc: ""
+          num: 5
+          5:
+            name: "LVM IEB 02 (Spec Controller)"
+            desc: "OSU spectrograph controller"
+          num: 6
+          6:
+            name: "LVM-ARCHON-01"
+            desc: "Archon controller"
+          num: 7
+          7:
+            name: "625 nm LED (M625L4)"
+            desc: "LED"
+          num: 8
+          8:
+            name: "LVM IEB 06 (Spec Controller) "
+            desc: "OSU spectrograph controller"
 
+    DLI-NPS-02:
+        type: dli
+        name: LVM-PSU-02
+        hostname: 10.7.45.29
+        use_https: False
+        user: 'admin'
+        password: 'VCrht9wfx2CQN9b'
+        numports: 8
+        ouo: False # handle also unconfigured ports
+        ports:
+          num: 1
+          1:
+            name: "Outlet 1"
+            desc: ""
+          num: 2
+          2:
+            name: "IEB06"
+            desc: "LVM Instrument Electronic Box"
+          num: 3
+          3:
+            name: "Outlet 3"
+            desc: ""
+          num: 4
+          4:
+            name: "LVM-Archon-02"
+            desc: "Archon controller"
+          num: 5
+          5:
+            name: "Pressure Transducer"
+            desc: "Pressure Transducer"
+          num: 6
+          6:
+            name: "Outlet 6"
+            desc: ""
+          num: 7
+          7:
+            name: "Outlet 7"
+            desc: ""
+          num: 8
+          8:
+            name: "Outlet 8"
+            desc: ""
+    
+   # DLI-NPS-03:
+   #     type: dli
+   #     name: LVM-PSU-02
+   #     hostname: 10.7.45.31
+   #     use_https: False
+   #     user: 'admin'
+   #     password: '1234'
+   #     numports: 8
+   #     ouo: False # handle also unconfigured ports
+   #     ports:
         
         
 timeouts:

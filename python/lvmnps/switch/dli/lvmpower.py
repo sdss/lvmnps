@@ -131,14 +131,16 @@ class PowerSwitch(object):
 
 
 
-    async def on(self, outlet_number:int=0):
+    async def on(self, outlet_number=0):
         """Turn on power to an outlet
            False = Success
            True = Fail
         """
 
-        await self.geturl(url='outlet?%d=ON' % await self.determine_outlet(outlet_number))
-        return await self.status(outlet_number) != 'ON'
+        await self.geturl(url='outlet?%d=ON' % outlet_number)
+
+        currentstatus = await self.dli.statusdictionary()
+        return currentstatus[outlet_number] != 'ON'
 
         """
         outlets = await self.statuslist()
@@ -161,14 +163,16 @@ class PowerSwitch(object):
         await self.geturl(url='outlet?%s=ON' % 'a')
 
 
-    async def off(self, outlet_number:int=0):
-        """Turn on power to an outlet
+    async def off(self, outlet_number=0):
+        """Turn off power to an outlet
            False = Success
            True = Fail
         """
 
-        await self.geturl(url='outlet?%d=OFF' % await self.determine_outlet(outlet_number))
-        return await self.status(outlet_number) != 'OFF'
+        await self.geturl(url='outlet?%d=OFF' % outlet_number)
+
+        currentstatus = await self.dli.statusdictionary()
+        return currentstatus[outlet_number] != 'OFF'
 
         """
         outlets = await self.statuslist()

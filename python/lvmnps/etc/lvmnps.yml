@@ -8,6 +8,39 @@ switches:
         password: 'irlab'
         numports: 8
         ouo: False # only handle configured ports, see lvnmps_dummy.yml
+        ports:
+          num: 1  
+          1:
+            name: "one"
+            desc: ""
+          num: 2
+          2:
+            name: "two"
+            desc: ""
+          num: 3
+          3:
+            name: "three"
+            desc: ""
+          num: 4
+          4:
+            name: "four"
+            desc: ""
+          num: 5
+          5:
+            name: "five"
+            desc: ""
+          num: 6
+          6:
+            name: "six"
+            desc: ""
+          num: 7
+          7:
+            name: "seven"
+            desc: ""
+          num: 8
+          8:
+            name: "eight"
+            desc: ""
 
 timeouts:
         switch_connect: 1
