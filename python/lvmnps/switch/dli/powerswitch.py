@@ -61,7 +61,7 @@ class PowerSwitch(PowerSwitchBase):
             return reachable
 
         except Exception as ex:
-            self.log.error(f"Unexpected exception is {type(ex)}: {ex}")
+            self.log.error(f"Unexpected exception is {type(ex)}: {ex}")        #help me please.... to ck
             self.dli = None
             return False
 
@@ -77,7 +77,7 @@ class PowerSwitch(PowerSwitchBase):
                 print(f"after isReachable  :  {current_time}")
 
                 currentstatus = await self.dli.statusdictionary()
-                #print(currentstatus)
+                print(currentstatus)
                 for o in outlets:
                     o.setState(currentstatus[o.portnum])
                 

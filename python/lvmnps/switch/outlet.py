@@ -31,6 +31,7 @@ class Outlet(object):
     def parse(value):
         current_time = datetime.datetime.now()
         print(f"starting parse  :  {current_time}")
+        
         if value in ['off', 'OFF', '0', 0, False]:
             return 0
         if value in ['on', 'ON', '1', 1, True]:
