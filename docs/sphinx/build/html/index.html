@@ -177,36 +177,146 @@ config file will be used.</p></li>
 ‘ouo’ false in the config file, see
 <a class="reference external" href="https://github.com/sdss/lvmnps/blob/master/python/lvmnps/etc/lvmnps_dummy.yml">lvmnps_dummy.yml</a></p>
 <p>lvmnps status</p>
-<p>12:02:08.649 lvmnps &gt; 12:02:08.660 lvmnps i { “STATUS”: {
-“nps_dummy_1.port1”: { “STATE”: -1, “DESCR”: “was 1”, “SWITCH”:
-“nps_dummy_1”, “PORT”: 1 }, “skye.what.ever”: { “STATE”: -1,
-“DESCR”: “whatever is connected to skye”, “SWITCH”: “nps_dummy_1”,
-“PORT”: 2 }, “skyw.what.ever”: { “STATE”: -1, “DESCR”: “Something &#64;
-skyw”, “SWITCH”: “nps_dummy_1”, “PORT”: 4 }, “skye.pwi”: { “STATE”:
--1, “DESCR”: “PlaneWavemount Skye”, “SWITCH”: “skye.nps”, “PORT”: 1
-}, “skyw.pwi”: { “STATE”: -1, “DESCR”: “PlaneWavemount Skyw”,
-“SWITCH”: “nps_dummy_3”, “PORT”: 1 } } }</p>
+<p>12:02:08.649 lvmnps &gt;
+12:02:08.660 lvmnps i {</p>
+<blockquote>
+<div><blockquote>
+<div><dl>
+<dt>“STATUS”: {</dt><dd><blockquote>
+<div><dl>
+<dt>“nps_dummy_1.port1”: {</dt><dd><blockquote>
+<div><p>“STATE”: -1,
+“DESCR”: “was 1”,
+“SWITCH”:
+“nps_dummy_1”,
+“PORT”: 1</p>
+</div></blockquote>
+<p>},
+“skye.what.ever”: {</p>
+<blockquote>
+<div><p>“STATE”: -1,
+“DESCR”: “whatever is connected to skye”,
+“SWITCH”: “nps_dummy_1”,
+“PORT”: 2</p>
+</div></blockquote>
+<p>},
+“skyw.what.ever”: {</p>
+<blockquote>
+<div><p>“STATE”: -1,
+“DESCR”: “Something &#64; skyw”,
+“SWITCH”: “nps_dummy_1”,
+“PORT”: 4</p>
+</div></blockquote>
+<p>},
+“skye.pwi”: {</p>
+<blockquote>
+<div><p>“STATE”: -1,
+“DESCR”: “PlaneWavemount Skye”,
+“SWITCH”: “skye.nps”,
+“PORT”: 1</p>
+</div></blockquote>
+<p>},
+“skyw.pwi”: {</p>
+<blockquote>
+<div><p>“STATE”: -1,
+“DESCR”: “PlaneWavemount Skyw”,
+“SWITCH”: “nps_dummy_3”,
+“PORT”: 1</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
 </li>
 <li><p>status command with port name skyw.what.ever</p>
 <p>lvmnps status skyw.what.ever</p>
-<p>12:07:12.349 lvmnps &gt; 12:07:12.377 lvmnps i { “STATUS”: {
-“skyw.what.ever”: { “STATE”: -1, “DESCR”: “Something &#64; skyw”,
-“SWITCH”: “nps_dummy_1”, “PORT”: 4 }</p>
+<p>12:07:12.349 lvmnps &gt;
+12:07:12.377 lvmnps i {</p>
+<blockquote>
+<div><blockquote>
+<div><dl class="simple">
+<dt>“STATUS”: {</dt><dd><dl class="simple">
+<dt>“skyw.what.ever”: {</dt><dd><p>“STATE”: -1,
+“DESCR”: “Something &#64; skyw”,
+“SWITCH”: “nps_dummy_1”,
+“PORT”: 4</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
 </li>
 <li><p>status command with switch name nps_dummy_1</p>
 <p>lvmnps status nps_dummy_1</p>
-<p>12:07:12.349 lvmnps &gt; 12:12:21.349 lvmnps i { “STATUS”: {
-“nps_dummy_1.port1”: { “STATE”: -1, “DESCR”: “was 1”, “SWITCH”:
-“nps_dummy_1”, “PORT”: 1 }, “skye.what.ever”: { “STATE”: -1,
-“DESCR”: “whatever is connected to skye”, “SWITCH”: “nps_dummy_1”,
-“PORT”: 2 }, “skyw.what.ever”: { “STATE”: -1, “DESCR”: “Something &#64;
-skyw”, “SWITCH”: “nps_dummy_1”, “PORT”: 4 } } }</p>
+<p>12:07:12.349 lvmnps &gt;
+12:12:21.349 lvmnps i {</p>
+<blockquote>
+<div><blockquote>
+<div><dl>
+<dt>“STATUS”: {</dt><dd><blockquote>
+<div><dl>
+<dt>“nps_dummy_1.port1”: {</dt><dd><blockquote>
+<div><p>“STATE”: -1,
+“DESCR”: “was 1”,
+“SWITCH”: “nps_dummy_1”,
+“PORT”: 1</p>
+</div></blockquote>
+<p>},
+“skye.what.ever”: {</p>
+<blockquote>
+<div><p>“STATE”: -1,
+“DESCR”: “whatever is connected to skye”,
+“SWITCH”: “nps_dummy_1”,
+“PORT”: 2</p>
+</div></blockquote>
+<p>},
+“skyw.what.ever”: {</p>
+<blockquote>
+<div><p>“STATE”: -1,
+“DESCR”: “Something &#64; skyw”,
+“SWITCH”: “nps_dummy_1”,
+“PORT”: 4</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
 </li>
 <li><p>status command with switch name nps_dummy_1 and port 4 returns</p>
 <p>lvmnps status nps_dummy_1 4</p>
-<p>12:07:12.349 lvmnps &gt; 12:12:21.349 lvmnps i { “STATUS”: {
-“skyw.what.ever”: { “STATE”: -1, “DESCR”: “Something &#64; skyw”,
-“SWITCH”: “nps_dummy_1”, “PORT”: 4 } } }</p>
+<p>12:07:12.349 lvmnps &gt;
+12:12:21.349 lvmnps i {</p>
+<blockquote>
+<div><blockquote>
+<div><dl>
+<dt>“STATUS”: {</dt><dd><dl class="simple">
+<dt>“skyw.what.ever”: {</dt><dd><p>“STATE”: -1,
+“DESCR”: “Something &#64; skyw”,
+“SWITCH”: “nps_dummy_1”,
+“PORT”: 4</p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
 </li>
 <li><p>the commands on and off use the same addressing scheme as status</p></li>
 </ul>
