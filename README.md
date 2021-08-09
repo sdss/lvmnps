@@ -15,6 +15,86 @@ Lvm Network Power Switch
 - Supports [iBOOT g2](https://dataprobe.com/iboot-g2/) with python code from [here](https://github.com/dprince/python-iboot)
 - Supports [Digital Loggers Web Power](https://www.digital-loggers.com/lpc7.html) with python code from [here](https://github.com/dwighthubbard/python-dlipower)
 
+
+## Installation
+
+Install [CLU](https://clu.readthedocs.io/en/latest/) by using PyPI.
+```
+$ pip install sdss-clu
+```
+
+Clone this repository.
+```
+$ git clone https://github.com/sdss/lvmnps
+$ cd lvmnps
+```
+
+## Quick Start
+
+### Prerequisite
+
+Install [RabbitMQ](https://www.rabbitmq.com/) by using apt-get.
+
+```
+$ sudo apt-get install -y erlang
+$ sudo apt-get install -y rabbitmq-server
+$ sudo systemctl enable rabbitmq-server
+$ sudo systemctl start rabbitmq-server
+```
+
+Install [pyenv](https://github.com/pyenv/pyenv) by using [pyenv installer](https://github.com/pyenv/pyenv-installer).
+
+```
+$ curl https://pyenv.run | bash
+```
+
+You should add the code below to `~/.bashrc` by using your preferred editor.
+```
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv init --path)"
+eval "$(pyenv virtualenv-init -)"
+```
+
+
+Set the python 3.9.1 virtual environment.
+```
+$ pyenv install 3.9.1
+$ pyenv virtualenv 3.9.1 lvmnps-with-3.9.1
+$ pyenv local lvmnps-with-3.9.1
+```
+
+Install [poetry](https://python-poetry.org/) and dependencies. For more information, check [sdss/archon](https://github.com/sdss/archon).
+```
+$ pip install poetry
+$ python create_setup.py
+$ pip install -e .
+```
+
+### Start the actor
+
+Start `lvmnps` actor.
+```
+$ lvmnps start
+```
+
+In another terminal, type `clu` and `lvmnps ping` for test.
+```
+$ clu
+lvmnps ping
+     07:41:22.636 lvmnps > 
+     07:41:22.645 lvmnps : {
+         "text": "Pong."
+         }
+```
+
+Stop `lvmnps` actor.
+```
+$ lvmnps stop
+```
+
 ## Config file structure
 
     switches:
@@ -154,79 +234,4 @@ Lvm Network Power Switch
 ## Test
      poetry run pytest
      poetry run pytest -p no:logging -s -vv 
-
-## Quick Start
-
-### Prerequisite
-
-Install [CLU](https://clu.readthedocs.io/en/latest/) by using PyPI.
-```
-$ pip install sdss-clu
-```
-
-Install [RabbitMQ](https://www.rabbitmq.com/) by using apt-get.
-
-```
-$ sudo apt-get install -y erlang
-$ sudo apt-get install -y rabbitmq-server
-$ sudo systemctl enable rabbitmq-server
-$ sudo systemctl start rabbitmq-server
-```
-
-Install [pyenv](https://github.com/pyenv/pyenv) by using [pyenv installer](https://github.com/pyenv/pyenv-installer).
-
-```
-$ curl https://pyenv.run | bash
-```
-
-You should add the code below to `~/.bashrc` by using your preferred editor.
-```
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv init --path)"
-eval "$(pyenv virtualenv-init -)"
-```
-
-### Ping-pong test
-
-Clone this repository.
-```
-$ git clone https://github.com/sdss/lvmnps
-$ cd lvmnps
-```
-
-Set the python 3.9.1 virtual environment.
-```
-$ pyenv install 3.9.1
-$ pyenv virtualenv 3.9.1 lvmnps-with-3.9.1
-$ pyenv local lvmnps-with-3.9.1
-```
-
-Install [poetry](https://python-poetry.org/) and dependencies. For more information, check [sdss/archon](https://github.com/sdss/archon).
-```
-$ pip install poetry
-$ python create_setup.py
-$ pip install -e .
-```
-
-Start `lvmnps` actor.
-```
-$ lvmnps start
-```
-
-In another terminal, type `clu` and `lvmnps ping` for test.
-```
-$ clu
-lvmnps ping
-07:41:22.636 lvmnps > 
-07:41:22.645 lvmnps : {
-    "text": "Pong."
-}
-```
-
-Stop `lvmnps` actor.
-```
-$ lvmnps stop
-```
+     
