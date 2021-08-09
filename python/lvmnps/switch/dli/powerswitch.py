@@ -61,7 +61,7 @@ class PowerSwitch(PowerSwitchBase):
             return reachable
 
         except Exception as ex:
-            self.log.error(f"Unexpected exception is {type(ex)}: {ex}")
+            self.log.error(f"Unexpected exception is {type(ex)}: {ex}")        #help me please.... to ck
             self.dli = None
             return False
 
@@ -98,7 +98,7 @@ class PowerSwitch(PowerSwitchBase):
             if await self.isReachable():
                 # either loop over the outlets or pass the outlet list.
                 for o in outlets:
-                    self.dli.on(o.portnum) if state else self.dli.off(o.portnum)
+                    await self.dli.on(o.portnum) if state else await self.dli.off(o.portnum)
 
             await self.update(outlets)
 

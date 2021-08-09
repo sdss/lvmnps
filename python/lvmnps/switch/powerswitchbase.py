@@ -52,6 +52,9 @@ class PowerSwitchBase(object):
                 return o
 
     def collectOutletsByNameAndPort(self, name: str, portnum: int = 0):
+
+        current_time = datetime.datetime.now()
+        print(f"starting collectOutletsByNameAndPort  :  {current_time}")
         if not name or name == self.name:
             if portnum:
                 if portnum > self.numports:
@@ -71,10 +74,10 @@ class PowerSwitchBase(object):
         return []
 
     async def setState(self, state, name: str = "", portnum: int = 0):
-        if portnum > self.numports:
-            return []
+        #if portnum > self.numports:
+        #    return []
         current_time = datetime.datetime.now()
-        print(f"in setState  :  {current_time}")
+        print(f"starting setState  :  {current_time}")
         return await self.switch(Outlet.parse(state),
                                  self.collectOutletsByNameAndPort(name, portnum))
 
@@ -100,9 +103,11 @@ class PowerSwitchBase(object):
         print(f"before toJson  :  {current_time}")
         for o in outlets:
             status[f'{o.name}'] = o.toJson()
+
         current_time = datetime.datetime.now()
         print(f"after toJson  :  {current_time}")
 
+        print(status)
         return status
 
     @abstractmethod

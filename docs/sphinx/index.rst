@@ -1,32 +1,21 @@
 
-NpsActor's documentation
-=============================================
+lvmnps's documentation
+=========================
 
-This is the documentation for the SDSS Python product NpsActor. The current version is |npsactor_version|. You can install the package by doing
+.. include:: ../../README.md
+  :start-line: 2
 
-.. code-block:: console
-
-  $ pip install sdss-npsactor
 
 
 Contents
 --------
 
 .. toctree::
-  :maxdepth: 2
 
-  What's new in NpsActor? <CHANGELOG>
-  Introduction to NpsActor <intro>
-
-
-Reference
----------
-
-.. toctree::
-   :maxdepth: 1
-
-   api
-
+  lvmnps
+  switch
+  Commands
+  Exceptions
 
 Indices and tables
 ------------------

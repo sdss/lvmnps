@@ -5,6 +5,7 @@
 # @Filename: lvmnps/switch/outlet.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
+import datetime
 
 class Outlet(object):
     """
