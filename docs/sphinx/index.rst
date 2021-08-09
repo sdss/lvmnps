@@ -2,7 +2,7 @@
 lvmnps's documentation
 =========================
 
-.. include:: ../../README.md
+.. include:: ../../README.rst
   :start-line: 2
 
 
