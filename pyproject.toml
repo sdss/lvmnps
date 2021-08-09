@@ -47,6 +47,8 @@ aiohttp = "^3.7.4"
 httpx = "^0.18.1"
 asyncinit = "^0.2.4"
 beautifulsoup4 = "^4.9.3"
+sphinx-click = "^3.0.1"
+myst-parser = "^0.15.1"
 
 [tool.poetry.dev-dependencies]
 ipython = ">=7.11.0"

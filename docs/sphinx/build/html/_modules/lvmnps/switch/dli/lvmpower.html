@@ -48,6 +48,14 @@
 <span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">httpx</span>
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+
+<span class="n">CONFIG_DEFAULTS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;userid&#39;</span><span class="p">:</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="s1">&#39;irlab&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;hostname&#39;</span><span class="p">:</span> <span class="s1">&#39;163.180.145.123&#39;</span>
+<span class="p">}</span>
 
 
 <div class="viewcode-block" id="PowerSwitch"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch">[docs]</a><span class="k">class</span> <span class="nc">PowerSwitch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -57,21 +65,36 @@
 <span class="sd">        Class initialization</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">hostname</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">userid</span> <span class="o">=</span> <span class="n">userid</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_configuration</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">userid</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">userid</span> <span class="o">=</span> <span class="n">userid</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">userid</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;userid&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">password</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">hostname</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="n">hostname</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;hostname&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">scheme</span> <span class="o">=</span> <span class="s1">&#39;http&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">://</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scheme</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">://</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scheme</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clients</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="PowerSwitch.load_configuration"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.load_configuration">[docs]</a>    <span class="k">def</span> <span class="nf">load_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a configuration dictionary &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">CONFIG_DEFAULTS</span></div>
+
 
 <div class="viewcode-block" id="PowerSwitch.add_client"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.add_client">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">add_client</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Access the url object&quot;&quot;&quot;</span>
         
         <span class="n">auth</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">DigestAuth</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">]</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">]</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span>
             <span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">,</span>
             <span class="n">base_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{},</span>
@@ -91,7 +114,7 @@
                 <span class="p">}</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">login</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">]</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">]</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
                 <span class="n">url</span><span class="o">=</span><span class="n">login_url</span><span class="p">,</span>
                 <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
                 <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
@@ -99,12 +122,12 @@
         <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">RequestError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An error occurred while requesting </span><span class="si">{</span><span class="n">login_url</span><span class="si">!r}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">login</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error response </span><span class="si">{</span><span class="n">login</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> while requesting </span><span class="si">{</span><span class="n">login_url</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error response </span><span class="si">{</span><span class="n">res</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> while requesting </span><span class="si">{</span><span class="n">login_url</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PowerSwitch.close"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.close">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Close the Connection with URL&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">]</span><span class="o">.</span><span class="n">aclose</span><span class="p">()</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">]</span><span class="o">.</span><span class="n">aclose</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="PowerSwitch.verify"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.verify">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">verify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -117,39 +140,36 @@
 <div class="viewcode-block" id="PowerSwitch.geturl"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.geturl">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">geturl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s1">&#39;index.htm&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get a URL&quot;&quot;&quot;</span>
         
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_client</span><span class="p">()</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
         <span class="n">full_url</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Client for host </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2"> not defined.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Client for hostname </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="si">}</span><span class="s2"> not defined.&quot;</span><span class="p">)</span>
         
-        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">full_url</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">full_url</span><span class="p">)</span>
         
-        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GET returned code </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GET returned code </span><span class="si">{</span><span class="n">res</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">content</span>
 
-        <span class="c1">#await self.clients[self.host].aclose()</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
 
 
-<div class="viewcode-block" id="PowerSwitch.on"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.on">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;Outlet 0&#39;</span><span class="p">,</span> <span class="n">outlet_number</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PowerSwitch.on"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.on">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outlet_number</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Turn on power to an outlet</span>
 <span class="sd">           False = Success</span>
 <span class="sd">           True = Fail</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">outlets</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">statuslist</span><span class="p">()</span>
-        <span class="nb">len</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">outlet_number</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">geturl</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;outlet?</span><span class="si">%s</span><span class="s1">=ON&#39;</span> <span class="o">%</span> <span class="n">outlet_number</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">plug</span> <span class="ow">in</span> <span class="nb">len</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">outlets</span><span class="p">[</span><span class="n">plug</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">plug_number</span> <span class="o">=</span> <span class="n">outlets</span><span class="p">[</span><span class="n">plug</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">geturl</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;outlet?</span><span class="si">%s</span><span class="s1">=ON&#39;</span> <span class="o">%</span> <span class="n">plug_number</span><span class="p">)</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">geturl</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;outlet?</span><span class="si">%d</span><span class="s1">=ON&#39;</span> <span class="o">%</span> <span class="n">outlet_number</span><span class="p">)</span>
+
+        <span class="n">currentstatus</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">dli</span><span class="o">.</span><span class="n">statusdictionary</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">currentstatus</span><span class="p">[</span><span class="n">outlet_number</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;ON&#39;</span></div>
 
 
 <div class="viewcode-block" id="PowerSwitch.onall"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.onall">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">onall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -157,27 +177,16 @@
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">geturl</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;outlet?</span><span class="si">%s</span><span class="s1">=ON&#39;</span> <span class="o">%</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="PowerSwitch.outlet"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.outlet">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">outlet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">outlet</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span> <span class="n">statuslist</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">outlet</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="PowerSwitch.off"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.off">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">off</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s1">&#39;Oetlet 0&#39;</span><span class="p">,</span> <span class="n">outlet_number</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Turn on power to an outlet</span>
+<div class="viewcode-block" id="PowerSwitch.off"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.off">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">off</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outlet_number</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Turn off power to an outlet</span>
 <span class="sd">           False = Success</span>
 <span class="sd">           True = Fail</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">outlets</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">statuslist</span><span class="p">()</span>
-        <span class="nb">len</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">outlet_number</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">geturl</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;outlet?</span><span class="si">%s</span><span class="s1">=OFF&#39;</span> <span class="o">%</span> <span class="n">outlet_number</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">plug</span> <span class="ow">in</span> <span class="nb">len</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">outlets</span><span class="p">[</span><span class="n">plug</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">plug_number</span> <span class="o">=</span> <span class="n">outlets</span><span class="p">[</span><span class="n">plug</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">geturl</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;outlet?</span><span class="si">%s</span><span class="s1">=OFF&#39;</span> <span class="o">%</span> <span class="n">plug_number</span><span class="p">)</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">geturl</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;outlet?</span><span class="si">%d</span><span class="s1">=OFF&#39;</span> <span class="o">%</span> <span class="n">outlet_number</span><span class="p">)</span>
 
+        <span class="n">currentstatus</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">dli</span><span class="o">.</span><span class="n">statusdictionary</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">currentstatus</span><span class="p">[</span><span class="n">outlet_number</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;OFF&#39;</span></div>
 
 <div class="viewcode-block" id="PowerSwitch.offall"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.offall">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">offall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Turn off all outlets&quot;&quot;&quot;</span>
@@ -236,6 +245,34 @@
 
         <span class="k">return</span> <span class="n">outlets</span></div>
 
+<div class="viewcode-block" id="PowerSwitch.outletdictionary"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.outletdictionary">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">outletdictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return the status of all outlets in a dictionary,</span>
+<span class="sd">        each item will contain 2 items plugnumber, hostname&quot;&quot;&quot;</span>
+        
+        <span class="n">outlets</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">statuslist</span><span class="p">()</span>
+        <span class="n">outlets_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">num</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">num</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">outlets</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">outlets_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+            
+        <span class="k">return</span> <span class="n">outlets_dict</span></div>
+
+<div class="viewcode-block" id="PowerSwitch.statusdictionary"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.statusdictionary">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">statusdictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return the status of all outlets in a dictionary,</span>
+<span class="sd">        each item will contain 2 items plugnumber, status&quot;&quot;&quot;</span>
+        
+        <span class="n">outlets</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">statuslist</span><span class="p">()</span>
+        <span class="n">outlets_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">num</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">num</span><span class="p">:</span>
+            <span class="n">plugnumber</span> <span class="o">=</span> <span class="n">outlets</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">outlets_dict</span><span class="p">[</span><span class="n">plugnumber</span><span class="p">]</span> <span class="o">=</span> <span class="n">outlets</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+            
+        <span class="k">return</span> <span class="n">outlets_dict</span></div>
+
 <div class="viewcode-block" id="PowerSwitch.printstatus"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.dli.lvmpower.PowerSwitch.printstatus">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">printstatus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Print the status off all the outlets as a table to stdout &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">statuslist</span><span class="p">():</span>
@@ -245,6 +282,7 @@
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">statuslist</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="se">\t</span><span class="si">%-15.15s</span><span class="se">\t</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
         <span class="k">return</span></div></div>
+        
 </pre></div>
 
           </div>
