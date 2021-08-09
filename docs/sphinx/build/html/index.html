@@ -37,281 +37,187 @@
             
   <div class="section" id="lvmnps-s-documentation">
 <h1>lvmnps’s documentation<a class="headerlink" href="#lvmnps-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>![Versions](<a class="reference external" href="https://img.shields.io/badge/python-">https://img.shields.io/badge/python-</a>&gt;3.7-blue)
-[![Documentation Status](<a class="reference external" href="https://readthedocs.org/projects/sdss-lvmnps/badge/?version=latest)](https://sdss-lvmnps.readthedocs.io/en/latest/">https://readthedocs.org/projects/sdss-lvmnps/badge/?version=latest)](https://sdss-lvmnps.readthedocs.io/en/latest/</a>?badge=latest)
-[![Travis (.org)](<a class="reference external" href="https://img.shields.io/travis/sdss/lvmnps)](https://travis-ci.org/sdss/lvmnps">https://img.shields.io/travis/sdss/lvmnps)](https://travis-ci.org/sdss/lvmnps</a>)
-[![codecov](<a class="reference external" href="https://codecov.io/gh/sdss/lvmnps/branch/main/graph/badge.svg)](https://codecov.io/gh/sdss/lvmnps">https://codecov.io/gh/sdss/lvmnps/branch/main/graph/badge.svg)](https://codecov.io/gh/sdss/lvmnps</a>)
-[![Test with RabbitMQ](<a class="reference external" href="https://github.com/wasndas/lvmnps/actions/workflows/test-rabbitmq.yml/badge.svg)](https://github.com/wasndas/lvmnps/actions/workflows/test-rabbitmq.yml">https://github.com/wasndas/lvmnps/actions/workflows/test-rabbitmq.yml/badge.svg)](https://github.com/wasndas/lvmnps/actions/workflows/test-rabbitmq.yml</a>)</p>
+<p><img alt="Versions" src="https://img.shields.io/badge/python-&gt;3.7-blue" /> <a class="reference external" href="https://sdss-lvmnps.readthedocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/sdss-lvmnps/badge/?version=latest" /></a> <a class="reference external" href="https://travis-ci.org/sdss/lvmnps"><img alt="Travis (.org)" src="https://img.shields.io/travis/sdss/lvmnps" /></a> <a class="reference external" href="https://codecov.io/gh/sdss/lvmnps"><img alt="codecov" src="https://codecov.io/gh/sdss/lvmnps/branch/main/graph/badge.svg" /></a> <a class="reference external" href="https://github.com/wasndas/lvmnps/actions/workflows/test-rabbitmq.yml"><img alt="Test with RabbitMQ" src="https://github.com/wasndas/lvmnps/actions/workflows/test-rabbitmq.yml/badge.svg" /></a></p>
 <p>Lvm Network Power Switch</p>
-<p>## Features</p>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>CLU Actor based interface</p></li>
 <li><p>Supports a Dummy PDU</p></li>
-<li><p>Supports [iBOOT g2](<a class="reference external" href="https://dataprobe.com/iboot-g2/">https://dataprobe.com/iboot-g2/</a>) with python code from [here](<a class="reference external" href="https://github.com/dprince/python-iboot">https://github.com/dprince/python-iboot</a>)</p></li>
-<li><p>Supports [Digital Loggers Web Power](<a class="reference external" href="https://www.digital-loggers.com/lpc7.html">https://www.digital-loggers.com/lpc7.html</a>) with python code from [here](<a class="reference external" href="https://github.com/dwighthubbard/python-dlipower">https://github.com/dwighthubbard/python-dlipower</a>)</p></li>
+<li><p>Supports <a class="reference external" href="https://dataprobe.com/iboot-g2/">iBOOT g2</a> with python
+code from <a class="reference external" href="https://github.com/dprince/python-iboot">here</a></p></li>
+<li><p>Supports <a class="reference external" href="https://www.digital-loggers.com/lpc7.html">Digital Loggers Web
+Power</a> with python code
+from <a class="reference external" href="https://github.com/dwighthubbard/python-dlipower">here</a></p></li>
 </ul>
-<p>## Installation</p>
-<p>Install [CLU](<a class="reference external" href="https://clu.readthedocs.io/en/latest/">https://clu.readthedocs.io/en/latest/</a>) by using PyPI.
-<code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">$</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">sdss-clu</span>
-<span class="pre">`</span></code></p>
-<p>Clone this repository.
-<code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">$</span> <span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/sdss/lvmnps</span>
-<span class="pre">$</span> <span class="pre">cd</span> <span class="pre">lvmnps</span>
-<span class="pre">`</span></code></p>
-<p>## Quick Start</p>
-<p>### Prerequisite</p>
-<p>Install [RabbitMQ](<a class="reference external" href="https://www.rabbitmq.com/">https://www.rabbitmq.com/</a>) by using apt-get.</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">$</span> <span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">-y</span> <span class="pre">erlang</span>
-<span class="pre">$</span> <span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">-y</span> <span class="pre">rabbitmq-server</span>
-<span class="pre">$</span> <span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">enable</span> <span class="pre">rabbitmq-server</span>
-<span class="pre">$</span> <span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">start</span> <span class="pre">rabbitmq-server</span>
-<span class="pre">`</span></code></p>
-<p>Install [pyenv](<a class="reference external" href="https://github.com/pyenv/pyenv">https://github.com/pyenv/pyenv</a>) by using [pyenv installer](<a class="reference external" href="https://github.com/pyenv/pyenv-installer">https://github.com/pyenv/pyenv-installer</a>).</p>
-<p><code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">$</span> <span class="pre">curl</span> <span class="pre">https://pyenv.run</span> <span class="pre">|</span> <span class="pre">bash</span>
-<span class="pre">`</span></code></p>
-<p>You should add the code below to <code class="xref py py-obj docutils literal notranslate"><span class="pre">bashrc</span></code> by using your preferred editor.
-<code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">#</span> <span class="pre">pyenv</span>
-<span class="pre">export</span> <span class="pre">PYENV_ROOT=&quot;$HOME/.pyenv&quot;</span>
-<span class="pre">export</span> <span class="pre">PATH=&quot;$PYENV_ROOT/bin:$PATH&quot;</span>
-<span class="pre">eval</span> <span class="pre">&quot;$(pyenv</span> <span class="pre">init</span> <span class="pre">-)&quot;</span>
-<span class="pre">eval</span> <span class="pre">&quot;$(pyenv</span> <span class="pre">init</span> <span class="pre">--path)&quot;</span>
-<span class="pre">eval</span> <span class="pre">&quot;$(pyenv</span> <span class="pre">virtualenv-init</span> <span class="pre">-)&quot;</span>
-<span class="pre">`</span></code></p>
-<p>Set the python 3.9.1 virtual environment.
-<code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">$</span> <span class="pre">pyenv</span> <span class="pre">install</span> <span class="pre">3.9.1</span>
-<span class="pre">$</span> <span class="pre">pyenv</span> <span class="pre">virtualenv</span> <span class="pre">3.9.1</span> <span class="pre">lvmnps-with-3.9.1</span>
-<span class="pre">$</span> <span class="pre">pyenv</span> <span class="pre">local</span> <span class="pre">lvmnps-with-3.9.1</span>
-<span class="pre">`</span></code></p>
-<p>Install [poetry](<a class="reference external" href="https://python-poetry.org/">https://python-poetry.org/</a>) and dependencies. For more information, check [sdss/archon](<a class="reference external" href="https://github.com/sdss/archon">https://github.com/sdss/archon</a>).
-<code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">$</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">poetry</span>
-<span class="pre">$</span> <span class="pre">python</span> <span class="pre">create_setup.py</span>
-<span class="pre">$</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span>
-<span class="pre">`</span></code></p>
-<p>### Start the actor</p>
-<p>Start <code class="xref py py-obj docutils literal notranslate"><span class="pre">lvmnps</span></code> actor.
-<code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">$</span> <span class="pre">lvmnps</span> <span class="pre">start</span>
-<span class="pre">`</span></code></p>
-<p>In another terminal, type <code class="xref py py-obj docutils literal notranslate"><span class="pre">clu</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">lvmnps</span> <span class="pre">ping</span></code> for test.
-<a href="#id1"><span class="problematic" id="id2">``</span></a>`
-$ clu
-lvmnps ping</p>
-<blockquote>
-<div><p>07:41:22.636 lvmnps &gt;
-07:41:22.645 lvmnps : {</p>
-<blockquote>
-<div><p>“text”: “Pong.”
-}</p>
-</div></blockquote>
-</div></blockquote>
-<p><a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></p>
-<p>Stop <code class="xref py py-obj docutils literal notranslate"><span class="pre">lvmnps</span></code> actor.
-<code class="docutils literal notranslate"><span class="pre">`</span>
-<span class="pre">$</span> <span class="pre">lvmnps</span> <span class="pre">stop</span>
-<span class="pre">`</span></code></p>
-<p>## Config file structure</p>
-<blockquote>
-<div><dl>
-<dt>switches:</dt><dd><dl>
-<dt>name_your_switch_here:    # should be a unique name</dt><dd><p>type: dummy           # currently dummy, iboot, dli
-num: 8                # number of ports
-ports:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>1:</dt><dd><p>name: “skyw.pwi”  # should also be a unique name
-desc: “Something that make sense”</p>
-</dd>
-</dl>
-</div></blockquote>
-</dd>
-<dt>should_be_a_unique_name:</dt><dd><p>type: dummy
-ports:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>1:</dt><dd><p>name: “skye.pwi”
-desc: “PlaneWavemount Skye”</p>
-</dd>
-</dl>
-</div></blockquote>
-</dd>
-</dl>
-</dd>
-</dl>
-</div></blockquote>
-<p>## Status return for all commands
-* if ‘name’ is not defined then the port name will be ‘switch name’.’port number’ eg nps_dummy_1.port1 otherwise ‘name’ from the config file will be used.
-* STATE: 1: ON, 0: OFF, -1: UNKNOWN</p>
-<blockquote>
-<div><dl>
-<dt>“STATUS”: {</dt><dd><dl class="simple">
-<dt>“nps_dummy_1.port1”: {</dt><dd><p>“STATE”: -1,
-“DESCR”: “was 1”,
-“SWITCH”: “nps_dummy_1”,
-“PORT”: 1</p>
-</dd>
-</dl>
-<p>},</p>
-</dd>
-</dl>
-</div></blockquote>
-<dl>
-<dt>## Run the example lvmnps_dummy</dt><dd><p>#&gt; cd lvmnps
-#&gt; poetry run lvmnps -vvv -c $(pwd)/python/lvmnps/etc/lvmnps_dummy.yml start</p>
-<p>#&gt; poetry run clu</p>
-</dd>
-</dl>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Install <a class="reference external" href="https://clu.readthedocs.io/en/latest/">CLU</a> by using PyPI.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install sdss-clu
+</pre></div>
+</div>
+<p>Clone this repository.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/sdss/lvmnps
+$ cd lvmnps
+</pre></div>
+</div>
+</div>
+<div class="section" id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="prerequisite">
+<h3>Prerequisite<a class="headerlink" href="#prerequisite" title="Permalink to this headline">¶</a></h3>
+<p>Install <a class="reference external" href="https://www.rabbitmq.com/">RabbitMQ</a> by using apt-get.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install -y erlang
+$ sudo apt-get install -y rabbitmq-server
+$ sudo systemctl enable rabbitmq-server
+$ sudo systemctl start rabbitmq-server
+</pre></div>
+</div>
+<p>Install <a class="reference external" href="https://github.com/pyenv/pyenv">pyenv</a> by using <a class="reference external" href="https://github.com/pyenv/pyenv-installer">pyenv
+installer</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl https://pyenv.run | bash
+</pre></div>
+</div>
+<p>You should add the code below to <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code> by using your preferred
+editor.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># pyenv</span>
+<span class="n">export</span> <span class="n">PYENV_ROOT</span><span class="o">=</span><span class="s2">&quot;$HOME/.pyenv&quot;</span>
+<span class="n">export</span> <span class="n">PATH</span><span class="o">=</span><span class="s2">&quot;$PYENV_ROOT/bin:$PATH&quot;</span>
+<span class="nb">eval</span> <span class="s2">&quot;$(pyenv init -)&quot;</span>
+<span class="nb">eval</span> <span class="s2">&quot;$(pyenv init --path)&quot;</span>
+<span class="nb">eval</span> <span class="s2">&quot;$(pyenv virtualenv-init -)&quot;</span>
+</pre></div>
+</div>
+<p>Set the python 3.9.1 virtual environment.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pyenv install 3.9.1
+$ pyenv virtualenv 3.9.1 lvmnps-with-3.9.1
+$ pyenv local lvmnps-with-3.9.1
+</pre></div>
+</div>
+<p>Install <a class="reference external" href="https://python-poetry.org/">poetry</a> and dependencies. For
+more information, check
+<a class="reference external" href="https://github.com/sdss/archon">sdss/archon</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install poetry
+$ python create_setup.py
+$ pip install -e .
+</pre></div>
+</div>
+</div>
+<div class="section" id="start-the-actor">
+<h3>Start the actor<a class="headerlink" href="#start-the-actor" title="Permalink to this headline">¶</a></h3>
+<p>Start <code class="docutils literal notranslate"><span class="pre">lvmnps</span></code> actor.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ lvmnps start
+</pre></div>
+</div>
+<p>In another terminal, type <code class="docutils literal notranslate"><span class="pre">clu</span></code> and <code class="docutils literal notranslate"><span class="pre">lvmnps</span> <span class="pre">ping</span></code> for test.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ clu
+lvmnps ping
+     07:41:22.636 lvmnps &gt;
+     07:41:22.645 lvmnps : {
+         &quot;text&quot;: &quot;Pong.&quot;
+         }
+</pre></div>
+</div>
+<p>Stop <code class="docutils literal notranslate"><span class="pre">lvmnps</span></code> actor.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ lvmnps stop
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="config-file-structure">
+<h2>Config file structure<a class="headerlink" href="#config-file-structure" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">switches</span><span class="p">:</span>
+    <span class="n">name_your_switch_here</span><span class="p">:</span>    <span class="c1"># should be a unique name</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="n">dummy</span>           <span class="c1"># currently dummy, iboot, dli</span>
+        <span class="n">num</span><span class="p">:</span> <span class="mi">8</span>                <span class="c1"># number of ports</span>
+        <span class="n">ports</span><span class="p">:</span>
+          <span class="mi">1</span><span class="p">:</span>
+            <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;skyw.pwi&quot;</span>  <span class="c1"># should also be a unique name</span>
+            <span class="n">desc</span><span class="p">:</span> <span class="s2">&quot;Something that make sense&quot;</span>
+    <span class="n">should_be_a_unique_name</span><span class="p">:</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="n">dummy</span>
+        <span class="n">ports</span><span class="p">:</span>
+          <span class="mi">1</span><span class="p">:</span>
+            <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;skye.pwi&quot;</span>
+            <span class="n">desc</span><span class="p">:</span> <span class="s2">&quot;PlaneWavemount Skye&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="status-return-for-all-commands">
+<h2>Status return for all commands<a class="headerlink" href="#status-return-for-all-commands" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>if ‘name’ is not defined then the port name will be ‘switch
+name’.’port number’ eg nps_dummy_1.port1 otherwise ‘name’ from the
+config file will be used.</p></li>
+<li><p>STATE: 1: ON, 0: OFF, -1: UNKNOWN</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;STATUS&quot;</span><span class="p">:</span> <span class="p">{</span>
+ <span class="s2">&quot;nps_dummy_1.port1&quot;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s2">&quot;STATE&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+     <span class="s2">&quot;DESCR&quot;</span><span class="p">:</span> <span class="s2">&quot;was 1&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;SWITCH&quot;</span><span class="p">:</span> <span class="s2">&quot;nps_dummy_1&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="mi">1</span>
+ <span class="p">},</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="run-the-example-lvmnps-dummy">
+<h2>Run the example lvmnps_dummy<a class="headerlink" href="#run-the-example-lvmnps-dummy" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#&gt; cd lvmnps</span>
+<span class="c1">#&gt; poetry run lvmnps -vvv -c $(pwd)/python/lvmnps/etc/lvmnps_dummy.yml start</span>
+
+<span class="c1">#&gt; poetry run clu</span>
+</pre></div>
+</div>
 <ul>
 <li><p>status command without parameter returns all ports of all switches.</p></li>
-<li><p>the default is to return only configured ports, otherwise define ‘ouo’ false in the config file, see [lvmnps_dummy.yml](<a class="reference external" href="https://github.com/sdss/lvmnps/blob/master/python/lvmnps/etc/lvmnps_dummy.yml">https://github.com/sdss/lvmnps/blob/master/python/lvmnps/etc/lvmnps_dummy.yml</a>)</p>
-<blockquote>
-<div><p>lvmnps status</p>
-<p>12:02:08.649 lvmnps &gt;
-12:02:08.660 lvmnps i {</p>
-<blockquote>
-<div><dl>
-<dt>“STATUS”: {</dt><dd><dl class="simple">
-<dt>“nps_dummy_1.port1”: {</dt><dd><p>“STATE”: -1,
-“DESCR”: “was 1”,
-“SWITCH”: “nps_dummy_1”,
-“PORT”: 1</p>
-</dd>
-</dl>
-<p>},
-“skye.what.ever”: {</p>
-<blockquote>
-<div><p>“STATE”: -1,
-“DESCR”: “whatever is connected to skye”,
-“SWITCH”: “nps_dummy_1”,
-“PORT”: 2</p>
-</div></blockquote>
-<p>},
-“skyw.what.ever”: {</p>
-<blockquote>
-<div><p>“STATE”: -1,
-“DESCR”: “Something &#64; skyw”,
-“SWITCH”: “nps_dummy_1”,
-“PORT”: 4</p>
-</div></blockquote>
-<p>},
-“skye.pwi”: {</p>
-<blockquote>
-<div><p>“STATE”: -1,
-“DESCR”: “PlaneWavemount Skye”,
-“SWITCH”: “skye.nps”,
-“PORT”: 1</p>
-</div></blockquote>
-<dl class="simple">
-<dt>},</dt><dd><p>“skyw.pwi”: {
-“STATE”: -1,
-“DESCR”: “PlaneWavemount Skyw”,
-“SWITCH”: “nps_dummy_3”,
-“PORT”: 1</p>
-</dd>
-</dl>
-<p>}</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<p>}</p>
-</div></blockquote>
+<li><p>the default is to return only configured ports, otherwise define
+‘ouo’ false in the config file, see
+<a class="reference external" href="https://github.com/sdss/lvmnps/blob/master/python/lvmnps/etc/lvmnps_dummy.yml">lvmnps_dummy.yml</a></p>
+<p>lvmnps status</p>
+<p>12:02:08.649 lvmnps &gt; 12:02:08.660 lvmnps i { “STATUS”: {
+“nps_dummy_1.port1”: { “STATE”: -1, “DESCR”: “was 1”, “SWITCH”:
+“nps_dummy_1”, “PORT”: 1 }, “skye.what.ever”: { “STATE”: -1,
+“DESCR”: “whatever is connected to skye”, “SWITCH”: “nps_dummy_1”,
+“PORT”: 2 }, “skyw.what.ever”: { “STATE”: -1, “DESCR”: “Something &#64;
+skyw”, “SWITCH”: “nps_dummy_1”, “PORT”: 4 }, “skye.pwi”: { “STATE”:
+-1, “DESCR”: “PlaneWavemount Skye”, “SWITCH”: “skye.nps”, “PORT”: 1
+}, “skyw.pwi”: { “STATE”: -1, “DESCR”: “PlaneWavemount Skyw”,
+“SWITCH”: “nps_dummy_3”, “PORT”: 1 } } }</p>
 </li>
 <li><p>status command with port name skyw.what.ever</p>
-<blockquote>
-<div><p>lvmnps status skyw.what.ever</p>
-<p>12:07:12.349 lvmnps &gt;
-12:07:12.377 lvmnps i {</p>
-<blockquote>
-<div><blockquote>
-<div><dl class="simple">
-<dt>“STATUS”: {</dt><dd><dl class="simple">
-<dt>“skyw.what.ever”: {</dt><dd><p>“STATE”: -1,
-“DESCR”: “Something &#64; skyw”,
-“SWITCH”: “nps_dummy_1”,
-“PORT”: 4</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</div></blockquote>
-<p>}</p>
-</div></blockquote>
-</div></blockquote>
+<p>lvmnps status skyw.what.ever</p>
+<p>12:07:12.349 lvmnps &gt; 12:07:12.377 lvmnps i { “STATUS”: {
+“skyw.what.ever”: { “STATE”: -1, “DESCR”: “Something &#64; skyw”,
+“SWITCH”: “nps_dummy_1”, “PORT”: 4 }</p>
 </li>
 <li><p>status command with switch name nps_dummy_1</p>
-<blockquote>
-<div><p>lvmnps status nps_dummy_1</p>
-<p>12:07:12.349 lvmnps &gt;
-12:12:21.349 lvmnps i {</p>
-<blockquote>
-<div><dl>
-<dt>“STATUS”: {</dt><dd><dl class="simple">
-<dt>“nps_dummy_1.port1”: {</dt><dd><p>“STATE”: -1,
-“DESCR”: “was 1”,
-“SWITCH”: “nps_dummy_1”,
-“PORT”: 1</p>
-</dd>
-</dl>
-<p>},
-“skye.what.ever”: {</p>
-<blockquote>
-<div><p>“STATE”: -1,
-“DESCR”: “whatever is connected to skye”,
-“SWITCH”: “nps_dummy_1”,
-“PORT”: 2</p>
-</div></blockquote>
-<p>},
-“skyw.what.ever”: {</p>
-<blockquote>
-<div><p>“STATE”: -1,
-“DESCR”: “Something &#64; skyw”,
-“SWITCH”: “nps_dummy_1”,
-“PORT”: 4</p>
-</div></blockquote>
-<p>}</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<p>}</p>
-</div></blockquote>
+<p>lvmnps status nps_dummy_1</p>
+<p>12:07:12.349 lvmnps &gt; 12:12:21.349 lvmnps i { “STATUS”: {
+“nps_dummy_1.port1”: { “STATE”: -1, “DESCR”: “was 1”, “SWITCH”:
+“nps_dummy_1”, “PORT”: 1 }, “skye.what.ever”: { “STATE”: -1,
+“DESCR”: “whatever is connected to skye”, “SWITCH”: “nps_dummy_1”,
+“PORT”: 2 }, “skyw.what.ever”: { “STATE”: -1, “DESCR”: “Something &#64;
+skyw”, “SWITCH”: “nps_dummy_1”, “PORT”: 4 } } }</p>
 </li>
 <li><p>status command with switch name nps_dummy_1 and port 4 returns</p>
-<blockquote>
-<div><p>lvmnps status nps_dummy_1 4</p>
-<p>12:07:12.349 lvmnps &gt;
-12:12:21.349 lvmnps i {</p>
-<blockquote>
-<div><dl>
-<dt>“STATUS”: {</dt><dd><dl class="simple">
-<dt>“skyw.what.ever”: {</dt><dd><p>“STATE”: -1,
-“DESCR”: “Something &#64; skyw”,
-“SWITCH”: “nps_dummy_1”,
-“PORT”: 4</p>
-</dd>
-</dl>
-<p>}</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<p>}</p>
-</div></blockquote>
+<p>lvmnps status nps_dummy_1 4</p>
+<p>12:07:12.349 lvmnps &gt; 12:12:21.349 lvmnps i { “STATUS”: {
+“skyw.what.ever”: { “STATE”: -1, “DESCR”: “Something &#64; skyw”,
+“SWITCH”: “nps_dummy_1”, “PORT”: 4 } } }</p>
 </li>
 <li><p>the commands on and off use the same addressing scheme as status</p></li>
 </ul>
-<dl class="simple">
-<dt>## Test</dt><dd><p>poetry run pytest
-poetry run pytest -p no:logging -s -vv</p>
-</dd>
-</dl>
+</div>
+<div class="section" id="test">
+<h2>Test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">pytest</span>
+<span class="n">poetry</span> <span class="n">run</span> <span class="n">pytest</span> <span class="o">-</span><span class="n">p</span> <span class="n">no</span><span class="p">:</span><span class="n">logging</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">vv</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
