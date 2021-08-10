@@ -331,7 +331,7 @@ class PowerSwitch(object):
     def __getitem__(self, index):
         outlets = []
         if isinstance(index, slice):
-            status = self.statuslist()[index.start: index.stop]
+            status = self.statuslist()[index.start : index.stop]  # noqa: E203
         else:
             status = [self.statuslist()[index]]
         for outlet_status in status:
