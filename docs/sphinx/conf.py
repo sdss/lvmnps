@@ -29,8 +29,8 @@ on_rtd = os.environ.get("READTHEDOCS") == "True"
 sphinx_template = "sphinx-bootstrap"
 use_releases = "no"
 
-if sphinx_template == "sphinx-bootstrap":
-    import sphinx_bootstrap_theme
+# if sphinx_template == "sphinx-bootstrap":
+#    import sphinx_bootstrap_theme
 
 
 # Importing matplotlib here with agg to prevent tkinter error in readthedocs
