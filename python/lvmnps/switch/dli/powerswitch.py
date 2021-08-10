@@ -5,8 +5,9 @@
 # @Filename: lvmnps/switch/iboot/powerswitch.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
-from sdsstools.logger import SDSSLogger
 import datetime
+
+from sdsstools.logger import SDSSLogger
 
 from lvmnps.switch.dli.lvmpower import PowerSwitch as DliPowerSwitch
 from lvmnps.switch.powerswitchbase import PowerSwitchBase

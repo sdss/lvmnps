@@ -8,13 +8,14 @@
 
 from __future__ import annotations
 
-import click
-from clu.command import Command
 import datetime
 
+import click
+from clu.command import Command
+
 from lvmnps.actor.commands import parser
-from lvmnps.switch.exceptions import PowerException
 from lvmnps.switch.dli.powerswitch import PowerSwitch
+from lvmnps.switch.exceptions import PowerException
 
 
 @parser.group()
