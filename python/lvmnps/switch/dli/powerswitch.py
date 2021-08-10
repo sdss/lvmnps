@@ -30,6 +30,7 @@ class PowerSwitch(PowerSwitchBase):
         self.use_https = self.config_get('use_https', False)
 
         self.dli = None
+        self.reachable = None
 
     async def start(self):
         if not await self.isReachable():
@@ -54,11 +55,11 @@ class PowerSwitch(PowerSwitchBase):
                 self.dli = DliPowerSwitch(name=self.name, userid=self.username, password=self.password,
                                           hostname=self.hostname, use_https=self.use_https)
 #                reachable = self.statuslist()
-                reachable = await self.dli.verify()
+                self.reachable = await self.dli.verify()
 
-                if not reachable:
+                if not self.reachable:
                     self.dli = None
-            return reachable
+            return self.reachable
 
         except Exception as ex:
             self.log.error(f"Unexpected exception is {type(ex)}: {ex}")        #help me please.... to ck
