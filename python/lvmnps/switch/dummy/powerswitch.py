@@ -13,11 +13,11 @@ from sdsstools.logger import SDSSLogger
 from lvmnps.switch.powerswitchbase import PowerSwitchBase
 
 
-__all__ = ['PowerSwitch']
+__all__ = ["PowerSwitch"]
 
 
 class PowerSwitch(PowerSwitchBase):
-    """ Powerswitch class to manage the Digital Loggers Web power switch """
+    """Powerswitch class to manage the Digital Loggers Web power switch"""
 
     def __init__(self, name: str, config: [], log: SDSSLogger):
         super().__init__(name, config, log)
@@ -29,8 +29,10 @@ class PowerSwitch(PowerSwitchBase):
         await self.update(self.outlets)
 
     async def stop(self):
-        self.log.debug("For a moment, nothing happened. Then, after a second or so, "
-                       "nothing continued to happen ...")
+        self.log.debug(
+            "For a moment, nothing happened. Then, after a second or so, "
+            "nothing continued to happen ..."
+        )
 
     async def isReachable(self):
         return True
@@ -41,7 +43,7 @@ class PowerSwitch(PowerSwitchBase):
     async def switch(self, state, outlets):
         for o in outlets:
             self.log.debug(f"{self.name} set")
-#            time.sleep(self.delay)
+            #            time.sleep(self.delay)
             await asyncio.sleep(self.delay)
-            self.log.debug(f'{self.name} {outlets}')
+            self.log.debug(f"{self.name} {outlets}")
             o.setState(state)

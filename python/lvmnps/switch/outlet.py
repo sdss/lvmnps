@@ -7,6 +7,7 @@
 
 import datetime
 
+
 class Outlet(object):
     """
     A power outlet class
@@ -29,9 +30,9 @@ class Outlet(object):
 
     @staticmethod
     def parse(value):
-        if value in ['off', 'OFF', '0', 0, False]:
+        if value in ["off", "OFF", "0", 0, False]:
             return 0
-        if value in ['on', 'ON', '1', 1, True]:
+        if value in ["on", "ON", "1", 1, True]:
             return 1
         return -1
 
@@ -49,8 +50,8 @@ class Outlet(object):
 
     def toJson(self):
         return {
-            'STATE': self.state,
-            'DESCR': self.description,
-            'SWITCH': self.swname,
-            'PORT': self.portnum,
+            "STATE": self.state,
+            "DESCR": self.description,
+            "SWITCH": self.swname,
+            "PORT": self.portnum,
         }

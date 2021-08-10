@@ -14,12 +14,15 @@ from .iboot.powerswitch import PowerSwitch as IBootPowerSwitch
 
 
 def powerSwitchFactory(name: str, config: dict, log: SDSSLogger):
-
     def throwError(n, c):
         raise PowerException(f"Power switch {n} with type {c['type']} not defined")
 
-    factorymap = {"dli": DliPowerSwitch,
-                  "iboot": IBootPowerSwitch,
-                  "dummy": DummyPowerSwitch}
+    factorymap = {
+        "dli": DliPowerSwitch,
+        "iboot": IBootPowerSwitch,
+        "dummy": DummyPowerSwitch,
+    }
 
-    return factorymap.get(config["type"], lambda n, c: throwError(n, c))(name, config, log)
+    return factorymap.get(config["type"], lambda n, c: throwError(n, c))(
+        name, config, log
+    )

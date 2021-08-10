@@ -46,19 +46,16 @@ async def what(command: Command, switches: PowerSwitch, name: str, portnum: int)
             print(name)
             print(portnum)
             print(current_status)
-            
+
             if current_status:
-                status = dict(list(status.items()) +
-                          list((current_status.items())))
+                status = dict(list(status.items()) + list((current_status.items())))
             else:
                 return command.fail(text="The switch returns wrong value")
 
         except PowerException as ex:
             return command.fail(error=str(ex))
 
-    command.info(
-        STATUS=status
-    )
+    command.info(STATUS=status)
 
     return command.finish("done")
 
@@ -75,15 +72,12 @@ async def all(command: Command, switches: PowerSwitch):
             command.info(text="Printing the current status of switch")
 
             current_status = await switch.statusAsJson()
-            
-            status = dict(list(status.items()) +
-                          list((current_status.items())))
+
+            status = dict(list(status.items()) + list((current_status.items())))
 
         except PowerException as ex:
             return command.fail(error=str(ex))
 
-    command.info(
-        STATUS=status
-    )
+    command.info(STATUS=status)
 
     return command.finish("done")

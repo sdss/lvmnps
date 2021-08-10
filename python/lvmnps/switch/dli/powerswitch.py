@@ -15,19 +15,19 @@ from lvmnps.switch.powerswitchbase import PowerSwitchBase
 # Todo: Dont inherit clu.Device in lvmnps.switch.dli.dlipower.PowerSwitch if you are not using it.
 
 
-__all__ = ['PowerSwitch']
+__all__ = ["PowerSwitch"]
 
 
 class PowerSwitch(PowerSwitchBase):
-    """ Powerswitch class to manage the iboot power switch """
+    """Powerswitch class to manage the iboot power switch"""
 
     def __init__(self, name: str, config: [], log: SDSSLogger):
         super().__init__(name, config, log)
 
-        self.hostname = self.config_get('hostname')
-        self.username = self.config_get('user', 'admin')
-        self.password = self.config_get('password', 'admin')
-        self.use_https = self.config_get('use_https', False)
+        self.hostname = self.config_get("hostname")
+        self.username = self.config_get("user", "admin")
+        self.password = self.config_get("password", "admin")
+        self.use_https = self.config_get("use_https", False)
 
         self.dli = None
         self.reachable = None
@@ -48,13 +48,17 @@ class PowerSwitch(PowerSwitchBase):
 
         self.log.debug("So Long, and Thanks for All the Fish ...")
 
-
     async def isReachable(self):
         try:
             if not self.dli:
-                self.dli = DliPowerSwitch(name=self.name, userid=self.username, password=self.password,
-                                          hostname=self.hostname, use_https=self.use_https)
-#                reachable = self.statuslist()
+                self.dli = DliPowerSwitch(
+                    name=self.name,
+                    userid=self.username,
+                    password=self.password,
+                    hostname=self.hostname,
+                    use_https=self.use_https,
+                )
+                #                reachable = self.statuslist()
                 self.reachable = await self.dli.verify()
 
                 if not self.reachable:
@@ -62,20 +66,22 @@ class PowerSwitch(PowerSwitchBase):
             return self.reachable
 
         except Exception as ex:
-            self.log.error(f"Unexpected exception is {type(ex)}: {ex}")        #help me please.... to ck
+            self.log.error(
+                f"Unexpected exception is {type(ex)}: {ex}"
+            )  # help me please.... to ck
             self.dli = None
             return False
 
     async def update(self, outlets):
         # outlets contains all targeted ports
         self.log.debug(f"{outlets}")
-        #flag = await self.isReachable()
+        # flag = await self.isReachable()
         try:
             if await self.isReachable():
                 # get a list [] of port states, use outlets for a subset.
 
                 currentstatus = await self.dli.statusdictionary()
-                #print(currentstatus)
+                # print(currentstatus)
                 for o in outlets:
                     o.setState(currentstatus[o.portnum])
 
@@ -85,7 +91,6 @@ class PowerSwitch(PowerSwitchBase):
 
         except Exception as ex:
             self.log.error(f"Unexpected exception for {type(ex)}: {ex}")
-
 
     async def switch(self, state, outlets):
         # outlets contains all targeted ports
@@ -97,7 +102,9 @@ class PowerSwitch(PowerSwitchBase):
                 print(f"after isReachable  :  {current_time}")
 
                 for o in outlets:
-                    await self.dli.on(o.portnum) if state else await self.dli.off(o.portnum)
+                    await self.dli.on(o.portnum) if state else await self.dli.off(
+                        o.portnum
+                    )
 
                 current_time = datetime.datetime.now()
                 print(f"after dli  :  {current_time}")

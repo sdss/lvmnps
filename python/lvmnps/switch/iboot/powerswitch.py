@@ -11,22 +11,23 @@ from lvmnps.switch.iboot.iboot import iBootInterface
 from lvmnps.switch.powerswitchbase import PowerSwitchBase
 
 
-__all__ = ['PowerSwitch']
+__all__ = ["PowerSwitch"]
 
 
 class PowerSwitch(PowerSwitchBase):
-    """ Powerswitch class to manage the iboot power switch """
+    """Powerswitch class to manage the iboot power switch"""
 
     def __init__(self, name: str, config: [], log: SDSSLogger):
         super().__init__(name, config, log)
 
-        self.hostname = self.config_get('hostname')
-        self.username = self.config_get('username', 'admin')
-        self.password = self.config_get('password', 'admin')
-        self.portsnum = int(self.config_get('ports.num', '1'))
+        self.hostname = self.config_get("hostname")
+        self.username = self.config_get("username", "admin")
+        self.password = self.config_get("password", "admin")
+        self.portsnum = int(self.config_get("ports.num", "1"))
 
-        self.iboot = iBootInterface(self.hostname, self.username,
-                                    self.password, self.portsnum, self.log)
+        self.iboot = iBootInterface(
+            self.hostname, self.username, self.password, self.portsnum, self.log
+        )
 
     async def start(self):
         if not await self.isReachable():
