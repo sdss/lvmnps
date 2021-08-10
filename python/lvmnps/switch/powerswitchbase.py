@@ -78,11 +78,11 @@ class PowerSwitchBase(object):
             else:
                 outlets = []
                 self.log.debug(str(self.onlyusedones))
-                print(self.outlets)
+                #print(self.outlets)
                 for o in self.outlets:
                     if o.inuse or not self.onlyusedones:
                         outlets.append(o)
-                print(outlets)
+                #print(outlets)
                 return outlets
         else:
             o = self.findOutletByName(name)

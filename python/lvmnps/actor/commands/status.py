@@ -32,30 +32,32 @@ async def what(command: Command, switches: PowerSwitch, name: str, portnum: int)
 
     status = {}
 
-    for switch in switches:
-        try:
-            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-            command.info(text=f"Printing the current status of switch {name}")
+    try:
+        for switch in switches:
+            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9 
+            command.info(text=f"Printing the current status of port {name} in {switch.name}")
             current_time = datetime.datetime.now()
             print(f"before switch getting status  :  {current_time}")
 
             current_status = await switch.statusAsJson(name, portnum)
             current_time = datetime.datetime.now()
             print(f"after switch getting status  :  {current_time}")
-
-            print(name)
-            print(portnum)
-            print(current_status)
-
+            
+            #print(current_status)
+            #command.info(STATUS=current_status)
+            
             if current_status:
-                status = dict(list(status.items()) + list((current_status.items())))
+                break
             else:
-                return command.fail(text="The switch returns wrong value")
+                command.info(text=f"{name} is not here!")
+            
+        if current_status:
+            command.info(STATUS=current_status)
+        else:
+            return command.fail(text="The switch returns wrong value")
 
-        except PowerException as ex:
+    except PowerException as ex:
             return command.fail(error=str(ex))
-
-    command.info(STATUS=status)
 
     return command.finish("done")
 
@@ -64,20 +66,17 @@ async def what(command: Command, switches: PowerSwitch, name: str, portnum: int)
 async def all(command: Command, switches: PowerSwitch):
     """Returns the status of ALL outlets in the NPS."""
 
-    status = {}
-
     for switch in switches:
         try:
+            status = {}
             # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-            command.info(text="Printing the current status of switch")
+            command.info(text=f"Printing the current status of switch {switch.name}")
 
             current_status = await switch.statusAsJson()
-
             status = dict(list(status.items()) + list((current_status.items())))
+            command.info(STATUS=status)
 
         except PowerException as ex:
             return command.fail(error=str(ex))
-
-    command.info(STATUS=status)
 
     return command.finish("done")
