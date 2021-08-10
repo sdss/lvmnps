@@ -17,11 +17,18 @@ from lvmnps.actor.commands import parser
 from lvmnps.switch.exceptions import PowerException
 from lvmnps.switch.dli.powerswitch import PowerSwitch
 
-@parser.command()
+
+@parser.group()
+def status(*args):
+    """print the status of the NPS."""
+    pass
+
+
+@status.command()
 @click.argument("NAME", type=str, default="")
 @click.argument("PORTNUM", type=int, default=0)
-async def status(command: Command, switches: PowerSwitch, name: str, portnum: int):
-    """print the status of the NPS."""
+async def what(command: Command, switches: PowerSwitch, name: str, portnum: int):
+    """Returns the status of the outlets."""
 
     status = {}
 
@@ -52,9 +59,9 @@ async def status(command: Command, switches: PowerSwitch, name: str, portnum: in
     return command.finish("done")
 
 
-@parser.command()
-async def statusall(command: Command, switches: PowerSwitch):
-    """print the status of ALL outlets in the NPS."""
+@status.command()
+async def all(command: Command, switches: PowerSwitch):
+    """Returns the status of ALL outlets in the NPS."""
 
     status = {}
 
