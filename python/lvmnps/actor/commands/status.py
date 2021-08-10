@@ -7,7 +7,7 @@
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from __future__ import annotations
-import asyncio
+#import asyncio
 
 import click
 from clu.command import Command

@@ -6,7 +6,6 @@
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from abc import abstractmethod
-import datetime
 
 from sdsstools.logger import SDSSLogger
 

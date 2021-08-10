@@ -249,7 +249,6 @@ class PowerSwitch(object):
         """
         Class initializaton
         """
-        self.name = name
 
         if not retries:
             retries = RETRIES
@@ -332,7 +331,7 @@ class PowerSwitch(object):
     def __getitem__(self, index):
         outlets = []
         if isinstance(index, slice):
-            status = self.statuslist()[index.start : index.stop]
+            status = self.statuslist()[index.start: index.stop]
         else:
             status = [self.statuslist()[index]]
         for outlet_status in status:

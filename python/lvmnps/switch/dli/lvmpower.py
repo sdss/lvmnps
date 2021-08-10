@@ -8,10 +8,8 @@
 
 
 from __future__ import annotations
-import asyncio
 import httpx
 from bs4 import BeautifulSoup
-import datetime
 
 
 CONFIG_DEFAULTS = {
@@ -75,7 +73,8 @@ class PowerSwitch(object):
         login_url = "%s/login.tgi" % self.base_url
         data = {"Username": self.userid, "Password": self.password}
         headers = {
-            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0",
+            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0)\
+                Gecko/20100101 Firefox/89.0",
             "Content-Type": "application/x-www-form-urlencoded",
         }
 
@@ -86,7 +85,7 @@ class PowerSwitch(object):
                 headers=headers,
             )
         except httpx.RequestError as exc:
-            print(f"An error occurred while requesting {login_url!r}.")
+            print(f"An error {exc} occurred while requesting {login_url!r}.")
 
         if res.status_code != 200:
             raise Exception(
