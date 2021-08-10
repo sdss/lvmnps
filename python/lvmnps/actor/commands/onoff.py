@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import asyncio
 import datetime
-#from lvmnps.python.lvmnps.actor.commands.status import status
 
 import click
 from clu.command import Command
@@ -22,9 +21,7 @@ from lvmnps.switch.dli.powerswitch import PowerSwitch
 async def switch_control(switches: PowerSwitch, on: bool, name: str, portnum: int):
     current_time = datetime.datetime.now()
     print(f"starting switch_control  :  {current_time}")
-
-    status = {}
-
+    
     try:
         tasks = []
         for switch in switches:
@@ -36,22 +33,34 @@ async def switch_control(switches: PowerSwitch, on: bool, name: str, portnum: in
         current_time = datetime.datetime.now()
         print(f"after gather  :  {current_time}")
 
-        status = dict(list(status.items()) + 
-                  list((await switch.statusAsJson(name, portnum)).items()))
-
     except NpsActorError as err:
         return {str(err)}
 
-    return status
 
 
 @parser.command()
 @click.argument("NAME", type=str, default="")
 @click.argument("PORTNUM", type=int, default=0)
-async def on(command: Command, switches: [], name: str, portnum: int):
+async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """Turn on the Outlet"""
 
-    command.info(STATUS=await switch_control(switches, True, name, portnum))
+    status = {}
+    for switch in switches:
+            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
+        current_status = await switch.statusAsJson(name, portnum)
+
+        if current_status[name]['STATE'] == 0:
+            await switch_control(switches, True, name, portnum)
+        elif current_status[name]['STATE'] == 1:
+            command.fail(text=f"The Outlet {name} is already ON")
+        else:
+            command.fail(text=f"The Outlet {name} returns wrong value")
+
+        current_status = await switch.statusAsJson(name, portnum)
+        status = dict(list(status.items()) +
+                          list((current_status.items())))
+
+    command.info(STATUS=status)
 
     return command.finish(text="done")
 
@@ -59,20 +68,45 @@ async def on(command: Command, switches: [], name: str, portnum: int):
 @parser.command()
 @click.argument("NAME", type=str, default="")
 @click.argument("PORTNUM", type=int, default=0)
-async def off(command: Command, switches: [], name: str, portnum: int):
+async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """Turn off the Outlet"""
 
-    command.info(STATUS=await switch_control(switches, False, name, portnum))
+    status = {}
+    for switch in switches:
+            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
+        current_status = await switch.statusAsJson(name, portnum)
+        
+        if current_status[name]['STATE'] == 1:
+            await switch_control(switches, False, name, portnum)
+        elif current_status[name]['STATE'] == 0:
+            command.fail(text=f"The Outlet {name} is already ON")
+        else:
+            command.fail(text=f"The Outlet {name} returns wrong value")
+
+        current_status = await switch.statusAsJson(name, portnum)
+        status = dict(list(status.items()) +
+                          list((current_status.items())))
+
+    command.info(STATUS=status)
 
     return command.finish(text="done")
 
 
 @parser.command()
 @click.argument("NAME", type=str, default="")
-async def onall(command: Command, switches: [], name: str):
+async def onall(command: Command, switches: PowerSwitch, name: str):
     """Turn on all Outlet"""
 
-    command.info(STATUS=await switch_control(switches, True, 0, name))
+    await switch_control(switches, True, 0, name)
+
+    status = {}
+    for switch in switches:
+            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
+        current_status = await switch.statusAsJson(name)
+        status = dict(list(status.items()) +
+                          list((current_status.items())))
+
+    command.info(STATUS=status)
 
     return command.finish(text="done")
 
