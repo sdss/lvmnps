@@ -28,7 +28,7 @@ async def status(command: Command, switches: PowerSwitch, name: str, portnum: in
     for switch in switches:
         try:
             # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-            command.info(text="Printing the current status of switch")
+            command.info(text=f"Printing the current status of switch {name}")
             current_time = datetime.datetime.now()
             print(f"before switch getting status  :  {current_time}")
 
@@ -36,19 +36,43 @@ async def status(command: Command, switches: PowerSwitch, name: str, portnum: in
             current_time = datetime.datetime.now()
             print(f"after switch getting status  :  {current_time}")
 
-            status = dict(list(status.items()) +
+            if current_status[name]:
+                status = dict(list(status.items()) +
                           list((current_status.items())))
-
+            else:
+                return command.fail(text="The switch returns wrong value")
 
         except PowerException as ex:
             return command.fail(error=str(ex))
 
-    print("-----print-----")
     command.info(
         STATUS=status
     )
-    current_time = datetime.datetime.now()
-    print(f"after command status  :  {current_time}")
 
+    return command.finish("done")
+
+
+@parser.command()
+async def statusall(command: Command, switches: PowerSwitch):
+    """print the status of ALL outlets in the NPS."""
+
+    status = {}
+
+    for switch in switches:
+        try:
+            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
+            command.info(text="Printing the current status of switch")
+
+            current_status = await switch.statusAsJson()
+            
+            status = dict(list(status.items()) +
+                          list((current_status.items())))
+
+        except PowerException as ex:
+            return command.fail(error=str(ex))
+
+    command.info(
+        STATUS=status
+    )
 
     return command.finish("done")

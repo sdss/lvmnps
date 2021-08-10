@@ -131,8 +131,8 @@ class PowerSwitch(object):
 
         await self.geturl(url='outlet?%d=ON' % outlet_number)
 
-        currentstatus = await self.dli.statusdictionary()
-        return currentstatus[outlet_number] != 'ON'
+        #currentstatus = await self.dli.statusdictionary()
+        #return currentstatus[outlet_number] != 'ON'
 
 
     async def onall(self):
@@ -148,8 +148,8 @@ class PowerSwitch(object):
 
         await self.geturl(url='outlet?%d=OFF' % outlet_number)
 
-        currentstatus = await self.dli.statusdictionary()
-        return currentstatus[outlet_number] != 'OFF'
+        #currentstatus = await self.dli.statusdictionary()
+        #return currentstatus[outlet_number] != 'OFF'
 
     async def offall(self):
         """Turn off all outlets"""

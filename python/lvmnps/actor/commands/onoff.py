@@ -19,22 +19,16 @@ from lvmnps.exceptions import NpsActorError
 from lvmnps.switch.dli.powerswitch import PowerSwitch
 
 async def switch_control(switches: PowerSwitch, on: bool, name: str, portnum: int):
+    
     current_time = datetime.datetime.now()
     print(f"starting switch_control  :  {current_time}")
     
-    try:
-        tasks = []
-        for switch in switches:
-            tasks.append(asyncio.create_task(switch.setState(on, name, portnum)))
-            current_time = datetime.datetime.now()
-            print(f"after setState  :  {current_time}")
+    for switch in switches:
+        try:
+            await switch.setState(on, name, portnum)
 
-        await asyncio.gather(*tasks)
-        current_time = datetime.datetime.now()
-        print(f"after gather  :  {current_time}")
-
-    except NpsActorError as err:
-        return {str(err)}
+        except NpsActorError as err:
+            return {str(err)}
 
 
 
@@ -52,9 +46,9 @@ async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
         if current_status[name]['STATE'] == 0:
             await switch_control(switches, True, name, portnum)
         elif current_status[name]['STATE'] == 1:
-            command.fail(text=f"The Outlet {name} is already ON")
+            return command.fail(text=f"The Outlet {name} is already ON")
         else:
-            command.fail(text=f"The Outlet {name} returns wrong value")
+            return command.fail(text=f"The Outlet {name} returns wrong value")
 
         current_status = await switch.statusAsJson(name, portnum)
         status = dict(list(status.items()) +
@@ -79,9 +73,9 @@ async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
         if current_status[name]['STATE'] == 1:
             await switch_control(switches, False, name, portnum)
         elif current_status[name]['STATE'] == 0:
-            command.fail(text=f"The Outlet {name} is already ON")
+            return command.fail(text=f"The Outlet {name} is already OFF")
         else:
-            command.fail(text=f"The Outlet {name} returns wrong value")
+            return command.fail(text=f"The Outlet {name} returns wrong value")
 
         current_status = await switch.statusAsJson(name, portnum)
         status = dict(list(status.items()) +

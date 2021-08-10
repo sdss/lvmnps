@@ -73,17 +73,12 @@ class PowerSwitch(PowerSwitchBase):
         try:
             if await self.isReachable():
                 # get a list [] of port states, use outlets for a subset.
-                #print("is inside reachable")
-                current_time = datetime.datetime.now()
-                print(f"after isReachable  :  {current_time}")
 
                 currentstatus = await self.dli.statusdictionary()
                 #print(currentstatus)
                 for o in outlets:
                     o.setState(currentstatus[o.portnum])
-                
-                current_time = datetime.datetime.now()
-                print(f"after setState  :  {current_time}")
+
             else:
                 for o in outlets:
                     o.setState(-1)
@@ -98,10 +93,19 @@ class PowerSwitch(PowerSwitchBase):
         try:
             if await self.isReachable():
                 # either loop over the outlets or pass the outlet list.
+                current_time = datetime.datetime.now()
+                print(f"after isReachable  :  {current_time}")
+
                 for o in outlets:
                     await self.dli.on(o.portnum) if state else await self.dli.off(o.portnum)
 
+                current_time = datetime.datetime.now()
+                print(f"after dli  :  {current_time}")
+
             await self.update(outlets)
+
+            current_time = datetime.datetime.now()
+            print(f"after update  :  {current_time}")
 
         except Exception as ex:
             self.log.error(f"Unexpected exception to {type(ex)}: {ex}")
