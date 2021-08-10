@@ -52,7 +52,10 @@ class PowerSwitchBase(object):
                 return o
 
     def collectOutletsByNameAndPort(self, name: str, portnum: int = 0):
-
+        
+        #print(self.numports)
+        #print(portnum)
+        
         if not name or name == self.name:
             if portnum:
                 if portnum > self.numports:
@@ -61,9 +64,11 @@ class PowerSwitchBase(object):
             else:
                 outlets = []
                 self.log.debug(str(self.onlyusedones))
+                print(self.outlets)
                 for o in self.outlets:
                     if o.inuse or not self.onlyusedones:
                         outlets.append(o)
+                print(outlets)
                 return outlets
         else:
             o = self.findOutletByName(name)
@@ -81,7 +86,7 @@ class PowerSwitchBase(object):
         # name: can be a switch or an outlet name
 
         outlets = self.collectOutletsByNameAndPort(name, portnum)
-        #print(outlets)
+        print(outlets)
 
         await self.update(outlets)
 
