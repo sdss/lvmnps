@@ -67,6 +67,16 @@ editor.
     eval "$(pyenv init --path)"
     eval "$(pyenv virtualenv-init -)"
 
+``pyenv`` builds Python from source. So you should install build
+dependencies. For more information, check `Common build
+problems <https://github.com/pyenv/pyenv/wiki/Common-build-problems>`__.
+
+::
+
+    $ sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
+    libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
+    libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
+
 Set the python 3.9.1 virtual environment.
 
 ::
@@ -166,42 +176,98 @@ Run the example lvmnps\_dummy
 
    lvmnps status
 
-   12:02:08.649 lvmnps > 12:02:08.660 lvmnps i { "STATUS": {
-   "nps\_dummy\_1.port1": { "STATE": -1, "DESCR": "was 1", "SWITCH":
-   "nps\_dummy\_1", "PORT": 1 }, "skye.what.ever": { "STATE": -1,
-   "DESCR": "whatever is connected to skye", "SWITCH": "nps\_dummy\_1",
-   "PORT": 2 }, "skyw.what.ever": { "STATE": -1, "DESCR": "Something @
-   skyw", "SWITCH": "nps\_dummy\_1", "PORT": 4 }, "skye.pwi": { "STATE":
-   -1, "DESCR": "PlaneWavemount Skye", "SWITCH": "skye.nps", "PORT": 1
-   }, "skyw.pwi": { "STATE": -1, "DESCR": "PlaneWavemount Skyw",
-   "SWITCH": "nps\_dummy\_3", "PORT": 1 } } }
+   12:02:08.649 lvmnps > 
+   12:02:08.660 lvmnps i {
+        "STATUS": {
+            "nps\_dummy\_1.port1": {
+                "STATE": -1, 
+                "DESCR": "was 1", 
+                "SWITCH": "nps\_dummy\_1", 
+                "PORT": 1 
+                }, 
+            "skye.what.ever": {
+                "STATE": -1,
+                "DESCR": "whatever is connected to skye", 
+                "SWITCH": "nps\_dummy\_1",
+                "PORT": 2 
+                }, 
+            "skyw.what.ever": { 
+                "STATE": -1, 
+                "DESCR": "Something @ skyw", 
+                "SWITCH": "nps\_dummy\_1", 
+                "PORT": 4 
+                }, 
+            "skye.pwi": { 
+                "STATE":-1, 
+                "DESCR": "PlaneWavemount Skye", 
+                "SWITCH": "skye.nps", 
+                "PORT": 1
+                }, 
+            "skyw.pwi": { 
+                "STATE": -1, 
+                "DESCR": "PlaneWavemount Skyw",
+                "SWITCH": "nps\_dummy\_3", 
+                "PORT": 1 
+                } 
+            } 
+        }
 
 -  status command with port name skyw.what.ever
 
    lvmnps status skyw.what.ever
 
-   12:07:12.349 lvmnps > 12:07:12.377 lvmnps i { "STATUS": {
-   "skyw.what.ever": { "STATE": -1, "DESCR": "Something @ skyw",
-   "SWITCH": "nps\_dummy\_1", "PORT": 4 }
+   12:07:12.349 lvmnps > 
+   12:07:12.377 lvmnps i { 
+       "STATUS": {
+           "skyw.what.ever": { 
+               "STATE": -1, 
+               "DESCR": "Something @ skyw",
+               "SWITCH": "nps\_dummy\_1", 
+               "PORT": 4 
+               }
 
 -  status command with switch name nps\_dummy\_1
 
    lvmnps status nps\_dummy\_1
 
-   12:07:12.349 lvmnps > 12:12:21.349 lvmnps i { "STATUS": {
-   "nps\_dummy\_1.port1": { "STATE": -1, "DESCR": "was 1", "SWITCH":
-   "nps\_dummy\_1", "PORT": 1 }, "skye.what.ever": { "STATE": -1,
-   "DESCR": "whatever is connected to skye", "SWITCH": "nps\_dummy\_1",
-   "PORT": 2 }, "skyw.what.ever": { "STATE": -1, "DESCR": "Something @
-   skyw", "SWITCH": "nps\_dummy\_1", "PORT": 4 } } }
+   12:07:12.349 lvmnps > 
+   12:12:21.349 lvmnps i { 
+       "STATUS": {
+           "nps\_dummy\_1.port1": { 
+               "STATE": -1, 
+               "DESCR": "was 1", 
+               "SWITCH": "nps\_dummy\_1", 
+               "PORT": 1 
+               }, 
+            "skye.what.ever": { 
+                "STATE": -1,
+                "DESCR": "whatever is connected to skye", 
+                "SWITCH": "nps\_dummy\_1",
+                "PORT": 2 }, 
+            "skyw.what.ever": { 
+                "STATE": -1, 
+                "DESCR": "Something @ skyw", 
+                "SWITCH": "nps\_dummy\_1", 
+                "PORT": 4 
+                } 
+            } 
+        }
 
 -  status command with switch name nps\_dummy\_1 and port 4 returns
 
    lvmnps status nps\_dummy\_1 4
 
-   12:07:12.349 lvmnps > 12:12:21.349 lvmnps i { "STATUS": {
-   "skyw.what.ever": { "STATE": -1, "DESCR": "Something @ skyw",
-   "SWITCH": "nps\_dummy\_1", "PORT": 4 } } }
+   12:07:12.349 lvmnps > 
+   12:12:21.349 lvmnps i { 
+       "STATUS": {
+           "skyw.what.ever": { 
+               "STATE": -1, 
+               "DESCR": "Something @ skyw",
+               "SWITCH": "nps\_dummy\_1", 
+               "PORT": 4 
+               } 
+            } 
+        }
 
 -  the commands on and off use the same addressing scheme as status
 
