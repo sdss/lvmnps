@@ -43,7 +43,7 @@ async def what(command: Command, switches: PowerSwitch, name: str, portnum: int)
             current_time = datetime.datetime.now()
             print(f"after switch getting status  :  {current_time}")
 
-            if current_status[name]:
+            if current_status:
                 status = dict(list(status.items()) +
                           list((current_status.items())))
             else:
