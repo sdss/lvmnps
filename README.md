@@ -58,6 +58,12 @@ eval "$(pyenv init --path)"
 eval "$(pyenv virtualenv-init -)"
 ```
 
+`pyenv` builds Python from source. So you should install build dependencies. For more information, check [Common build problems](https://github.com/pyenv/pyenv/wiki/Common-build-problems).
+```
+$ sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
+libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
+libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
+```
 
 Set the python 3.9.1 virtual environment.
 ```
