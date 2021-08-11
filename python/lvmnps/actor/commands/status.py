@@ -62,6 +62,6 @@ async def all(command: Command, switches: PowerSwitch):
             
             return command.finish(STATUS=status)
 
-        except PowerException as ex:
+    except PowerException as ex:
             return command.fail(error=str(ex))
 

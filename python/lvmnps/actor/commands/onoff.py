@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import click
+import asyncio
 from clu.command import Command
 
 from lvmnps.actor.commands import parser
@@ -110,19 +111,18 @@ async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
     #current_status = await switch.statusAsJson(name, portnum)
 
     try:
-        if current_status:
-            if current_status[name]["STATE"] == 1:
-                current_status = await switch_control(
-                    "off", switch, True, name, portnum
-                )
-            elif current_status[name]["STATE"] == -1:
-                current_status = await switch_control(
-                    "off", switch, True, name, portnum
-                )
-            elif current_status[name]["STATE"] == 0:
-                return command.fail(text=f"The Outlet {name} is already OFF")
-            else:
-                return command.fail(text=f"The Outlet {name} returns wrong value")
+        if current_status[name]["STATE"] == 1:
+            current_status = await switch_control(
+                "off", switches, False, name, portnum
+            )
+        elif current_status[name]["STATE"] == -1:
+            current_status = await switch_control(
+                "off", switches, False, name, portnum
+            )
+        elif current_status[name]["STATE"] == 0:
+            return command.fail(text=f"The Outlet {name} is already OFF")
+        else:
+            return command.fail(text=f"The Outlet {name} returns wrong value")
 
     except PowerException as ex:
         return command.fail(error=str(ex))
@@ -167,7 +167,7 @@ async def cycle(command: Command, switches: PowerSwitch, name: str, portnum: int
     except PowerException as ex:
         return command.fail(error=str(ex))
 
-    return command.finish(STATUS=current_status)
+    return command.finish(text="done")
 
 
 """
