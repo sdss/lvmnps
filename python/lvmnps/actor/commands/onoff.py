@@ -30,17 +30,17 @@ async def switch_control(
                 # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
                 status = dict(
                     list(status.items())
-                    + list(
+                    + list(  # noqa: W503
                         (await switch.statusAsJson(name, portnum)).items()
-                    )  # noqa: W503
+                    )
                 )
             elif command == "cycle":
                 await switch.cycle(name, portnum)
                 status = dict(
                     list(status.items())
-                    + list(
+                    + list(  # noqa: W503
                         (await switch.statusAsJson(name, portnum)).items()
-                    )  # noqa: W503
+                    )
                 )
         except NpsActorError as err:
             return {str(err)}
