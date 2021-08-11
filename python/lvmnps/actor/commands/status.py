@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # @Author: Florian Briegel (briegel@mpia.de)
-# @Date: 2021-07-28
+# @Date: 2021-08-12
 # @Filename: status.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
@@ -28,53 +28,40 @@ def status(*args):
 async def what(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """Returns the status of the outlets."""
 
+    command.info(
+        text=f"Printing the current status of port {name}"
+        )
+    
     try:
         for switch in switches:
             # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-            command.info(
-                text=f"Printing the current status of port {name} in {switch.name}"
-            )
-            # print(f"before switch getting status  :  {current_time}")
-
             current_status = await switch.statusAsJson(name, portnum)
-            # print(f"after switch getting status  :  {current_time}")
-
-            # print(current_status)
-            # command.info(STATUS=current_status)
-
+            
             if current_status:
-                break
+                return command.finish(STATUS=current_status)
             else:
-                command.info(text=f"{name} is not here!")
-
-        if current_status:
-            command.info(STATUS=current_status)
-        else:
-            return command.fail(text="The switch returns wrong value")
+                return command.fail(text=f"The Outlet {name} don't exist")
 
     except PowerException as ex:
         return command.fail(error=str(ex))
-
-    return command.finish("done")
 
 
 @status.command()
 async def all(command: Command, switches: PowerSwitch):
     """Returns the status of ALL outlets in the NPS."""
-
+    
     status = {}
-
-    for switch in switches:
-        try:
-
+    
+    try:
+        for switch in switches:
             # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
             command.info(text=f"Printing the current status of switch {switch.name}")
 
             current_status = await switch.statusAsJson()
             status = dict(list(status.items()) + list((current_status.items())))
-            command.info(STATUS=status)
+            
+            return command.finish(STATUS=status)
 
         except PowerException as ex:
             return command.fail(error=str(ex))
 
-    return command.finish("done")

@@ -55,8 +55,8 @@ switches:
         ports:
           num: 1
           1:
-            name: "Outlet 1"
-            desc: ""
+            name: "Router/Switch"
+            desc: "Router power switch"
           num: 2
           2:
             name: "IEB06"
@@ -71,20 +71,20 @@ switches:
             desc: "Archon controller"
           num: 5
           5:
-            name: "Pressure Transducer"
-            desc: "Pressure Transducer"
+            name: "RPi"
+            desc: "Raspberry Pi PC"
           num: 6
           6:
-            name: "Outlet 6"
-            desc: ""
+            name: "Ln2 red valve"
+            desc: "Cryogenic solenoid valve for liquid nitrogen."
           num: 7
           7:
             name: "Outlet 7"
             desc: ""
           num: 8
           8:
-            name: "Outlet 8"
-            desc: ""
+            name: "Pressure transducers"
+            desc: "Pressure transducers"
     
    # DLI-NPS-03:
    #     type: dli
@@ -96,6 +96,7 @@ switches:
    #     numports: 8
    #     ouo: False # handle also unconfigured ports
    #     ports:        
+
 timeouts:
         switch_connect: 3
 

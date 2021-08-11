@@ -43,7 +43,7 @@ switches:
             desc: ""
 
 timeouts:
-        switch_connect: 1
+        switch_connect: 3
 
 # Actor configuration for the AMQPActor class
 actor:

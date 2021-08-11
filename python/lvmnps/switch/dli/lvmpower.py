@@ -4,7 +4,7 @@
 # Licensed under a 3-clause BSD license.
 #
 # @Author: Mingyeong Yang (mingyeong@khu.ac.kr)
-# @Date: 2021-07-05
+# @Date: 2021-08-12
 
 
 from __future__ import annotations
@@ -15,10 +15,11 @@ from bs4 import BeautifulSoup
 
 CONFIG_DEFAULTS = {
     "userid": "admin",
-    "password": "irlab",
-    "hostname": "163.180.145.123",
+    "password": "1234",
+    "hostname": "192.168.0.100",
+    "port": "80",
+    "name": "switch"
 }
-
 
 class PowerSwitch(object):
     def __init__(
@@ -47,8 +48,14 @@ class PowerSwitch(object):
             self.hostname = hostname
         else:
             self.hostname = config["hostname"]
-        self.port = port
-        self.name = name
+        if port:
+            self.port = port
+        else:
+            self.port = config["port"]
+        if name:
+            self.name = name
+        else:
+            self.name = config["name"]
 
         self.scheme = "http"
         self.base_url = "%s://%s" % (self.scheme, self.hostname)
@@ -125,54 +132,21 @@ class PowerSwitch(object):
         return result
 
     async def on(self, outlet_number=0):
-        """Turn on power to an outlet
-        False = Success
-        True = Fail
-        """
-
+        """Turn on power to an outlet"""
         await self.geturl(url="outlet?%d=ON" % outlet_number)
-
-        # currentstatus = await self.dli.statusdictionary()
-        # return currentstatus[outlet_number] != 'ON'
 
     async def onall(self):
         """Turn on all outlets"""
         await self.geturl(url="outlet?%s=ON" % "a")
 
     async def off(self, outlet_number=0):
-        """Turn off power to an outlet
-        False = Success
-        True = Fail
-        """
-
+        """Turn off power to an outlet"""
         await self.geturl(url="outlet?%d=OFF" % outlet_number)
-
-        # currentstatus = await self.dli.statusdictionary()
-        # return currentstatus[outlet_number] != 'OFF'
-
-    async def offall(self):
-        """Turn off all outlets"""
-        await self.geturl(url="outlet?%s=OFF" % "a")
 
     async def cycle(self, outlet_number: int):
         """cycle power to an outlet"""
+        await self.geturl(url="outlet?%d=CCL" % outlet_number)
 
-        if outlet_number != 0:
-            await self.geturl(url="outlet?%d=CCL" % outlet_number)
-        else:
-            await self.geturl(url="outlet?%s=CCL" % "a")
-
-    async def getstatus(self):
-        i = 1
-        data = {}
-        list = await self.statuslist()
-        for item in list:
-            out_name = "outlet_" + str(i)
-            out_state = "state_" + str(i)
-            data[out_name] = item[1]
-            data[out_state] = item[2]
-            i += 1
-        return data
 
     async def statuslist(self):
         """Return the status of all outlets in a list,
@@ -203,20 +177,6 @@ class PowerSwitch(object):
                 outlets.append([int(plugnumber), name, state])
 
         return outlets
-
-    async def outletdictionary(self):
-        """Return the status of all outlets in a dictionary,
-        each item will contain 2 items plugnumber, hostname"""
-
-        outlets = await self.statuslist()
-        outlets_dict = {}
-
-        num = range(0, 7)
-        for n in num:
-            name = outlets[n][1]
-            outlets_dict[name] = n + 1
-
-        return outlets_dict
 
     async def statusdictionary(self):
         """Return the status of all outlets in a dictionary,
