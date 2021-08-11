@@ -93,6 +93,7 @@ class PowerSwitchBase(object):
     async def setState(self, state, name: str = "", portnum: int = 0):
         if portnum > self.numports:
             return []
+        # print(Outlet.parse(state))
         return await self.switch(
             Outlet.parse(state), self.collectOutletsByNameAndPort(name, portnum)
         )
@@ -101,14 +102,14 @@ class PowerSwitchBase(object):
         # name: can be a switch or an outlet name
 
         outlets = self.collectOutletsByNameAndPort(name, portnum)
-        print(outlets)
+        # print(outlets)
 
         await self.update(outlets)
 
         status = {}
         for o in outlets:
             status[f"{o.name}"] = o.toJson()
-        print(status)
+        # print(status)
         return status
 
     @abstractmethod

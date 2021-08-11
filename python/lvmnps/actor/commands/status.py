@@ -8,8 +8,6 @@
 
 from __future__ import annotations
 
-import datetime
-
 import click
 from clu.command import Command
 
@@ -30,20 +28,16 @@ def status(*args):
 async def what(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """Returns the status of the outlets."""
 
-    status = {}
-
     try:
         for switch in switches:
             # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
             command.info(
                 text=f"Printing the current status of port {name} in {switch.name}"
             )
-            current_time = datetime.datetime.now()
-            print(f"before switch getting status  :  {current_time}")
+            # print(f"before switch getting status  :  {current_time}")
 
             current_status = await switch.statusAsJson(name, portnum)
-            current_time = datetime.datetime.now()
-            print(f"after switch getting status  :  {current_time}")
+            # print(f"after switch getting status  :  {current_time}")
 
             # print(current_status)
             # command.info(STATUS=current_status)
@@ -68,9 +62,11 @@ async def what(command: Command, switches: PowerSwitch, name: str, portnum: int)
 async def all(command: Command, switches: PowerSwitch):
     """Returns the status of ALL outlets in the NPS."""
 
+    status = {}
+
     for switch in switches:
         try:
-            status = {}
+
             # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
             command.info(text=f"Printing the current status of switch {switch.name}")
 

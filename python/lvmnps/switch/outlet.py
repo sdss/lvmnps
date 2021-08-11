@@ -36,6 +36,7 @@ class Outlet(object):
 
     def setState(self, value):
         self.state = Outlet.parse(value)
+        # print(self.state)
 
     def isOn(self):
         return self.state == 1

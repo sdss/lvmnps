@@ -80,7 +80,6 @@ class PowerSwitch(PowerSwitchBase):
         try:
             if await self.isReachable():
                 # get a list [] of port states, use outlets for a subset.
-
                 currentstatus = await self.dli.statusdictionary()
                 # print(currentstatus)
                 for o in outlets:
@@ -111,9 +110,16 @@ class PowerSwitch(PowerSwitchBase):
                 print(f"after dli  :  {current_time}")
 
             await self.update(outlets)
+            print(outlets)
 
             current_time = datetime.datetime.now()
             print(f"after update  :  {current_time}")
 
         except Exception as ex:
             self.log.error(f"Unexpected exception to {type(ex)}: {ex}")
+
+    async def cycle(self, name, portnum):
+        outlets = self.collectOutletsByNameAndPort(name, portnum)
+
+        for o in outlets:
+            await self.dli.cycle(o.portnum)

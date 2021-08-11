@@ -47,3 +47,5 @@ class PowerSwitch(PowerSwitchBase):
             await asyncio.sleep(self.delay)
             self.log.debug(f"{self.name} {outlets}")
             o.setState(state)
+            print(o)
+            print(state)
