@@ -34,30 +34,32 @@ async def what(command: Command, switches: PowerSwitch, name: str, portnum: int)
 
     try:
         for switch in switches:
-            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9 
-            command.info(text=f"Printing the current status of port {name} in {switch.name}")
+            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
+            command.info(
+                text=f"Printing the current status of port {name} in {switch.name}"
+            )
             current_time = datetime.datetime.now()
             print(f"before switch getting status  :  {current_time}")
 
             current_status = await switch.statusAsJson(name, portnum)
             current_time = datetime.datetime.now()
             print(f"after switch getting status  :  {current_time}")
-            
-            #print(current_status)
-            #command.info(STATUS=current_status)
-            
+
+            # print(current_status)
+            # command.info(STATUS=current_status)
+
             if current_status:
                 break
             else:
                 command.info(text=f"{name} is not here!")
-            
+
         if current_status:
             command.info(STATUS=current_status)
         else:
             return command.fail(text="The switch returns wrong value")
 
     except PowerException as ex:
-            return command.fail(error=str(ex))
+        return command.fail(error=str(ex))
 
     return command.finish("done")
 

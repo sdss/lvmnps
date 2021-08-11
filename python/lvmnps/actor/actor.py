@@ -38,7 +38,7 @@ class lvmnps(AMQPActor):
         connect_timeout = self.config["timeouts"]["switch_connect"]
 
         assert len(self.parser_args) == 1
-
+        print(self.parser_args[0])
         for switch in self.parser_args[0]:
             try:
                 self.log.debug(f"Start {switch.name} ...")
