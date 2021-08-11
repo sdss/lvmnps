@@ -50,13 +50,19 @@ async def test_actor(switches):
     test_actor.parser = nps_command_parser
     test_actor.parser_args = [switches]
 
-    task = asyncio.create_task(send_command(test_actor, "on"))
+    task = []
+    task.append(asyncio.create_task(send_command(test_actor, "on slow")))
+    task.append(asyncio.create_task(send_command(test_actor, "on fast")))
 
     await asyncio.sleep(0.2)
-    status = await send_command(test_actor, "status")
-    assert status["fast"]["STATE"] == 1
-    assert status["slow"]["STATE"] == -1
 
-    status = await task
-    assert status["slow"]["STATE"] == 1
-    assert status["fast"]["STATE"] == 1
+    status_task = []
+    status_task.append(asyncio.create_task(send_command(test_actor, "status all")))
+
+    status = await asyncio.gather(*status_task)
+    assert status[0]["fast"]["STATE"] == 1
+    assert status[0]["slow"]["STATE"] == -1
+
+    status_after = await asyncio.gather(*task)
+    assert status_after[0]["slow"]["STATE"] == 1
+    assert status_after[1]["fast"]["STATE"] == 1
