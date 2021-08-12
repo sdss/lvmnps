@@ -49,23 +49,38 @@ async def test_actor(switches):
 
     status = await send_command(test_actor, "status what port1")
     assert len(status) == 1
-    assert status["port1"]["STATE"] == -1
+    assert status["nps_dummy_1"]["port1"]["STATE"] == -1
 
     # switch nps_dummy_1 port1 'on'
     status = await send_command(test_actor, "on port1")
-    assert status["port1"]["STATE"] == 1
+    assert status["nps_dummy_1"]["port1"]["STATE"] == 1
 
     # switch off port 1 on nps_dummy_1
     status = await send_command(test_actor, "off port1")
-    assert status["port1"]["STATE"] == 0
+    assert status["nps_dummy_1"]["port1"]["STATE"] == 0
 
     # switch status 
     status = await send_command(test_actor, "status all")
-    assert status["port1"]["STATE"] == 0
-    assert status["skye.what.ever"]["STATE"] == -1
-    assert status["skyw.what.ever"]["STATE"] == -1
-    #assert status["skye.pwi"]["STATE"] == -1
-    #assert status["skyw.pwi"]["STATE"] == -1
+    print(status)
+    assert status["nps_dummy_1"]["port1"]["STATE"] == 0
+    assert status["nps_dummy_1"]["skye.what.ever"]["STATE"] == -1
+    assert status["nps_dummy_1"]["skyw.what.ever"]["STATE"] == -1
+    #assert status["skye.nps"]["skye.pwi"]["STATE"] == -1
+    #assert status["nps_dummy_3"]["skyw.pwi"]["STATE"] == -1
+
+    # switch skye.nps skye.pwi 'on'
+    status = await send_command(test_actor, "on skye.pwi")
+    assert status["skye.nps"]["skye.pwi"]["STATE"] == 1
+
+    # switch off skye.nps skye.pwi
+    status = await send_command(test_actor, "off skye.pwi")
+    assert status["skye.nps"]["skye.pwi"]["STATE"] == 0
+
+    # switch status 
+    status = await send_command(test_actor, "status what skye.pwi")
+    assert status["skye.nps"]["skye.pwi"]["STATE"] == 0
+    #status = await send_command(test_actor, "status all")
+    #assert status["skye.nps"]["skye.pwi"]["STATE"] == 0
 
     # switch all ports on  nps_dummy_1 on
     #status = await send_command(test_actor, "on nps_dummy_1")
@@ -80,4 +95,3 @@ async def test_actor(switches):
     #assert status["skyw.what.ever"]["STATE"] == 0
     #assert status["skye.pwi"]["STATE"] == 0
     #assert status["skyw.pwi"]["STATE"] == 0
-

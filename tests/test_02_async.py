@@ -52,7 +52,7 @@ async def test_actor(switches):
 
     task = []
     task.append(asyncio.create_task(send_command(test_actor, "on slow")))
-    #task.append(asyncio.create_task(send_command(test_actor, "on fast")))
+    task.append(asyncio.create_task(send_command(test_actor, "on fast")))
 
     await asyncio.sleep(0.2)
 
@@ -60,9 +60,10 @@ async def test_actor(switches):
     status_task.append(asyncio.create_task(send_command(test_actor, "status all")))
 
     status = await asyncio.gather(*status_task)
-    assert status[0]["slow"]["STATE"] == -1
-    #assert status[1]["fast"]["STATE"] == -1
+    print(status)
+    assert status[0]["slow"]["slow"]["STATE"] == -1
+    #assert status[0]["fast"]["fast"]["STATE"] == -1
 
     status_after = await asyncio.gather(*task)
-    assert status_after[0]["slow"]["STATE"] == 1
-    #assert status_after[1]["fast"]["STATE"] == 1
+    assert status_after[0]["slow"]["slow"]["STATE"] == 1
+    assert status_after[1]["fast"]["fast"]["STATE"] == 1
