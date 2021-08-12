@@ -33,9 +33,9 @@ async def send_command(actor, command_string):
     command = actor.invoke_mock_command(command_string)
     await command
     assert command.status.is_done
-    assert actor.mock_replies[-1]["text"] == "done"
+    #assert actor.mock_replies[-1]["text"] == "done"
 
-    status_reply = actor.mock_replies[-2]
+    status_reply = actor.mock_replies[-1]
     return status_reply["STATUS"]
 
 
@@ -47,37 +47,37 @@ async def test_actor(switches):
     test_actor.parser = nps_command_parser
     test_actor.parser_args = [switches]
 
-    status = await send_command(test_actor, "status what nps_dummy_1.port1")
+    status = await send_command(test_actor, "status what port1")
     assert len(status) == 1
-    assert status["nps_dummy_1.port1"]["STATE"] == -1
+    assert status["port1"]["STATE"] == -1
 
     # switch nps_dummy_1 port1 'on'
-    status = await send_command(test_actor, "on nps_dummy_1.port1")
-    assert status["nps_dummy_1.port1"]["STATE"] == 1
+    status = await send_command(test_actor, "on port1")
+    assert status["port1"]["STATE"] == 1
 
+    # switch off port 1 on nps_dummy_1
+    status = await send_command(test_actor, "off port1")
+    assert status["port1"]["STATE"] == 0
 
-"""
+    # switch status 
+    status = await send_command(test_actor, "status all")
+    assert status["port1"]["STATE"] == 0
+    assert status["skye.what.ever"]["STATE"] == -1
+    assert status["skyw.what.ever"]["STATE"] == -1
+    #assert status["skye.pwi"]["STATE"] == -1
+    #assert status["skyw.pwi"]["STATE"] == -1
+
     # switch all ports on  nps_dummy_1 on
-    status = await send_command(test_actor, "on nps_dummy_1")
-    assert status["nps_dummy_1.port1"]["STATE"] == 1
-    assert status["skye.what.ever"]["STATE"] == 1
-    assert status["skyw.what.ever"]["STATE"] == 1
-
-    # switch off port 4 on nps_dummy_1
-    status = await send_command(test_actor, "off nps_dummy_1 4")
-
-    status = await send_command(test_actor, "status")
-    assert status["nps_dummy_1.port1"]["STATE"] == 1
-    assert status["skye.what.ever"]["STATE"] == 1
-    assert status["skyw.what.ever"]["STATE"] == 0
-    assert status["skye.pwi"]["STATE"] == -1
-    assert status["skyw.pwi"]["STATE"] == -1
+    #status = await send_command(test_actor, "on nps_dummy_1")
+    #assert status["nps_dummy_1.port1"]["STATE"] == 1
+    #assert status["skye.what.ever"]["STATE"] == 1
+    #assert status["skyw.what.ever"]["STATE"] == 1
 
     # switch off everything - same as command offall
-    status = await send_command(test_actor, "off")
-    assert status["nps_dummy_1.port1"]["STATE"] == 0
-    assert status["skye.what.ever"]["STATE"] == 0
-    assert status["skyw.what.ever"]["STATE"] == 0
-    assert status["skye.pwi"]["STATE"] == 0
-    assert status["skyw.pwi"]["STATE"] == 0
-"""
+    #status = await send_command(test_actor, "off")
+    #assert status["nps_dummy_1.port1"]["STATE"] == 0
+    #assert status["skye.what.ever"]["STATE"] == 0
+    #assert status["skyw.what.ever"]["STATE"] == 0
+    #assert status["skye.pwi"]["STATE"] == 0
+    #assert status["skyw.pwi"]["STATE"] == 0
+

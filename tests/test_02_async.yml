@@ -5,13 +5,13 @@ switches:
         delay: 2.0
         ports:
           num: 1
-          1:  
+          1:
             name: "slow"
     fast:
         type: dummy
         ports:
           num: 1
-          1:  
+          1:
             name: "fast"
 
 timeouts:
