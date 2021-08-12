@@ -60,8 +60,9 @@ async def all(command: Command, switches: PowerSwitch):
             current_status = await switch.statusAsJson()
             #status[switch.name] = dict(list(status.items()) + list((current_status.items())))
             status[switch.name] = current_status
+            command.info(STATUS=status[switch.name])
             
-            return command.finish(STATUS=status)
+        return command.finish()
 
     except PowerException as ex:
             return command.fail(error=str(ex))
