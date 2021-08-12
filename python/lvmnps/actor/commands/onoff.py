@@ -29,7 +29,7 @@ async def switch_control(
             if command == "on" or command == "off":
                 await switch.setState(on, name, portnum)
                 # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-                status = dict(
+                status[switch.name] = dict(
                     list(status.items())
                     + list(  # noqa: W503
                         (await switch.statusAsJson(name, portnum)).items()
@@ -37,7 +37,7 @@ async def switch_control(
                 )
             elif command == "cycle":
                 await switch.cycle(name, portnum)
-                status = dict(
+                status[switch.name] = dict(
                     list(status.items())
                     + list(  # noqa: W503
                         (await switch.statusAsJson(name, portnum)).items()
@@ -64,8 +64,6 @@ async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
         
         if current_status:
             break
-        else:
-            return command.fail(text=f"The Outlet {name} don't exist")
 
     #print(current_status)
 
@@ -104,8 +102,6 @@ async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
         
         if current_status:
             break
-        else:
-            return command.fail(text=f"The Outlet {name} don't exist")
 
     #print(current_status)
     #current_status = await switch.statusAsJson(name, portnum)
@@ -145,8 +141,6 @@ async def cycle(command: Command, switches: PowerSwitch, name: str, portnum: int
         
         if current_status:
             break
-        else:
-            return command.fail(text=f"The Outlet {name} don't exist")
     
     #print(current_status)
 

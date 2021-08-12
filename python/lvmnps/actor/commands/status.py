@@ -33,14 +33,14 @@ async def what(command: Command, switches: PowerSwitch, name: str, portnum: int)
         )
     
     try:
+        status = {}
         for switch in switches:
             # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
             current_status = await switch.statusAsJson(name, portnum)
             
             if current_status:
-                return command.finish(STATUS=current_status)
-            else:
-                return command.fail(text=f"The Outlet {name} don't exist")
+                status[switch.name] = current_status
+                return command.finish(STATUS=status)
 
     except PowerException as ex:
         return command.fail(error=str(ex))
@@ -58,7 +58,8 @@ async def all(command: Command, switches: PowerSwitch):
             command.info(text=f"Printing the current status of switch {switch.name}")
 
             current_status = await switch.statusAsJson()
-            status = dict(list(status.items()) + list((current_status.items())))
+            #status[switch.name] = dict(list(status.items()) + list((current_status.items())))
+            status[switch.name] = current_status
             
             return command.finish(STATUS=status)
 
