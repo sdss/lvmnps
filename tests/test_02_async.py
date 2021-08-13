@@ -44,8 +44,10 @@ async def send_command(actor, command_string):
     if command_string == "status all":
         length = len(actor.mock_replies)
         print(
-            actor.mock_replies[length - 2 : length - switch_num * 2 - 1 : -2]  # noqa: E203
-        )  # noqa: E203
+            actor.mock_replies[
+                length - 2 : length - switch_num * 2 - 1 : -2  # noqa: E203
+            ]
+        )
         status_all_reply = actor.mock_replies[
             length - 2 : length - switch_num * 2 - 1 : -2  # noqa: E203
         ]

@@ -43,8 +43,10 @@ async def send_command(actor, command_string):
     if command_string == "status all":
         length = len(actor.mock_replies)
         print(
-            actor.mock_replies[length - 2 : length - switch_num * 2 - 1 : -2]  # noqa: E203
-        )  # noqa: E203
+            actor.mock_replies[
+                length - 2 : length - switch_num * 2 - 1 : -2  # noqa: E203
+            ]
+        )
         status_all_reply = actor.mock_replies[
             length - 2 : length - switch_num * 2 - 1 : -2  # noqa: E203
         ]
@@ -72,8 +74,8 @@ async def test_actor(switches):
     assert status["nps_dummy_1"]["port1"]["STATE"] == 1
 
     # switch cycle nps_dummy_1 port1
-    #status = await send_command(test_actor, "cycle port1")
-    #assert status["nps_dummy_1"]["port1"]["STATE"] == 1
+    # status = await send_command(test_actor, "cycle port1")
+    # assert status["nps_dummy_1"]["port1"]["STATE"] == 1
 
     # switch off nps_dummy_1 port1
     status = await send_command(test_actor, "off port1")
@@ -93,7 +95,7 @@ async def test_actor(switches):
     status = await send_command(test_actor, "status all")
     assert status[1]["STATUS"]["skye.nps"]["skye.pwi"]["STATE"] == 0
 
-    #status what switch unit
+    # status what switch unit
     status = await send_command(test_actor, "status what nps_dummy_3")
     assert status["nps_dummy_3"]["skyw.pwi"]["STATE"] == -1
 
@@ -105,9 +107,8 @@ async def test_actor(switches):
     assert status[1]["STATUS"]["skye.nps"]["skye.pwi"]["STATE"] == 0
     assert status[2]["STATUS"]["nps_dummy_3"]["skyw.pwi"]["STATE"] == -1
 
-
     # switch all ports on  nps_dummy_1 on
-    #status = await send_command(test_actor, "on nps_dummy_1")
+    # status = await send_command(test_actor, "on nps_dummy_1")
     # assert status["nps_dummy_1.port1"]["STATE"] == 1
     # assert status["skye.what.ever"]["STATE"] == 1
     # assert status["skyw.what.ever"]["STATE"] == 1
