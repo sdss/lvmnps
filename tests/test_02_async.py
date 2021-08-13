@@ -34,7 +34,7 @@ async def send_command(actor, command_string):
     command = actor.invoke_mock_command(command_string)
     await command
     assert command.status.is_done
-#    assert actor.mock_replies[-1]["text"] == "done"
+    #    assert actor.mock_replies[-1]["text"] == "done"
 
     status_reply = actor.mock_replies[-1]
     return status_reply["STATUS"]
@@ -62,7 +62,7 @@ async def test_actor(switches):
     status = await asyncio.gather(*status_task)
     print(status)
     assert status[0]["slow"]["slow"]["STATE"] == -1
-    #assert status[0]["fast"]["fast"]["STATE"] == -1
+    # assert status[0]["fast"]["fast"]["STATE"] == -1
 
     status_after = await asyncio.gather(*task)
     assert status_after[0]["slow"]["slow"]["STATE"] == 1

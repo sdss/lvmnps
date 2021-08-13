@@ -28,42 +28,41 @@ def status(*args):
 async def what(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """Returns the status of the outlets."""
 
-    command.info(
-        text=f"Printing the current status of port {name}"
-        )
-    
+    command.info(text=f"Printing the current status of port {name}")
+
     try:
         status = {}
         for switch in switches:
             # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
             current_status = await switch.statusAsJson(name, portnum)
-            
+
             if current_status:
                 status[switch.name] = current_status
-                return command.finish(STATUS=status)
 
     except PowerException as ex:
         return command.fail(error=str(ex))
+
+    command.info(STATUS=status)
+    return command.finish(text="done")
 
 
 @status.command()
 async def all(command: Command, switches: PowerSwitch):
     """Returns the status of ALL outlets in the NPS."""
-    
+
     status = {}
-    
+
     try:
         for switch in switches:
             # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
             command.info(text=f"Printing the current status of switch {switch.name}")
 
             current_status = await switch.statusAsJson()
-            #status[switch.name] = dict(list(status.items()) + list((current_status.items())))
+            # status[switch.name] = dict(list(status.items()) + list((current_status.items())))
             status[switch.name] = current_status
-            command.info(STATUS=status[switch.name])
-            
-        return command.finish()
+            command.info(STATUS=status)
 
     except PowerException as ex:
-            return command.fail(error=str(ex))
+        return command.fail(error=str(ex))
 
+    return command.finish(text="done")

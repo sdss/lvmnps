@@ -18,8 +18,9 @@ CONFIG_DEFAULTS = {
     "password": "1234",
     "hostname": "192.168.0.100",
     "port": "80",
-    "name": "switch"
+    "name": "switch",
 }
+
 
 class PowerSwitch(object):
     def __init__(
@@ -146,7 +147,6 @@ class PowerSwitch(object):
     async def cycle(self, outlet_number: int):
         """cycle power to an outlet"""
         await self.geturl(url="outlet?%d=CCL" % outlet_number)
-
 
     async def statuslist(self):
         """Return the status of all outlets in a list,
