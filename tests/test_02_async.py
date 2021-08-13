@@ -34,10 +34,25 @@ async def send_command(actor, command_string):
     command = actor.invoke_mock_command(command_string)
     await command
     assert command.status.is_done
-    #    assert actor.mock_replies[-1]["text"] == "done"
 
-    status_reply = actor.mock_replies[-1]
-    return status_reply["STATUS"]
+    # print("number of swithces are ",len(actor.parser_args[0]))
+    switch_num = len(actor.parser_args[0])
+    status_all_reply = []
+    assert actor.mock_replies[-1]["text"] == "done"
+    status_reply = actor.mock_replies[-2]
+    # print(status_reply)
+    if command_string == "status all":
+        length = len(actor.mock_replies)
+        print(
+            actor.mock_replies[length - 2 : length - switch_num * 2 - 1 : -2]  # noqa: E203
+        )  # noqa: E203
+        status_all_reply = actor.mock_replies[
+            length - 2 : length - switch_num * 2 - 1 : -2  # noqa: E203
+        ]
+        status_all_reply.reverse()
+        return status_all_reply
+    else:
+        return status_reply["STATUS"]
 
 
 @pytest.mark.asyncio
@@ -60,8 +75,8 @@ async def test_actor(switches):
     status_task.append(asyncio.create_task(send_command(test_actor, "status all")))
 
     status = await asyncio.gather(*status_task)
-    print(status)
-    assert status[0]["slow"]["slow"]["STATE"] == -1
+    # print(status)
+    #assert status[0][0]["STATE"] == -1
     # assert status[0]["fast"]["fast"]["STATE"] == -1
 
     status_after = await asyncio.gather(*task)
