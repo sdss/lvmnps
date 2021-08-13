@@ -76,7 +76,7 @@ async def test_actor(switches):
 
     status = await asyncio.gather(*status_task)
     # print(status)
-    #assert status[0][0]["STATE"] == -1
+    # assert status[0][0]["STATE"] == -1
     # assert status[0]["fast"]["fast"]["STATE"] == -1
 
     status_after = await asyncio.gather(*task)
