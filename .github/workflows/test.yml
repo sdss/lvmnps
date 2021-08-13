@@ -63,12 +63,6 @@ jobs:
       run: |
         poetry run isort -c . -vvv
 
-    - name: Run type checking
-      continue-on-error: true
-      run: |
-        npm install -g pyright
-        poetry run pyright
-
     - name: Test with pytest
       run: |
         poetry run pytest
