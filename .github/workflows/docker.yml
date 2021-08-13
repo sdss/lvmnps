@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       USER: sdss
-      APP: lvmieb
+      APP: lvmnps
     steps:
       - name: Set docker tags
         id: set-tags
