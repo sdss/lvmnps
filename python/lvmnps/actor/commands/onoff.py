@@ -9,7 +9,6 @@
 from __future__ import annotations
 
 import click
-
 from clu.command import Command
 
 from lvmnps.actor.commands import parser
