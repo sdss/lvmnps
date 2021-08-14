@@ -5,7 +5,7 @@
 [![Documentation Status](https://readthedocs.org/projects/lvmnps/badge/?version=latest)](https://lvmnps.readthedocs.io/en/latest/?badge=latest)
 [![Test](https://github.com/sdss/lvmnps/actions/workflows/test.yml/badge.svg)](https://github.com/sdss/lvmnps/actions/workflows/test.yml)
 [![Docker](https://github.com/sdss/lvmnps/actions/workflows/docker.yml/badge.svg)](https://github.com/sdss/lvmnps/actions/workflows/docker.yml)
-[![codecov](https://codecov.io/gh/sdss/lvmnps/branch/main/graph/badge.svg)](https://codecov.io/gh/sdss/lvmnps)
+[![codecov](https://codecov.io/gh/sdss/lvmnps/branch/master/graph/badge.svg?token=M0RPGO77JH)](https://codecov.io/gh/sdss/lvmnps)
 
 
 Lvm Network Power Switch
