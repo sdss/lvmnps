@@ -59,27 +59,27 @@ switches:
             desc: "Router power switch"
           num: 2
           2:
-            name: "IEB06"
+            name: "Ln2 NIR valve"
             desc: "LVM Instrument Electronic Box"
           num: 3
           3:
-            name: "Outlet 3"
+            name: "LVM-Archon-02"
             desc: ""
           num: 4
           4:
-            name: "LVM-Archon-02"
+            name: "IEB06"
             desc: "Archon controller"
           num: 5
           5:
-            name: "RPi"
+            name: 
             desc: "Raspberry Pi PC"
           num: 6
           6:
-            name: "Ln2 red valve"
+            name: "RPi"
             desc: "Cryogenic solenoid valve for liquid nitrogen."
           num: 7
           7:
-            name: "Outlet 7"
+            name: "FFS LED"
             desc: ""
           num: 8
           8:
