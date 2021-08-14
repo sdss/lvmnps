@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-'''
+"""
 Copyright (c) 2013, Luke Fitzgerald
 All rights reserved.
 
@@ -26,7 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
-either expressed or implied, of the FreeBSD Project.'''
+either expressed or implied, of the FreeBSD Project."""
 
 import asyncio
 import logging
@@ -34,18 +34,18 @@ import socket
 import struct
 
 
-HELLO_STR = 'hello-000'
+HELLO_STR = "hello-000"
 
-HEADER_STRUCT = struct.Struct('<B21s21sBBH')
+HEADER_STRUCT = struct.Struct("<B21s21sBBH")
 
 COMMAND_MAP = {
-    'NULL': 0,
-    'SET': 1,
-    'GET': 2,
-    'IO': 3,
-    'KEEPALIVE': 4,
-    'RSS': 5,
-    'RCU': 6
+    "NULL": 0,
+    "SET": 1,
+    "GET": 2,
+    "IO": 3,
+    "KEEPALIVE": 4,
+    "RSS": 5,
+    "RCU": 6,
 }
 
 SOCKET_TIMEOUT = 1
@@ -70,12 +70,14 @@ class DXPCommand(object):
         if not self.DESCRIPTOR:
             raise Exception("'DESCRIPTOR' type not specified for class")
 
-        return HEADER_STRUCT.pack(COMMAND_MAP[self.COMMAND],
-                                  bytes(self.interface.username, 'utf-8'),
-                                  bytes(self.interface.password, 'utf-8'),
-                                  self.DESCRIPTOR_MAP[self.DESCRIPTOR],
-                                  0,
-                                  self.interface.get_seq_num())
+        return HEADER_STRUCT.pack(
+            COMMAND_MAP[self.COMMAND],
+            bytes(self.interface.username, "utf-8"),
+            bytes(self.interface.password, "utf-8"),
+            self.DESCRIPTOR_MAP[self.DESCRIPTOR],
+            0,
+            self.interface.get_seq_num(),
+        )
 
     def _build_payload(self, *pack_args):
         if not self.PAYLOAD_STRUCT:
@@ -87,7 +89,7 @@ class DXPCommand(object):
         """
         Parse the response from the request
         """
-        raise Exception('get_response method not implemented')
+        raise Exception("get_response method not implemented")
 
     async def _get_boolean_response(self):
         # response = self.interface.socket.recv(1)
@@ -99,7 +101,7 @@ class DXPCommand(object):
         return self._parse_bool(response)
 
     def _parse_bool(self, string):
-        return not struct.unpack('?', string)[0]
+        return not struct.unpack("?", string)[0]
 
     async def do_request(self):
         header = self._build_header()
@@ -120,33 +122,29 @@ class DXPCommand(object):
 
 
 class IOCommand(DXPCommand):
-    COMMAND = 'IO'
+    COMMAND = "IO"
     DESCRIPTOR_MAP = {
-        'NULL': 0,
-        'CHANGE_RELAY': 1,
-        'CHANGE_RELAYS': 2,
-        'GET_RELAY': 3,
-        'GET_RELAYS': 4,
-        'GET_INPUT': 5,
-        'GET_INPUTS': 6,
-        'PULSE_RELAY': 7
+        "NULL": 0,
+        "CHANGE_RELAY": 1,
+        "CHANGE_RELAYS": 2,
+        "GET_RELAY": 3,
+        "GET_RELAYS": 4,
+        "GET_INPUT": 5,
+        "GET_INPUTS": 6,
+        "PULSE_RELAY": 7,
     }
 
 
 class RelayCommand(IOCommand):
-    STATE_MAP = {
-        True: 1,
-        False: 0,
-        'NO_CHANGE': 2
-    }
+    STATE_MAP = {True: 1, False: 0, "NO_CHANGE": 2}
 
     async def _get_response(self):
         return await self._get_boolean_response()
 
 
 class ChangeRelayCommand(RelayCommand):
-    DESCRIPTOR = 'CHANGE_RELAY'
-    PAYLOAD_STRUCT = struct.Struct('<BB')
+    DESCRIPTOR = "CHANGE_RELAY"
+    PAYLOAD_STRUCT = struct.Struct("<BB")
 
     def __init__(self, interface, relay, state):
         super(ChangeRelayCommand, self).__init__(interface)
@@ -155,12 +153,13 @@ class ChangeRelayCommand(RelayCommand):
 
     def _build_payload(self):
         return super(ChangeRelayCommand, self)._build_payload(
-            self.relay, self.STATE_MAP[self.state])
+            self.relay, self.STATE_MAP[self.state]
+        )
 
 
 class ChangeRelaysCommand(RelayCommand):
-    DESCRIPTOR = 'CHANGE_RELAYS'
-    PAYLOAD_STRUCT = struct.Struct('<' + ('B' * 32))  # 32 unsigned chars
+    DESCRIPTOR = "CHANGE_RELAYS"
+    PAYLOAD_STRUCT = struct.Struct("<" + ("B" * 32))  # 32 unsigned chars
 
     def __init__(self, interface, relay_state_dict):
         super(ChangeRelaysCommand, self).__init__(interface)
@@ -173,10 +172,9 @@ class ChangeRelaysCommand(RelayCommand):
 
         for relay in range(32):
             if (relay + 1) not in self.relay_state_dict:
-                state_list.append(self.STATE_MAP['NO_CHANGE'])
+                state_list.append(self.STATE_MAP["NO_CHANGE"])
             else:
-                state_list.append(
-                    self.STATE_MAP[self.relay_state_dict[relay + 1]])
+                state_list.append(self.STATE_MAP[self.relay_state_dict[relay + 1]])
 
         self.interface.logger.debug(state_list)
 
@@ -184,27 +182,27 @@ class ChangeRelaysCommand(RelayCommand):
 
 
 class GetRelaysRequest(IOCommand):
-    DESCRIPTOR = 'GET_RELAYS'
+    DESCRIPTOR = "GET_RELAYS"
 
     async def do_request(self):
         return await self._do_payloadless_request()
 
     async def _get_response(self):
         # response = self.interface.socket.recv(self.interface.num_relays)
-        response = await self.interface.loop.sock_recv(self.interface.socket,
-                                                       self.interface.num_relays)
+        response = await self.interface.loop.sock_recv(
+            self.interface.socket, self.interface.num_relays
+        )
         if not response:
             return None
 
         self.interface.increment_seq_num()
         # return [True if ord(str(relay_status)) == 1 else False
-        return [True if relay_status == 1 else False
-                for relay_status in response]
+        return [True if relay_status == 1 else False for relay_status in response]
 
 
 class PulseRelayRequest(RelayCommand):
-    DESCRIPTOR = 'PULSE_RELAY'
-    PAYLOAD_STRUCT = struct.Struct('<BBH')
+    DESCRIPTOR = "PULSE_RELAY"
+    PAYLOAD_STRUCT = struct.Struct("<BBH")
 
     def __init__(self, interface, relay, state, width):
         super(PulseRelayRequest, self).__init__(interface)
@@ -214,7 +212,8 @@ class PulseRelayRequest(RelayCommand):
 
     def _build_payload(self):
         return super(PulseRelayRequest, self)._build_payload(
-            self.relay, self.STATE_MAP[self.state], self.width)
+            self.relay, self.STATE_MAP[self.state], self.width
+        )
 
 
 class iBootInterface(object):
@@ -230,7 +229,7 @@ class iBootInterface(object):
             self.logger = log
         else:
             logging.basicConfig()
-            self.logger = logging.getLogger('iBootInterface')
+            self.logger = logging.getLogger("iBootInterface")
             self.logger.setLevel(logging.DEBUG)
         self.loop = asyncio.get_event_loop()
 
@@ -250,15 +249,15 @@ class iBootInterface(object):
             # self.socket.connect((self.ip, self.port))
             await self.loop.sock_connect(self.socket, (self.ip, self.port))
         except socket.error:
-            self.logger.error('Socket failed to connect')
+            self.logger.error("Socket failed to connect")
             return False
 
         try:
             # self.socket.sendall(bytes(HELLO_STR, 'utf-8'))
-            await self.loop.sock_sendall(self.socket, bytes(HELLO_STR, 'utf-8'))
+            await self.loop.sock_sendall(self.socket, bytes(HELLO_STR, "utf-8"))
             return await self._get_initial_seq_num()
         except socket.error:
-            self.logger.error('Socket error')
+            self.logger.error("Socket error")
             return False
 
         return True
@@ -270,7 +269,7 @@ class iBootInterface(object):
         if not response:
             return False
 
-        self.seq_num = struct.unpack('H', response)[0] + 1
+        self.seq_num = struct.unpack("H", response)[0] + 1
         return True
 
     def disconnect(self):
@@ -339,7 +338,7 @@ class iBootInterface(object):
             self.disconnect()
 
 
-if __name__ == '__main__':
-    interface = iBootInterface('192.168.0.105', 'admin', 'admin')
+if __name__ == "__main__":
+    interface = iBootInterface("192.168.0.105", "admin", "admin")
     print(str(interface.get_relays()))
     print(str(interface.switch(1, False)))

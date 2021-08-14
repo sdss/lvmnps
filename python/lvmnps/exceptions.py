@@ -16,8 +16,7 @@ class NpsActorError(Exception):
 
     def __init__(self, message=None):
 
-        message = 'There has been an error' \
-            if not message else message
+        message = "There has been an error" if not message else message
 
         super(NpsActorError, self).__init__(message)
 
@@ -27,8 +26,7 @@ class NpsActorNotImplemented(NpsActorError):
 
     def __init__(self, message=None):
 
-        message = 'This feature is not implemented yet.' \
-            if not message else message
+        message = "This feature is not implemented yet." if not message else message
 
         super(NpsActorNotImplemented, self).__init__(message)
 
@@ -38,20 +36,22 @@ class NpsActorAPIError(NpsActorError):
 
     def __init__(self, message=None):
         if not message:
-            message = 'Error with Http Response from NpsActor API'
+            message = "Error with Http Response from NpsActor API"
         else:
-            message = 'Http response error from NpsActor API. {0}'.format(message)
+            message = "Http response error from NpsActor API. {0}".format(message)
 
         super(NpsActorAPIError, self).__init__(message)
 
 
 class NpsActorApiAuthError(NpsActorAPIError):
     """A custom exception for API authentication errors"""
+
     pass
 
 
 class NpsActorMissingDependency(NpsActorError):
     """A custom exception for missing dependencies."""
+
     pass
 
 
@@ -61,14 +61,17 @@ class NpsActorWarning(Warning):
 
 class NpsActorUserWarning(UserWarning, NpsActorWarning):
     """The primary warning class."""
+
     pass
 
 
 class NpsActorSkippedTestWarning(NpsActorUserWarning):
     """A warning for when a test is skipped."""
+
     pass
 
 
 class NpsActorDeprecationWarning(NpsActorUserWarning):
     """A warning for deprecated features."""
+
     pass

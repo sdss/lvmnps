@@ -5,7 +5,6 @@
 # @Filename: lvmnps/switch/outlet.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
-import datetime
 
 class Outlet(object):
     """
@@ -29,14 +28,15 @@ class Outlet(object):
 
     @staticmethod
     def parse(value):
-        if value in ['off', 'OFF', '0', 0, False]:
+        if value in ["off", "OFF", "0", 0, False]:
             return 0
-        if value in ['on', 'ON', '1', 1, True]:
+        if value in ["on", "ON", "1", 1, True]:
             return 1
         return -1
 
     def setState(self, value):
         self.state = Outlet.parse(value)
+        # print(self.state)
 
     def isOn(self):
         return self.state == 1
@@ -49,8 +49,8 @@ class Outlet(object):
 
     def toJson(self):
         return {
-            'STATE': self.state,
-            'DESCR': self.description,
-            'SWITCH': self.swname,
-            'PORT': self.portnum,
+            "STATE": self.state,
+            "DESCR": self.description,
+            "SWITCH": self.swname,
+            "PORT": self.portnum,
         }

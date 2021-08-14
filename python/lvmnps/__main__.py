@@ -35,7 +35,7 @@ def lvmnps(ctx, config_file, verbose):
 @cli_coro
 async def actor(ctx):
     """Runs the actor."""
-    default_config_file = os.path.join(os.path.dirname(__file__), "etc/lvmnps.yml")
+    default_config_file = os.path.join(os.path.dirname(__file__), "etc/lvmnps_dli.yml")
     config_file = ctx.obj["config_file"] or default_config_file
 
     lvmnps_obj = NpsActorInstance.from_config(config_file)
@@ -46,6 +46,7 @@ async def actor(ctx):
 
     await lvmnps_obj.start()
     await lvmnps_obj.run_forever()
+
 
 if __name__ == "__main__":
     lvmnps()

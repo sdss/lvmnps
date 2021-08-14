@@ -29,11 +29,7 @@ class lvmnps(AMQPActor):
 
     parser = nps_command_parser  # commands register..CK 20210402
 
-    def __init__(
-            self,
-            *args,
-            **kwargs
-    ):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     async def start(self):
@@ -42,7 +38,7 @@ class lvmnps(AMQPActor):
         connect_timeout = self.config["timeouts"]["switch_connect"]
 
         assert len(self.parser_args) == 1
-
+        print(self.parser_args[0])
         for switch in self.parser_args[0]:
             try:
                 self.log.debug(f"Start {switch.name} ...")
@@ -76,7 +72,9 @@ class lvmnps(AMQPActor):
                     switches.append(powerSwitchFactory(name, config, instance.log))
 
                 except Exception as ex:
-                    instance.log.error(f"Error in power switch factory {type(ex)}: {ex}")
+                    instance.log.error(
+                        f"Error in power switch factory {type(ex)}: {ex}"
+                    )
             instance.parser_args = [switches]
 
         return instance

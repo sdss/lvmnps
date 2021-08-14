@@ -126,16 +126,16 @@ TIMEOUT = 20
 RETRIES = 3
 CYCLETIME = 3
 CONFIG_DEFAULTS = {
-    'timeout': TIMEOUT,
-    'cycletime': CYCLETIME,
-    'userid': 'admin',
-    'password': 'irlab',
-    'hostname': '163.180.145.123'
+    "timeout": TIMEOUT,
+    "cycletime": CYCLETIME,
+    "userid": "admin",
+    "password": "irlab",
+    "hostname": "163.180.145.123",
 }
-CONFIG_FILE = os.path.expanduser('~/.dlipower.conf')
+CONFIG_FILE = os.path.expanduser("~/.dlipower.conf")
 
 
-def _call_it(params):   # pragma: no cover
+def _call_it(params):  # pragma: no cover
     """indirect caller for instance methods and multiprocessing"""
     instance, name, args = params
     kwargs = {}
@@ -146,6 +146,7 @@ class DLIPowerException(Exception):
     """
     An error occurred talking the the DLI Power switch
     """
+
     pass
 
 
@@ -153,6 +154,7 @@ class Outlet(object):
     """
     A power outlet class
     """
+
     use_description = True
 
     def __init__(self, switch, outlet_number, description=None, state=None):
@@ -166,10 +168,10 @@ class Outlet(object):
     def __unicode__(self):
         name = None
         if self.use_description and self.description:  # pragma: no cover
-            name = '%s' % self.description
+            name = "%s" % self.description
         if not name:
-            name = '%d' % self.outlet_number
-        return '%s:%s' % (name, self._state)
+            name = "%d" % self.outlet_number
+        return "%s:%s" % (name, self._state)
 
     def __str__(self):
         return self.__unicode__()
@@ -178,32 +180,34 @@ class Outlet(object):
         return "<dlipower_outlet '%s'>" % self.__unicode__()
 
     def _repr_html_(self):  # pragma: no cover
-        """ Display representation as an html table when running in ipython """
-        return u"""<table>
+        """Display representation as an html table when running in ipython"""
+        return """<table>
     <tr><th>Description</th><th>Outlet Number</th><th>State</th></tr>
     <tr><td>{0:s}</td><td>{1:s}</td><td>{2:s}</td></tr>
-</table>""".format(self.description, self.outlet_number, self.state)
+</table>""".format(
+            self.description, self.outlet_number, self.state
+        )
 
     @property
     def state(self):
-        """ Return the outlet state """
+        """Return the outlet state"""
         return self._state
 
     @state.setter
     def state(self, value):
-        """ Set the outlet state """
+        """Set the outlet state"""
         self._state = value
-        if value in ['off', 'OFF', '0']:
+        if value in ["off", "OFF", "0"]:
             self.off()
-        if value in ['on', 'ON', '1']:
+        if value in ["on", "ON", "1"]:
             self.on()
 
     def off(self):
-        """ Turn the outlet off """
+        """Turn the outlet off"""
         return self.switch.off(self.outlet_number)
 
     def on(self):
-        """ Turn the outlet on """
+        """Turn the outlet on"""
         return self.switch.on(self.outlet_number)
 
     def rename(self, new_name):
@@ -216,28 +220,36 @@ class Outlet(object):
 
     @property
     def name(self):
-        """ Return the name or description of the outlet """
+        """Return the name or description of the outlet"""
         return self.switch.get_outlet_name(self.outlet_number)
 
     @name.setter
     def name(self, new_name):
-        """ Set the name of the outlet """
+        """Set the name of the outlet"""
         self.rename(new_name)
 
 
 class PowerSwitch(object):
-    """ Powerswitch class to manage the Digital Loggers Web power switch """
+    """Powerswitch class to manage the Digital Loggers Web power switch"""
+
     __len = 0
     login_timeout = 2.0
     secure_login = False
 
-    def __init__(self, userid=None, password=None, hostname=None, timeout=None,
-                 cycletime=None, retries=None, use_https=False):
+    def __init__(
+        self,
+        userid=None,
+        password=None,
+        hostname=None,
+        timeout=None,
+        cycletime=None,
+        retries=None,
+        use_https=False,
+    ):
         """
         Class initializaton
         """
-        self.name = name
-        
+
         if not retries:
             retries = RETRIES
         config = self.load_configuration()
@@ -246,31 +258,30 @@ class PowerSwitch(object):
         if userid:
             self.userid = userid
         else:
-            self.userid = config['userid']
+            self.userid = config["userid"]
         if password:
             self.password = password
         else:
-            self.password = config['password']
+            self.password = config["password"]
         if hostname:
             self.hostname = hostname
         else:
-            self.hostname = config['hostname']
+            self.hostname = config["hostname"]
         if timeout:
             self.timeout = float(timeout)
         else:
-            self.timeout = config['timeout']
+            self.timeout = config["timeout"]
         if cycletime:
             self.cycletime = float(cycletime)
         else:
-            self.cycletime = config['cycletime']
-        self.scheme = 'http'
+            self.cycletime = config["cycletime"]
+        self.scheme = "http"
         if use_https:
-            self.scheme = 'https'
-        self.base_url = '%s://%s' % (self.scheme, self.hostname)
+            self.scheme = "https"
+        self.base_url = "%s://%s" % (self.scheme, self.hostname)
         self._is_admin = True
         self.session = requests.Session()
         self.login()
-
 
     def __len__(self):
         """
@@ -285,12 +296,13 @@ class PowerSwitch(object):
         display the representation
         """
         if not self.statuslist():
-            return "Digital Loggers Web Powerswitch " \
-                   "%s (UNCONNECTED)" % self.hostname
-        output = 'DLIPowerSwitch at %s\n' \
-                 'Outlet\t%-15.15s\tState\n' % (self.hostname, 'Name')
+            return "Digital Loggers Web Powerswitch " "%s (UNCONNECTED)" % self.hostname
+        output = "DLIPowerSwitch at %s\n" "Outlet\t%-15.15s\tState\n" % (
+            self.hostname,
+            "Name",
+        )
         for item in self.statuslist():
-            output += '%d\t%-15.15s\t%s\n' % (item[0], item[1], item[2])
+            output += "%d\t%-15.15s\t%s\n" % (item[0], item[1], item[2])
         return output
 
     def _repr_html_(self):
@@ -298,24 +310,28 @@ class PowerSwitch(object):
         __repr__ in an html table format
         """
         if not self.statuslist():
-            return "Digital Loggers Web Powerswitch " \
-                   "%s (UNCONNECTED)" % self.hostname
-        output = '<table>' \
-                 '<tr><th colspan="3">DLI Web Powerswitch at %s</th></tr>' \
-                 '<tr>' \
-                 '<th>Outlet Number</th>' \
-                 '<th>Outlet Name</th>' \
-                 '<th>Outlet State</th></tr>\n' % self.hostname
+            return "Digital Loggers Web Powerswitch " "%s (UNCONNECTED)" % self.hostname
+        output = (
+            "<table>"
+            '<tr><th colspan="3">DLI Web Powerswitch at %s</th></tr>'
+            "<tr>"
+            "<th>Outlet Number</th>"
+            "<th>Outlet Name</th>"
+            "<th>Outlet State</th></tr>\n" % self.hostname
+        )
         for item in self.statuslist():
-            output += '<tr><td>%d</td><td>%s</td><td>%s</td></tr>\n' % (
-                item[0], item[1], item[2])
-        output += '</table>\n'
+            output += "<tr><td>%d</td><td>%s</td><td>%s</td></tr>\n" % (
+                item[0],
+                item[1],
+                item[2],
+            )
+        output += "</table>\n"
         return output
 
     def __getitem__(self, index):
         outlets = []
         if isinstance(index, slice):
-            status = self.statuslist()[index.start:index.stop]
+            status = self.statuslist()[index.start : index.stop]  # noqa: E203
         else:
             status = [self.statuslist()[index]]
         for outlet_status in status:
@@ -323,7 +339,7 @@ class PowerSwitch(object):
                 switch=self,
                 outlet_number=outlet_status[0],
                 description=outlet_status[1],
-                state=outlet_status[2]
+                state=outlet_status[2],
             )
             outlets.append(power_outlet)
         if len(outlets) == 1:
@@ -334,51 +350,64 @@ class PowerSwitch(object):
         self.secure_login = False
         self.session = requests.Session()
         try:
-            response = self.session.get(self.base_url, verify=False,
-                                        timeout=self.login_timeout, allow_redirects=False)
+            response = self.session.get(
+                self.base_url,
+                verify=False,
+                timeout=self.login_timeout,
+                allow_redirects=False,
+            )
             if response.is_redirect:
-                self.base_url = response.headers['Location'].rstrip('/')
-                logger.debug(f'Redirecting to: {self.base_url}')
-                response = self.session.get(self.base_url, verify=False,
-                                            timeout=self.login_timeout)
-        except (requests.exceptions.ConnectTimeout, requests.exceptions.ConnectionError):
+                self.base_url = response.headers["Location"].rstrip("/")
+                logger.debug(f"Redirecting to: {self.base_url}")
+                response = self.session.get(
+                    self.base_url, verify=False, timeout=self.login_timeout
+                )
+        except (
+            requests.exceptions.ConnectTimeout,
+            requests.exceptions.ConnectionError,
+        ):
             self.session = None
             return
-        soup = BeautifulSoup(response.text, 'html.parser')
+        soup = BeautifulSoup(response.text, "html.parser")
         fields = {}
-        for field in soup.find_all('input'):
-            name = field.get('name', None)
-            value = field.get('value', '')
+        for field in soup.find_all("input"):
+            name = field.get("name", None)
+            value = field.get("value", "")
             if name:
                 fields[name] = value
 
-        fields['Username'] = self.userid
-        fields['Password'] = self.password
+        fields["Username"] = self.userid
+        fields["Password"] = self.password
 
-        form_response = fields['Challenge'] + fields['Username']
-        form_response += fields['Password'] + fields['Challenge']
+        form_response = fields["Challenge"] + fields["Username"]
+        form_response += fields["Password"] + fields["Challenge"]
 
         m = hashlib.md5()  # nosec - The switch we are talking to uses md5 hashes
         m.update(form_response.encode())
-        data = {'Username': 'admin', 'Password': m.hexdigest()}
-        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        data = {"Username": "admin", "Password": m.hexdigest()}
+        headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
         try:
-            response = self.session.post('%s/login.tgi' % self.base_url, headers=headers,
-                                         data=data, timeout=self.timeout, verify=False)
+            response = self.session.post(
+                "%s/login.tgi" % self.base_url,
+                headers=headers,
+                data=data,
+                timeout=self.timeout,
+                verify=False,
+            )
         except requests.exceptions.ConnectTimeout:
             self.secure_login = False
             self.session = None
             return
 
         if response.status_code == 200:
-            if 'Set-Cookie' in response.headers:
+            if "Set-Cookie" in response.headers:
                 self.secure_login = True
 
     def load_configuration(self):
-        """ Return a configuration dictionary """
+        """Return a configuration dictionary"""
         if os.path.isfile(CONFIG_FILE):
-            file_h = open(CONFIG_FILE, 'r')
+            file_h = open(CONFIG_FILE, "r")
             try:
                 config = json.load(file_h)
             except ValueError:
@@ -389,67 +418,78 @@ class PowerSwitch(object):
         return CONFIG_DEFAULTS
 
     def save_configuration(self):
-        """ Update the configuration file with the object's settings """
+        """Update the configuration file with the object's settings"""
         # Get the configuration from the config file or set to the defaults
         config = self.load_configuration()
 
         # Overwrite the objects configuration over the existing config values
-        config['userid'] = self.userid
-        config['password'] = self.password
-        config['hostname'] = self.hostname
-        config['timeout'] = self.timeout
+        config["userid"] = self.userid
+        config["password"] = self.password
+        config["hostname"] = self.hostname
+        config["timeout"] = self.timeout
 
         # Write it to disk
-        file_h = open(CONFIG_FILE, 'w')
+        file_h = open(CONFIG_FILE, "w")
         # Make sure the file perms are correct before we write data
         # that can include the password into it.
-        if hasattr(os, 'fchmod'):
+        if hasattr(os, "fchmod"):
             os.fchmod(file_h.fileno(), 0o0600)
         if file_h:
             json.dump(config, file_h, sort_keys=True, indent=4)
             file_h.close()
         else:
-            raise DLIPowerException('Unable to open configuration file for write')
+            raise DLIPowerException("Unable to open configuration file for write")
 
     def verify(self):
-        """ Verify we can reach the switch, returns true if ok """
+        """Verify we can reach the switch, returns true if ok"""
         if self.geturl():
             return True
         return False
 
-    def geturl(self, url='index.htm'):
+    def geturl(self, url="index.htm"):
         """
         Get a URL from the userid/password protected powerswitch page Return None on failure
         """
         full_url = "%s/%s" % (self.base_url, url)
         result = None
         request = None
-        logger.debug(f'Requesting url: {full_url}')
+        logger.debug(f"Requesting url: {full_url}")
         for i in range(0, self.retries):
             try:
                 if self.secure_login and self.session:
-                    request = self.session.get(full_url, timeout=self.timeout,
-                                               verify=False, allow_redirects=True)
+                    request = self.session.get(
+                        full_url,
+                        timeout=self.timeout,
+                        verify=False,
+                        allow_redirects=True,
+                    )
                 else:
-                    request = requests.get(full_url,
-                                           auth=(self.userid, self.password,),
-                                           verify=False,
-                                           allow_redirects=True)  # nosec
+                    request = requests.get(
+                        full_url,
+                        auth=(
+                            self.userid,
+                            self.password,
+                        ),
+                        verify=False,
+                        allow_redirects=True,
+                    )  # nosec
             except requests.exceptions.RequestException as e:
-                logger.warning("Request timed out - %d retries left.", self.retries - i - 1)
+                logger.warning(
+                    "Request timed out - %d retries left.", self.retries - i - 1
+                )
                 logger.exception("Caught exception %s", str(e))
                 continue
             if request.status_code == 200:
                 result = request.content
                 break
-        logger.debug('Response code: %s', request.status_code)
-        logger.debug(f'Response content: {result}')
+        logger.debug("Response code: %s", request.status_code)
+        logger.debug(f"Response content: {result}")
         return result
 
     def determine_outlet(self, outlet=None):
-        """ Get the correct outlet number from the outlet passed in, this
-            allows specifying the outlet by the name and making sure the
-            returned outlet is an int
+        """Get the correct outlet number from the outlet passed in, this
+        allows specifying the outlet by the name and making sure the
+        returned outlet is an int
         """
         outlets = self.statuslist()
         if outlet and outlets and isinstance(outlet, str):
@@ -460,51 +500,49 @@ class PowerSwitch(object):
         try:
             outlet_int = int(outlet)
             if outlet_int <= 0 or outlet_int > self.__len__():
-                raise DLIPowerException('Outlet number %d out of range' % outlet_int)
+                raise DLIPowerException("Outlet number %d out of range" % outlet_int)
             return outlet_int
         except ValueError:
-            raise DLIPowerException('Outlet name \'%s\' unknown' % outlet)
+            raise DLIPowerException("Outlet name '%s' unknown" % outlet)
 
     def get_outlet_name(self, outlet=0):
-        """ Return the name of the outlet """
+        """Return the name of the outlet"""
         outlet = self.determine_outlet(outlet)
         outlets = self.statuslist()
         if outlets and outlet:
             for plug in outlets:
                 if int(plug[0]) == outlet:
                     return plug[1]
-        return 'Unknown'
+        return "Unknown"
 
     def set_outlet_name(self, outlet=0, name="Unknown"):
-        """ Set the name of an outlet """
+        """Set the name of an outlet"""
         self.determine_outlet(outlet)
-        self.geturl(
-            url='unitnames.cgi?outname%s=%s' % (outlet, quote(name))
-        )
+        self.geturl(url="unitnames.cgi?outname%s=%s" % (outlet, quote(name)))
         return self.get_outlet_name(outlet) == name
 
     def off(self, outlet=0):
-        """ Turn off a power to an outlet
-            False = Success
-            True = Fail
+        """Turn off a power to an outlet
+        False = Success
+        True = Fail
         """
-        self.geturl(url='outlet?%d=OFF' % self.determine_outlet(outlet))
-        return self.status(outlet) != 'OFF'
+        self.geturl(url="outlet?%d=OFF" % self.determine_outlet(outlet))
+        return self.status(outlet) != "OFF"
 
     def on(self, outlet=0):
-        """ Turn on power to an outlet
-            False = Success
-            True = Fail
+        """Turn on power to an outlet
+        False = Success
+        True = Fail
         """
-        self.geturl(url='outlet?%d=ON' % self.determine_outlet(outlet))
-        return self.status(outlet) != 'ON'
+        self.geturl(url="outlet?%d=ON" % self.determine_outlet(outlet))
+        return self.status(outlet) != "ON"
 
     def cycle(self, outlet=0):
-        """ Cycle power to an outlet
-            False = Power off Success
-            True = Power off Fail
-            Note, does not return any status info about the power on part of
-            the operation by design
+        """Cycle power to an outlet
+        False = Power off Success
+        True = Power off Fail
+        Note, does not return any status info about the power on part of
+        the operation by design
         """
         if self.off(outlet):
             return True
@@ -513,44 +551,44 @@ class PowerSwitch(object):
         return False
 
     def statuslist(self):
-        """ Return the status of all outlets in a list,
-        each item will contain 3 items plugnumber, hostname and state  """
+        """Return the status of all outlets in a list,
+        each item will contain 3 items plugnumber, hostname and state"""
         outlets = []
-        url = self.geturl('index.htm')
+        url = self.geturl("index.htm")
         if not url:
             return None
         soup = BeautifulSoup(url, "html.parser")
         # Get the root of the table containing the port status info
         try:
-            root = soup.findAll('td', text='1')[0].parent.parent.parent
+            root = soup.findAll("td", text="1")[0].parent.parent.parent
         except IndexError:
             # Finding the root of the table with the outlet info failed
             # try again assuming we're seeing the table for a user
             # account insteaed of the admin account (tables are different)
             try:
                 self._is_admin = False
-                root = soup.findAll('th', text='#')[0].parent.parent.parent
+                root = soup.findAll("th", text="#")[0].parent.parent.parent
             except IndexError:
                 return None
-        for temp in root.findAll('tr'):
-            columns = temp.findAll('td')
+        for temp in root.findAll("tr"):
+            columns = temp.findAll("td")
             if len(columns) == 5:
                 plugnumber = columns[0].string
                 hostname = columns[1].string
-                state = columns[2].find('font').string.upper()
+                state = columns[2].find("font").string.upper()
                 outlets.append([int(plugnumber), hostname, state])
         if self.__len == 0:
             self.__len = len(outlets)
         return outlets
 
     def printstatus(self):
-        """ Print the status off all the outlets as a table to stdout """
+        """Print the status off all the outlets as a table to stdout"""
         if not self.statuslist():
             print("Unable to communicate to the Web power switch at %s" % self.hostname)
             return None
-        print('Outlet\t%-15.15s\tState' % 'Name')
+        print("Outlet\t%-15.15s\tState" % "Name")
         for item in self.statuslist():
-            print('%d\t%-15.15s\t%s' % (item[0], item[1], item[2]))
+            print("%d\t%-15.15s\t%s" % (item[0], item[1], item[2]))
         return
 
     def status(self, outlet=1):
@@ -564,7 +602,7 @@ class PowerSwitch(object):
             for plug in outlets:
                 if plug[0] == outlet:
                     return plug[2]
-        return 'Unknown'
+        return "Unknown"
 
     def command_on_outlets(self, command, outlets):
         """
@@ -581,10 +619,11 @@ class PowerSwitch(object):
                 return [result]
         pool = multiprocessing.Pool(processes=len(outlets))
         result = [
-            value for value in pool.imap(
+            value
+            for value in pool.imap(
                 _call_it,
-                [(self, command, (outlet, )) for outlet in outlets],
-                chunksize=1
+                [(self, command, (outlet,)) for outlet in outlets],
+                chunksize=1,
             )
         ]
         pool.close()

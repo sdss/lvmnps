@@ -55,36 +55,36 @@ switches:
         ports:
           num: 1
           1:
-            name: "Outlet 1"
-            desc: ""
+            name: "Router/Switch"
+            desc: "Router power switch"
           num: 2
           2:
-            name: "IEB06"
+            name: "Ln2 NIR valve"
             desc: "LVM Instrument Electronic Box"
           num: 3
           3:
-            name: "Outlet 3"
+            name: "LVM-Archon-02"
             desc: ""
           num: 4
           4:
-            name: "LVM-Archon-02"
+            name: "IEB06"
             desc: "Archon controller"
           num: 5
           5:
-            name: "Pressure Transducer"
-            desc: "Pressure Transducer"
+            name: 
+            desc: "Raspberry Pi PC"
           num: 6
           6:
-            name: "Outlet 6"
-            desc: ""
+            name: "RPi"
+            desc: "Cryogenic solenoid valve for liquid nitrogen."
           num: 7
           7:
-            name: "Outlet 7"
+            name: "FFS LED"
             desc: ""
           num: 8
           8:
-            name: "Outlet 8"
-            desc: ""
+            name: "Pressure transducers"
+            desc: "Pressure transducers"
     
    # DLI-NPS-03:
    #     type: dli
@@ -95,11 +95,10 @@ switches:
    #     password: '1234'
    #     numports: 8
    #     ouo: False # handle also unconfigured ports
-   #     ports:
-        
-        
+   #     ports:        
+
 timeouts:
-        switch_connect: 1
+        switch_connect: 3
 
 # Actor configuration for the AMQPActor class
 actor:

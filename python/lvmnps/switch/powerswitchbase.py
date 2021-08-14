@@ -6,18 +6,17 @@
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from abc import abstractmethod
-import datetime
 
 from sdsstools.logger import SDSSLogger
 
 from lvmnps.switch.outlet import Outlet
 
 
-__all__ = ['PowerSwitchBase']
+__all__ = ["PowerSwitchBase"]
 
 
 class PowerSwitchBase(object):
-    """ Powerswitch class to manage the Digital Loggers Web power switch """
+    """Powerswitch class to manage the Digital Loggers Web power switch"""
 
     def __init__(self, name: str, config: [], log: SDSSLogger):
         self.name = name
@@ -25,25 +24,40 @@ class PowerSwitchBase(object):
         self.config = config
 
         self.numports = self.config_get("ports.num", 8)
-        self.outlets = [Outlet(name,
-                               self.config_get(f"ports.{portnum}.name"),
-                               portnum,
-                               self.config_get(f"ports.{portnum}.desc"),
-                               -1,
-                               ) for portnum in range(1, self.numports + 1)
-                        ]
+        self.outlets = [
+            Outlet(
+                name,
+                self.config_get(f"ports.{portnum}.name"),
+                portnum,
+                self.config_get(f"ports.{portnum}.desc"),
+                -1,
+            )
+            for portnum in range(1, self.numports + 1)
+        ]
         self.log.debug(f"{self.outlets}")
         self.onlyusedones = self.config_get("ouo", True)
         self.log.debug(f"Only used ones: {self.onlyusedones}")
 
     def config_get(self, key, default=None):
-        """ DOESNT work for keys with dots !!! """
+        """DOESNT work for keys with dots !!!"""
+
         def g(config, key, d=None):
-            k = key.split('.', maxsplit=1)
-            c = config.get(k[0] if not k[0].isnumeric() else int(k[0]))  # keys can be numeric
-            #print(k)
-            #print(c)
-            return d if c is None else c if len(k) < 2 else g(c, k[1], d) if type(c) is dict else d
+            k = key.split(".", maxsplit=1)
+            c = config.get(
+                k[0] if not k[0].isnumeric() else int(k[0])
+            )  # keys can be numeric
+            # print(k)
+            # print(c)
+            return (
+                d
+                if c is None
+                else c
+                if len(k) < 2
+                else g(c, k[1], d)
+                if type(c) is dict
+                else d
+            )
+
         return g(self.config, key, default)
 
     def findOutletByName(self, name: str):
@@ -53,8 +67,9 @@ class PowerSwitchBase(object):
 
     def collectOutletsByNameAndPort(self, name: str, portnum: int = 0):
 
-        current_time = datetime.datetime.now()
-        print(f"starting collectOutletsByNameAndPort  :  {current_time}")
+        # print(self.numports)
+        # print(portnum)
+
         if not name or name == self.name:
             if portnum:
                 if portnum > self.numports:
@@ -63,9 +78,11 @@ class PowerSwitchBase(object):
             else:
                 outlets = []
                 self.log.debug(str(self.onlyusedones))
+                # print(self.outlets)
                 for o in self.outlets:
                     if o.inuse or not self.onlyusedones:
                         outlets.append(o)
+                # print(outlets)
                 return outlets
         else:
             o = self.findOutletByName(name)
@@ -74,40 +91,25 @@ class PowerSwitchBase(object):
         return []
 
     async def setState(self, state, name: str = "", portnum: int = 0):
-        #if portnum > self.numports:
-        #    return []
-        current_time = datetime.datetime.now()
-        print(f"starting setState  :  {current_time}")
-        return await self.switch(Outlet.parse(state),
-                                 self.collectOutletsByNameAndPort(name, portnum))
+        if portnum > self.numports:
+            return []
+        # print(Outlet.parse(state))
+        return await self.switch(
+            Outlet.parse(state), self.collectOutletsByNameAndPort(name, portnum)
+        )
 
     async def statusAsJson(self, name: str = "", portnum: int = 0):
         # name: can be a switch or an outlet name
-        current_time = datetime.datetime.now()
-        print(f"before collectOutletsByNameAndPort  :  {current_time}")
 
         outlets = self.collectOutletsByNameAndPort(name, portnum)
+        # print(outlets)
 
-        current_time = datetime.datetime.now()
-        print(f"after collectOutletsByNameAndPort  :  {current_time}")
-        #print(outlets)
-        
-        current_time = datetime.datetime.now()
-        print(f"before update  :  {current_time}")
         await self.update(outlets)
-        current_time = datetime.datetime.now()
-        print(f"after update  :  {current_time}")
 
         status = {}
-        current_time = datetime.datetime.now()
-        print(f"before toJson  :  {current_time}")
         for o in outlets:
-            status[f'{o.name}'] = o.toJson()
-
-        current_time = datetime.datetime.now()
-        print(f"after toJson  :  {current_time}")
-
-        print(status)
+            status[f"{o.name}"] = o.toJson()
+        # print(status)
         return status
 
     @abstractmethod
@@ -120,7 +122,7 @@ class PowerSwitchBase(object):
 
     @abstractmethod
     async def isReachable(self):
-        """ Verify we can reach the switch, returns true if ok """
+        """Verify we can reach the switch, returns true if ok"""
         pass
 
     @abstractmethod
@@ -130,4 +132,3 @@ class PowerSwitchBase(object):
     @abstractmethod
     async def switch(self, state, outlets):
         pass
-
