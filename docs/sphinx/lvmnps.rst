@@ -3,14 +3,6 @@
 lvmnps
 ================
 
-
-Introduction
-------------
-
-This package work on ...
-
-
-
 Actor
 -----
 

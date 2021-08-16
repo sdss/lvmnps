@@ -59,6 +59,7 @@ extensions = [
     "sphinx.ext.inheritance_diagram",
     "sphinx_click",
     "myst_parser",
+    "sphinx-jsonschema",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

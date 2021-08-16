@@ -36,7 +36,7 @@ python = "^3.7"
 sdss-tree = ">=2.15.2"
 sdss-access = ">=0.2.3"
 sdsstools = ">=0.4.0"
-Sphinx = {version="^4.0.2", optional=true}
+Sphinx = "4.1.2"
 sphinx_bootstrap_theme = { version=">=0.4.12", optional=true}
 daemonocle = "^1.1.1"
 click-default-group = "^1.2.2"
@@ -50,6 +50,7 @@ beautifulsoup4 = "^4.9.3"
 sphinx-click = "^3.0.1"
 myst-parser = "^0.15.1"
 black = "^21.7b0"
+sphinx-jsonschema = "^1.16.11"
 
 [tool.poetry.dev-dependencies]
 ipython = ">=7.11.0"

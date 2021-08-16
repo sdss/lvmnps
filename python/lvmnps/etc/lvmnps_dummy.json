@@ -1,0 +1,49 @@
+{
+    "switches": {
+       "nps_dummy_1": {
+          "type": "dummy",
+          "num": 8,
+          "ports": {
+             "1": {
+                "desc": "was 1"
+             },
+             "2": {
+                "name": "skye.what.ever",
+                "desc": "whatever is connected to skye"
+             },
+             "4": {
+                "name": "skyw.what.ever",
+                "desc": "Something @ skyw"
+             }
+          }
+       },
+       "skye.nps": {
+          "type": "dummy",
+          "ports": {
+             "1": {
+                "name": "skye.pwi",
+                "desc": "PlaneWavemount Skye"
+             }
+          }
+       },
+       "nps_dummy_3": {
+          "type": "dummy",
+          "ports": {
+             "1": {
+                "name": "skyw.pwi",
+                "desc": "PlaneWavemount Skyw"
+             },
+             "num": 2
+          }
+       }
+    },
+    "timeouts": {
+       "switch_connect": 1
+    },
+    "actor": {
+       "name": "lvmnps",
+       "host": "localhost",
+       "port": 5672,
+       "log_dir": "~/tmp/log"
+    }
+ }
