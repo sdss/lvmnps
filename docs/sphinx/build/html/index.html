@@ -179,12 +179,11 @@ config file will be used.</p></li>
 <span class="c1">#&gt; poetry run clu</span>
 </pre></div>
 </div>
-<ul class="simple">
+<ul>
 <li><p>status command without parameter returns all ports of all switches.</p></li>
 <li><p>the default is to return only configured ports, otherwise define
 ‘ouo’ false in the config file, see
-<a class="reference external" href="https://github.com/sdss/lvmnps/blob/master/python/lvmnps/etc/lvmnps_dummy.yml">lvmnps_dummy.yml</a></p></li>
-</ul>
+<a class="reference external" href="https://github.com/sdss/lvmnps/blob/master/python/lvmnps/etc/lvmnps_dummy.yml">lvmnps_dummy.yml</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lvmnps</span> <span class="n">status</span>
 
 <span class="mi">12</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mf">08.649</span> <span class="n">lvmnps</span> <span class="o">&gt;</span>
@@ -196,37 +195,36 @@ config file will be used.</p></li>
             <span class="s2">&quot;SWITCH&quot;</span><span class="p">:</span> <span class="s2">&quot;nps\_dummy\_1&quot;</span><span class="p">,</span>
             <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="mi">1</span>
             <span class="p">},</span>
-        <span class="s2">&quot;skye.what.ever&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;STATE&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-            <span class="s2">&quot;DESCR&quot;</span><span class="p">:</span> <span class="s2">&quot;whatever is connected to skye&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;SWITCH&quot;</span><span class="p">:</span> <span class="s2">&quot;nps\_dummy\_1&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="mi">2</span>
-            <span class="p">},</span>
-        <span class="s2">&quot;skyw.what.ever&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;STATE&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-            <span class="s2">&quot;DESCR&quot;</span><span class="p">:</span> <span class="s2">&quot;Something @ skyw&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;SWITCH&quot;</span><span class="p">:</span> <span class="s2">&quot;nps\_dummy\_1&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="mi">4</span>
-            <span class="p">},</span>
-        <span class="s2">&quot;skye.pwi&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;STATE&quot;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-            <span class="s2">&quot;DESCR&quot;</span><span class="p">:</span> <span class="s2">&quot;PlaneWavemount Skye&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;SWITCH&quot;</span><span class="p">:</span> <span class="s2">&quot;skye.nps&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="mi">1</span>
-            <span class="p">},</span>
-        <span class="s2">&quot;skyw.pwi&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;STATE&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-            <span class="s2">&quot;DESCR&quot;</span><span class="p">:</span> <span class="s2">&quot;PlaneWavemount Skyw&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;SWITCH&quot;</span><span class="p">:</span> <span class="s2">&quot;nps\_dummy\_3&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="mi">1</span>
-            <span class="p">}</span>
+         <span class="s2">&quot;skye.what.ever&quot;</span><span class="p">:</span> <span class="p">{</span>
+             <span class="s2">&quot;STATE&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+             <span class="s2">&quot;DESCR&quot;</span><span class="p">:</span> <span class="s2">&quot;whatever is connected to skye&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;SWITCH&quot;</span><span class="p">:</span> <span class="s2">&quot;nps\_dummy\_1&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="mi">2</span>
+             <span class="p">},</span>
+         <span class="s2">&quot;skyw.what.ever&quot;</span><span class="p">:</span> <span class="p">{</span>
+             <span class="s2">&quot;STATE&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+             <span class="s2">&quot;DESCR&quot;</span><span class="p">:</span> <span class="s2">&quot;Something @ skyw&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;SWITCH&quot;</span><span class="p">:</span> <span class="s2">&quot;nps\_dummy\_1&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="mi">4</span>
+             <span class="p">},</span>
+         <span class="s2">&quot;skye.pwi&quot;</span><span class="p">:</span> <span class="p">{</span>
+             <span class="s2">&quot;STATE&quot;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+             <span class="s2">&quot;DESCR&quot;</span><span class="p">:</span> <span class="s2">&quot;PlaneWavemount Skye&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;SWITCH&quot;</span><span class="p">:</span> <span class="s2">&quot;skye.nps&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="mi">1</span>
+             <span class="p">},</span>
+         <span class="s2">&quot;skyw.pwi&quot;</span><span class="p">:</span> <span class="p">{</span>
+             <span class="s2">&quot;STATE&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+             <span class="s2">&quot;DESCR&quot;</span><span class="p">:</span> <span class="s2">&quot;PlaneWavemount Skyw&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;SWITCH&quot;</span><span class="p">:</span> <span class="s2">&quot;nps\_dummy\_3&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="mi">1</span>
+             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li><p>status command with port name skyw.what.ever</p></li>
-</ul>
+</li>
+<li><p>status command with port name skyw.what.ever</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lvmnps</span> <span class="n">status</span> <span class="n">skyw</span><span class="o">.</span><span class="n">what</span><span class="o">.</span><span class="n">ever</span>
 
 <span class="mi">12</span><span class="p">:</span><span class="mi">07</span><span class="p">:</span><span class="mf">12.349</span> <span class="n">lvmnps</span> <span class="o">&gt;</span>
@@ -240,9 +238,8 @@ config file will be used.</p></li>
             <span class="p">}</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li><p>status command with switch name nps_dummy_1</p></li>
-</ul>
+</li>
+<li><p>status command with switch name nps_dummy_1</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lvmnps</span> <span class="n">status</span> <span class="n">nps</span>\<span class="n">_dummy</span>\<span class="n">_1</span>
 
 <span class="mi">12</span><span class="p">:</span><span class="mi">07</span><span class="p">:</span><span class="mf">12.349</span> <span class="n">lvmnps</span> <span class="o">&gt;</span>
@@ -270,9 +267,8 @@ config file will be used.</p></li>
     <span class="p">}</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li><p>status command with switch name nps_dummy_1 and port 4 returns</p></li>
-</ul>
+</li>
+<li><p>status command with switch name nps_dummy_1 and port 4 returns</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lvmnps</span> <span class="n">status</span> <span class="n">nps</span>\<span class="n">_dummy</span>\<span class="n">_1</span> <span class="mi">4</span>
 
 <span class="mi">12</span><span class="p">:</span><span class="mi">07</span><span class="p">:</span><span class="mf">12.349</span> <span class="n">lvmnps</span> <span class="o">&gt;</span>
@@ -288,7 +284,7 @@ config file will be used.</p></li>
     <span class="p">}</span>
 </pre></div>
 </div>
-<ul class="simple">
+</li>
 <li><p>the commands on and off use the same addressing scheme as status</p></li>
 </ul>
 </div>
