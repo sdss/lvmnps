@@ -174,100 +174,109 @@ Run the example lvmnps\_dummy
    'ouo' false in the config file, see
    `lvmnps\_dummy.yml <https://github.com/sdss/lvmnps/blob/master/python/lvmnps/etc/lvmnps_dummy.yml>`__
 
-   lvmnps status
+   ::
 
-   12:02:08.649 lvmnps > 
-   12:02:08.660 lvmnps i {
-        "STATUS": {
-            "nps\_dummy\_1.port1": {
-                "STATE": -1, 
-                "DESCR": "was 1", 
-                "SWITCH": "nps\_dummy\_1", 
-                "PORT": 1 
-                }, 
-            "skye.what.ever": {
-                "STATE": -1,
-                "DESCR": "whatever is connected to skye", 
-                "SWITCH": "nps\_dummy\_1",
-                "PORT": 2 
-                }, 
-            "skyw.what.ever": { 
-                "STATE": -1, 
-                "DESCR": "Something @ skyw", 
-                "SWITCH": "nps\_dummy\_1", 
-                "PORT": 4 
-                }, 
-            "skye.pwi": { 
-                "STATE":-1, 
-                "DESCR": "PlaneWavemount Skye", 
-                "SWITCH": "skye.nps", 
-                "PORT": 1
-                }, 
-            "skyw.pwi": { 
-                "STATE": -1, 
-                "DESCR": "PlaneWavemount Skyw",
-                "SWITCH": "nps\_dummy\_3", 
-                "PORT": 1 
-                } 
-            } 
-        }
+            lvmnps status all
+
+            12:02:08.649 lvmnps > 
+            12:02:08.660 lvmnps i {
+                "STATUS": {
+                    "nps\_dummy\_1.port1": {
+                        "STATE": -1, 
+                        "DESCR": "was 1", 
+                        "SWITCH": "nps\_dummy\_1", 
+                        "PORT": 1 
+                        }, 
+                     "skye.what.ever": {
+                         "STATE": -1,
+                         "DESCR": "whatever is connected to skye", 
+                         "SWITCH": "nps\_dummy\_1",
+                         "PORT": 2 
+                         }, 
+                     "skyw.what.ever": { 
+                         "STATE": -1, 
+                         "DESCR": "Something @ skyw", 
+                         "SWITCH": "nps\_dummy\_1", 
+                         "PORT": 4 
+                         }, 
+                     "skye.pwi": { 
+                         "STATE":-1, 
+                         "DESCR": "PlaneWavemount Skye", 
+                         "SWITCH": "skye.nps", 
+                         "PORT": 1
+                         }, 
+                     "skyw.pwi": { 
+                         "STATE": -1, 
+                         "DESCR": "PlaneWavemount Skyw",
+                         "SWITCH": "nps\_dummy\_3", 
+                         "PORT": 1 
+                         } 
+                    }
+                }
 
 -  status command with port name skyw.what.ever
 
-   lvmnps status skyw.what.ever
+   ::
 
-   12:07:12.349 lvmnps > 
-   12:07:12.377 lvmnps i { 
-       "STATUS": {
-           "skyw.what.ever": { 
-               "STATE": -1, 
-               "DESCR": "Something @ skyw",
-               "SWITCH": "nps\_dummy\_1", 
-               "PORT": 4 
-               }
+            lvmnps status what skyw.what.ever
+
+            12:07:12.349 lvmnps > 
+            12:07:12.377 lvmnps i { 
+                "STATUS": {
+                    "skyw.what.ever": { 
+                        "STATE": -1, 
+                        "DESCR": "Something @ skyw",
+                        "SWITCH": "nps\_dummy\_1", 
+                        "PORT": 4 
+                        }
 
 -  status command with switch name nps\_dummy\_1
 
-   lvmnps status nps\_dummy\_1
+   ::
 
-   12:07:12.349 lvmnps > 
-   12:12:21.349 lvmnps i { 
-       "STATUS": {
-           "nps\_dummy\_1.port1": { 
-               "STATE": -1, 
-               "DESCR": "was 1", 
-               "SWITCH": "nps\_dummy\_1", 
-               "PORT": 1 
-               }, 
-            "skye.what.ever": { 
-                "STATE": -1,
-                "DESCR": "whatever is connected to skye", 
-                "SWITCH": "nps\_dummy\_1",
-                "PORT": 2 }, 
-            "skyw.what.ever": { 
-                "STATE": -1, 
-                "DESCR": "Something @ skyw", 
-                "SWITCH": "nps\_dummy\_1", 
-                "PORT": 4 
-                } 
-            } 
-        }
+            lvmnps status what nps\_dummy\_1
+
+            12:07:12.349 lvmnps > 
+            12:12:21.349 lvmnps i { 
+                "STATUS": {
+                    "nps\_dummy\_1.port1": { 
+                        "STATE": -1, 
+                        "DESCR": "was 1", 
+                        "SWITCH": "nps\_dummy\_1", 
+                        "PORT": 1 
+                        }, 
+                    "skye.what.ever": { 
+                        "STATE": -1,
+                        "DESCR": "whatever is connected to skye", 
+                        "SWITCH": "nps\_dummy\_1",
+                        "PORT": 2 
+                        }, 
+                    "skyw.what.ever": { 
+                        "STATE": -1, 
+                        "DESCR": "Something @ skyw", 
+                        "SWITCH": "nps\_dummy\_1", 
+                        "PORT": 4 
+                        } 
+                    } 
+                }
 
 -  status command with switch name nps\_dummy\_1 and port 4 returns
 
-   lvmnps status nps\_dummy\_1 4
+   ::
 
-   12:07:12.349 lvmnps > 
-   12:12:21.349 lvmnps i { 
-       "STATUS": {
-           "skyw.what.ever": { 
-               "STATE": -1, 
-               "DESCR": "Something @ skyw",
-               "SWITCH": "nps\_dummy\_1", 
-               "PORT": 4 
-               } 
-            } 
-        }
+            lvmnps status what nps\_dummy\_1 4
+
+            12:07:12.349 lvmnps > 
+            12:12:21.349 lvmnps i { 
+                "STATUS": {
+                    "skyw.what.ever": { 
+                        "STATE": -1, 
+                        "DESCR": "Something @ skyw",
+                        "SWITCH": "nps\_dummy\_1", 
+                        "PORT": 4 
+                        } 
+                    } 
+                }
 
 -  the commands on and off use the same addressing scheme as status
 
