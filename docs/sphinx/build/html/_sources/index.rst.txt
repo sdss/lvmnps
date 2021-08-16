@@ -14,7 +14,7 @@ Contents
   lvmnps
   switch
   Commands
-  actor-yml
+  actor-schema
   Exceptions
 
 .. toctree::
