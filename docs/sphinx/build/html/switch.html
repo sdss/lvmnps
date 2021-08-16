@@ -8,10 +8,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>switch &#8212; lvmnps 0.1.4 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -41,13 +41,22 @@
 <div class="section" id="module-lvmnps.switch.powerswitchbase">
 <span id="powerswitchbase"></span><h2>powerswitchbase<a class="headerlink" href="#module-lvmnps.switch.powerswitchbase" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="lvmnps.switch.powerswitchbase.PowerSwitchBase">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.powerswitchbase.</span></code><code class="sig-name descname"><span class="pre">PowerSwitchBase</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.powerswitchbase.PowerSwitchBase">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.powerswitchbase.</span></span><span class="sig-name descname"><span class="pre">PowerSwitchBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Powerswitch class to manage the Digital Loggers Web power switch</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – </p></li>
+<li><p><strong>config</strong> (<em>[</em><em>]</em>) – </p></li>
+<li><p><strong>log</strong> (<em>sdsstools.logger.SDSSLogger</em>) – </p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
-<dt id="lvmnps.switch.powerswitchbase.PowerSwitchBase.collectOutletsByNameAndPort">
-<code class="sig-name descname"><span class="pre">collectOutletsByNameAndPort</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portnum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.collectOutletsByNameAndPort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.collectOutletsByNameAndPort" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.powerswitchbase.PowerSwitchBase.collectOutletsByNameAndPort">
+<span class="sig-name descname"><span class="pre">collectOutletsByNameAndPort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portnum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.collectOutletsByNameAndPort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.collectOutletsByNameAndPort" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -59,14 +68,14 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.powerswitchbase.PowerSwitchBase.config_get">
-<code class="sig-name descname"><span class="pre">config_get</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.config_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.config_get" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.powerswitchbase.PowerSwitchBase.config_get">
+<span class="sig-name descname"><span class="pre">config_get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.config_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.config_get" title="Permalink to this definition">¶</a></dt>
 <dd><p>DOESNT work for keys with dots !!!</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.powerswitchbase.PowerSwitchBase.findOutletByName">
-<code class="sig-name descname"><span class="pre">findOutletByName</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.findOutletByName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.findOutletByName" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.powerswitchbase.PowerSwitchBase.findOutletByName">
+<span class="sig-name descname"><span class="pre">findOutletByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.findOutletByName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.findOutletByName" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – </p>
@@ -75,14 +84,14 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.powerswitchbase.PowerSwitchBase.isReachable">
-<em class="property"><span class="pre">abstract</span> <span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">isReachable</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.isReachable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.isReachable" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.powerswitchbase.PowerSwitchBase.isReachable">
+<em class="property"><span class="pre">abstract</span> <span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">isReachable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.isReachable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.isReachable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Verify we can reach the switch, returns true if ok</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.powerswitchbase.PowerSwitchBase.setState">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">setState</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portnum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.setState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.setState" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.powerswitchbase.PowerSwitchBase.setState">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">setState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portnum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.setState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.setState" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -94,13 +103,13 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.powerswitchbase.PowerSwitchBase.start">
-<em class="property"><span class="pre">abstract</span> <span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">start</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.start" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.powerswitchbase.PowerSwitchBase.start">
+<em class="property"><span class="pre">abstract</span> <span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.start" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.powerswitchbase.PowerSwitchBase.statusAsJson">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">statusAsJson</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portnum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.statusAsJson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.statusAsJson" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.powerswitchbase.PowerSwitchBase.statusAsJson">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">statusAsJson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portnum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.statusAsJson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.statusAsJson" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -112,18 +121,18 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.powerswitchbase.PowerSwitchBase.stop">
-<em class="property"><span class="pre">abstract</span> <span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">stop</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.stop" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.powerswitchbase.PowerSwitchBase.stop">
+<em class="property"><span class="pre">abstract</span> <span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.stop" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.powerswitchbase.PowerSwitchBase.switch">
-<em class="property"><span class="pre">abstract</span> <span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">switch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outlets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.switch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.switch" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.powerswitchbase.PowerSwitchBase.switch">
+<em class="property"><span class="pre">abstract</span> <span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">switch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outlets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.switch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.switch" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.powerswitchbase.PowerSwitchBase.update">
-<em class="property"><span class="pre">abstract</span> <span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">update</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outlets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.update" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.powerswitchbase.PowerSwitchBase.update">
+<em class="property"><span class="pre">abstract</span> <span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outlets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/powerswitchbase.html#PowerSwitchBase.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase.update" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -132,38 +141,38 @@
 <div class="section" id="module-lvmnps.switch.outlet">
 <span id="outlet"></span><h2>outlet<a class="headerlink" href="#module-lvmnps.switch.outlet" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="lvmnps.switch.outlet.Outlet">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.outlet.</span></code><code class="sig-name descname"><span class="pre">Outlet</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">swname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portnum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.outlet.Outlet">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.outlet.</span></span><span class="sig-name descname"><span class="pre">Outlet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">swname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portnum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A power outlet class</p>
 <dl class="py method">
-<dt id="lvmnps.switch.outlet.Outlet.isOff">
-<code class="sig-name descname"><span class="pre">isOff</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet.isOff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet.isOff" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.outlet.Outlet.isOff">
+<span class="sig-name descname"><span class="pre">isOff</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet.isOff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet.isOff" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.outlet.Outlet.isOn">
-<code class="sig-name descname"><span class="pre">isOn</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet.isOn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet.isOn" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.outlet.Outlet.isOn">
+<span class="sig-name descname"><span class="pre">isOn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet.isOn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet.isOn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.outlet.Outlet.isValid">
-<code class="sig-name descname"><span class="pre">isValid</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet.isValid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet.isValid" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.outlet.Outlet.isValid">
+<span class="sig-name descname"><span class="pre">isValid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet.isValid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet.isValid" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.outlet.Outlet.parse">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">parse</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet.parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet.parse" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.outlet.Outlet.parse">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet.parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet.parse" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.outlet.Outlet.setState">
-<code class="sig-name descname"><span class="pre">setState</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet.setState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet.setState" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.outlet.Outlet.setState">
+<span class="sig-name descname"><span class="pre">setState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet.setState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet.setState" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.outlet.Outlet.toJson">
-<code class="sig-name descname"><span class="pre">toJson</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet.toJson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet.toJson" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.outlet.Outlet.toJson">
+<span class="sig-name descname"><span class="pre">toJson</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/outlet.html#Outlet.toJson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.outlet.Outlet.toJson" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -172,8 +181,8 @@
 <div class="section" id="module-lvmnps.switch.exceptions">
 <span id="exceptions"></span><h2>exceptions<a class="headerlink" href="#module-lvmnps.switch.exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="py exception">
-<dt id="lvmnps.switch.exceptions.PowerException">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.exceptions.</span></code><code class="sig-name descname"><span class="pre">PowerException</span></code><a class="reference internal" href="_modules/lvmnps/switch/exceptions.html#PowerException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.exceptions.PowerException" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.exceptions.PowerException">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.exceptions.</span></span><span class="sig-name descname"><span class="pre">PowerException</span></span><a class="reference internal" href="_modules/lvmnps/switch/exceptions.html#PowerException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.exceptions.PowerException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.6/library/exceptions.html#Exception" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 <p>An error occurred talking the the DLI Power switch</p>
 </dd></dl>
@@ -184,24 +193,24 @@
 <div class="section" id="module-lvmnps.switch.dli.lvmpower">
 <span id="lvmpower"></span><h3>lvmpower<a class="headerlink" href="#module-lvmnps.switch.dli.lvmpower" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.dli.lvmpower.</span></code><code class="sig-name descname"><span class="pre">PowerSwitch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hostname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_https</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.dli.lvmpower.</span></span><span class="sig-name descname"><span class="pre">PowerSwitch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hostname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_https</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.add_client">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">add_client</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.add_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.add_client" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.add_client">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">add_client</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.add_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.add_client" title="Permalink to this definition">¶</a></dt>
 <dd><p>Access the url object</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.close">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">close</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.close" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.close">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.close" title="Permalink to this definition">¶</a></dt>
 <dd><p>Close the Connection with URL</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.cycle">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">cycle</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outlet_number</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.cycle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.cycle" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.cycle">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">cycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outlet_number</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.cycle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.cycle" title="Permalink to this definition">¶</a></dt>
 <dd><p>cycle power to an outlet</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -211,86 +220,86 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.getstatus">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">getstatus</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.getstatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.getstatus" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.getstatus">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">getstatus</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.getstatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.getstatus" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.geturl">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">geturl</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index.htm'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.geturl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.geturl" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.geturl">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">geturl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index.htm'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.geturl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.geturl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a URL</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.load_configuration">
-<code class="sig-name descname"><span class="pre">load_configuration</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.load_configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.load_configuration" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.load_configuration">
+<span class="sig-name descname"><span class="pre">load_configuration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.load_configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.load_configuration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a configuration dictionary</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.login">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">login</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.login" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.login">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.login" title="Permalink to this definition">¶</a></dt>
 <dd><p>Access plaintext URL logins</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.off">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">off</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outlet_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.off"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.off" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.off">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">off</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outlet_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.off"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.off" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn off power to an outlet
 False = Success
 True = Fail</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.offall">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">offall</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.offall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.offall" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.offall">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">offall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.offall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.offall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn off all outlets</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.on">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">on</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outlet_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.on"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.on" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.on">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">on</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outlet_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.on"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.on" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn on power to an outlet
 False = Success
 True = Fail</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.onall">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">onall</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.onall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.onall" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.onall">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">onall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.onall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.onall" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn on all outlets</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.outletdictionary">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">outletdictionary</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.outletdictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.outletdictionary" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.outletdictionary">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">outletdictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.outletdictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.outletdictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the status of all outlets in a dictionary,
 each item will contain 2 items plugnumber, hostname</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.printstatus">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">printstatus</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.printstatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.printstatus" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.printstatus">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">printstatus</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.printstatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.printstatus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Print the status off all the outlets as a table to stdout</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.statusdictionary">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">statusdictionary</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.statusdictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.statusdictionary" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.statusdictionary">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">statusdictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.statusdictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.statusdictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the status of all outlets in a dictionary,
 each item will contain 2 items plugnumber, status</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.statuslist">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">statuslist</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.statuslist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.statuslist" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.statuslist">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">statuslist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.statuslist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.statuslist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the status of all outlets in a list,
 each item will contain 3 items plugnumber, hostname and state</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.lvmpower.PowerSwitch.verify">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">verify</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.verify" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.lvmpower.PowerSwitch.verify">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/lvmpower.html#PowerSwitch.verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.lvmpower.PowerSwitch.verify" title="Permalink to this definition">¶</a></dt>
 <dd><p>Verify we can reach the switch, returns true if ok</p>
 </dd></dl>
 
@@ -300,34 +309,43 @@ each item will contain 3 items plugnumber, hostname and state</p>
 <div class="section" id="module-lvmnps.switch.dli.powerswitch">
 <span id="powerswitch"></span><h3>Powerswitch<a class="headerlink" href="#module-lvmnps.switch.dli.powerswitch" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
-<dt id="lvmnps.switch.dli.powerswitch.PowerSwitch">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.dli.powerswitch.</span></code><code class="sig-name descname"><span class="pre">PowerSwitch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/powerswitch.html#PowerSwitch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.powerswitch.PowerSwitch" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.powerswitch.PowerSwitch">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.dli.powerswitch.</span></span><span class="sig-name descname"><span class="pre">PowerSwitch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/powerswitch.html#PowerSwitch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.powerswitch.PowerSwitch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase" title="lvmnps.switch.powerswitchbase.PowerSwitchBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">lvmnps.switch.powerswitchbase.PowerSwitchBase</span></code></a></p>
 <p>Powerswitch class to manage the iboot power switch</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – </p></li>
+<li><p><strong>config</strong> (<em>[</em><em>]</em>) – </p></li>
+<li><p><strong>log</strong> (<em>sdsstools.logger.SDSSLogger</em>) – </p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
-<dt id="lvmnps.switch.dli.powerswitch.PowerSwitch.isReachable">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">isReachable</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/powerswitch.html#PowerSwitch.isReachable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.powerswitch.PowerSwitch.isReachable" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.powerswitch.PowerSwitch.isReachable">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">isReachable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/powerswitch.html#PowerSwitch.isReachable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.powerswitch.PowerSwitch.isReachable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Verify we can reach the switch, returns true if ok</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.powerswitch.PowerSwitch.start">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">start</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/powerswitch.html#PowerSwitch.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.powerswitch.PowerSwitch.start" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.powerswitch.PowerSwitch.start">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/powerswitch.html#PowerSwitch.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.powerswitch.PowerSwitch.start" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.powerswitch.PowerSwitch.stop">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">stop</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/powerswitch.html#PowerSwitch.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.powerswitch.PowerSwitch.stop" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.powerswitch.PowerSwitch.stop">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/powerswitch.html#PowerSwitch.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.powerswitch.PowerSwitch.stop" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.powerswitch.PowerSwitch.switch">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">switch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outlets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/powerswitch.html#PowerSwitch.switch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.powerswitch.PowerSwitch.switch" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.powerswitch.PowerSwitch.switch">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">switch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outlets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/powerswitch.html#PowerSwitch.switch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.powerswitch.PowerSwitch.switch" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.dli.powerswitch.PowerSwitch.update">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">update</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outlets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/powerswitch.html#PowerSwitch.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.powerswitch.PowerSwitch.update" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.dli.powerswitch.PowerSwitch.update">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outlets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/dli/powerswitch.html#PowerSwitch.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.dli.powerswitch.PowerSwitch.update" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -363,170 +381,170 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.</p>
 <dl class="py class">
-<dt id="lvmnps.switch.iboot.iboot.ChangeRelayCommand">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></code><code class="sig-name descname"><span class="pre">ChangeRelayCommand</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#ChangeRelayCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.ChangeRelayCommand" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.ChangeRelayCommand">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></span><span class="sig-name descname"><span class="pre">ChangeRelayCommand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#ChangeRelayCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.ChangeRelayCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#lvmnps.switch.iboot.iboot.RelayCommand" title="lvmnps.switch.iboot.iboot.RelayCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">lvmnps.switch.iboot.iboot.RelayCommand</span></code></a></p>
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.ChangeRelayCommand.DESCRIPTOR">
-<code class="sig-name descname"><span class="pre">DESCRIPTOR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'CHANGE_RELAY'</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.ChangeRelayCommand.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.ChangeRelayCommand.DESCRIPTOR">
+<span class="sig-name descname"><span class="pre">DESCRIPTOR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'CHANGE_RELAY'</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.ChangeRelayCommand.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.ChangeRelayCommand.PAYLOAD_STRUCT">
-<code class="sig-name descname"><span class="pre">PAYLOAD_STRUCT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;Struct</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.ChangeRelayCommand.PAYLOAD_STRUCT" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.ChangeRelayCommand.PAYLOAD_STRUCT">
+<span class="sig-name descname"><span class="pre">PAYLOAD_STRUCT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;Struct</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.ChangeRelayCommand.PAYLOAD_STRUCT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="lvmnps.switch.iboot.iboot.ChangeRelaysCommand">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></code><code class="sig-name descname"><span class="pre">ChangeRelaysCommand</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relay_state_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#ChangeRelaysCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.ChangeRelaysCommand" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.ChangeRelaysCommand">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></span><span class="sig-name descname"><span class="pre">ChangeRelaysCommand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relay_state_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#ChangeRelaysCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.ChangeRelaysCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#lvmnps.switch.iboot.iboot.RelayCommand" title="lvmnps.switch.iboot.iboot.RelayCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">lvmnps.switch.iboot.iboot.RelayCommand</span></code></a></p>
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.ChangeRelaysCommand.DESCRIPTOR">
-<code class="sig-name descname"><span class="pre">DESCRIPTOR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'CHANGE_RELAYS'</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.ChangeRelaysCommand.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.ChangeRelaysCommand.DESCRIPTOR">
+<span class="sig-name descname"><span class="pre">DESCRIPTOR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'CHANGE_RELAYS'</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.ChangeRelaysCommand.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.ChangeRelaysCommand.PAYLOAD_STRUCT">
-<code class="sig-name descname"><span class="pre">PAYLOAD_STRUCT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;Struct</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.ChangeRelaysCommand.PAYLOAD_STRUCT" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.ChangeRelaysCommand.PAYLOAD_STRUCT">
+<span class="sig-name descname"><span class="pre">PAYLOAD_STRUCT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;Struct</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.ChangeRelaysCommand.PAYLOAD_STRUCT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="lvmnps.switch.iboot.iboot.DXPCommand">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></code><code class="sig-name descname"><span class="pre">DXPCommand</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#DXPCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.DXPCommand" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.DXPCommand">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></span><span class="sig-name descname"><span class="pre">DXPCommand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#DXPCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.DXPCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.iboot.DXPCommand.do_request">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">do_request</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#DXPCommand.do_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.DXPCommand.do_request" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.DXPCommand.do_request">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">do_request</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#DXPCommand.do_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.DXPCommand.do_request" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.DXPCommand.COMMAND">
-<code class="sig-name descname"><span class="pre">COMMAND</span></code><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.DXPCommand.COMMAND" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.DXPCommand.COMMAND">
+<span class="sig-name descname"><span class="pre">COMMAND</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.DXPCommand.COMMAND" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.DXPCommand.DESCRIPTOR">
-<code class="sig-name descname"><span class="pre">DESCRIPTOR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.DXPCommand.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.DXPCommand.DESCRIPTOR">
+<span class="sig-name descname"><span class="pre">DESCRIPTOR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.DXPCommand.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.DXPCommand.DESCRIPTOR_MAP">
-<code class="sig-name descname"><span class="pre">DESCRIPTOR_MAP</span></code><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.DXPCommand.DESCRIPTOR_MAP" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.DXPCommand.DESCRIPTOR_MAP">
+<span class="sig-name descname"><span class="pre">DESCRIPTOR_MAP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.DXPCommand.DESCRIPTOR_MAP" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.DXPCommand.PAYLOAD_STRUCT">
-<code class="sig-name descname"><span class="pre">PAYLOAD_STRUCT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.DXPCommand.PAYLOAD_STRUCT" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.DXPCommand.PAYLOAD_STRUCT">
+<span class="sig-name descname"><span class="pre">PAYLOAD_STRUCT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.DXPCommand.PAYLOAD_STRUCT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="lvmnps.switch.iboot.iboot.GetRelaysRequest">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></code><code class="sig-name descname"><span class="pre">GetRelaysRequest</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#GetRelaysRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.GetRelaysRequest" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.GetRelaysRequest">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></span><span class="sig-name descname"><span class="pre">GetRelaysRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#GetRelaysRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.GetRelaysRequest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#lvmnps.switch.iboot.iboot.IOCommand" title="lvmnps.switch.iboot.iboot.IOCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">lvmnps.switch.iboot.iboot.IOCommand</span></code></a></p>
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.iboot.GetRelaysRequest.do_request">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">do_request</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#GetRelaysRequest.do_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.GetRelaysRequest.do_request" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.GetRelaysRequest.do_request">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">do_request</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#GetRelaysRequest.do_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.GetRelaysRequest.do_request" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.GetRelaysRequest.DESCRIPTOR">
-<code class="sig-name descname"><span class="pre">DESCRIPTOR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'GET_RELAYS'</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.GetRelaysRequest.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.GetRelaysRequest.DESCRIPTOR">
+<span class="sig-name descname"><span class="pre">DESCRIPTOR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'GET_RELAYS'</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.GetRelaysRequest.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="lvmnps.switch.iboot.iboot.IOCommand">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></code><code class="sig-name descname"><span class="pre">IOCommand</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#IOCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.IOCommand" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.IOCommand">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></span><span class="sig-name descname"><span class="pre">IOCommand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#IOCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.IOCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#lvmnps.switch.iboot.iboot.DXPCommand" title="lvmnps.switch.iboot.iboot.DXPCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">lvmnps.switch.iboot.iboot.DXPCommand</span></code></a></p>
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.IOCommand.COMMAND">
-<code class="sig-name descname"><span class="pre">COMMAND</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'IO'</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.IOCommand.COMMAND" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.IOCommand.COMMAND">
+<span class="sig-name descname"><span class="pre">COMMAND</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'IO'</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.IOCommand.COMMAND" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.IOCommand.DESCRIPTOR_MAP">
-<code class="sig-name descname"><span class="pre">DESCRIPTOR_MAP</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{'CHANGE_RELAY':</span> <span class="pre">1,</span> <span class="pre">'CHANGE_RELAYS':</span> <span class="pre">2,</span> <span class="pre">'GET_INPUT':</span> <span class="pre">5,</span> <span class="pre">'GET_INPUTS':</span> <span class="pre">6,</span> <span class="pre">'GET_RELAY':</span> <span class="pre">3,</span> <span class="pre">'GET_RELAYS':</span> <span class="pre">4,</span> <span class="pre">'NULL':</span> <span class="pre">0,</span> <span class="pre">'PULSE_RELAY':</span> <span class="pre">7}</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.IOCommand.DESCRIPTOR_MAP" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.IOCommand.DESCRIPTOR_MAP">
+<span class="sig-name descname"><span class="pre">DESCRIPTOR_MAP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'CHANGE_RELAY':</span> <span class="pre">1,</span> <span class="pre">'CHANGE_RELAYS':</span> <span class="pre">2,</span> <span class="pre">'GET_INPUT':</span> <span class="pre">5,</span> <span class="pre">'GET_INPUTS':</span> <span class="pre">6,</span> <span class="pre">'GET_RELAY':</span> <span class="pre">3,</span> <span class="pre">'GET_RELAYS':</span> <span class="pre">4,</span> <span class="pre">'NULL':</span> <span class="pre">0,</span> <span class="pre">'PULSE_RELAY':</span> <span class="pre">7}</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.IOCommand.DESCRIPTOR_MAP" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="lvmnps.switch.iboot.iboot.PulseRelayRequest">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></code><code class="sig-name descname"><span class="pre">PulseRelayRequest</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#PulseRelayRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.PulseRelayRequest" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.PulseRelayRequest">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></span><span class="sig-name descname"><span class="pre">PulseRelayRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#PulseRelayRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.PulseRelayRequest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#lvmnps.switch.iboot.iboot.RelayCommand" title="lvmnps.switch.iboot.iboot.RelayCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">lvmnps.switch.iboot.iboot.RelayCommand</span></code></a></p>
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.PulseRelayRequest.DESCRIPTOR">
-<code class="sig-name descname"><span class="pre">DESCRIPTOR</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'PULSE_RELAY'</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.PulseRelayRequest.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.PulseRelayRequest.DESCRIPTOR">
+<span class="sig-name descname"><span class="pre">DESCRIPTOR</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'PULSE_RELAY'</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.PulseRelayRequest.DESCRIPTOR" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.PulseRelayRequest.PAYLOAD_STRUCT">
-<code class="sig-name descname"><span class="pre">PAYLOAD_STRUCT</span></code><em class="property"> <span class="pre">=</span> <span class="pre">&lt;Struct</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.PulseRelayRequest.PAYLOAD_STRUCT" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.PulseRelayRequest.PAYLOAD_STRUCT">
+<span class="sig-name descname"><span class="pre">PAYLOAD_STRUCT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;Struct</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.PulseRelayRequest.PAYLOAD_STRUCT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="lvmnps.switch.iboot.iboot.RelayCommand">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></code><code class="sig-name descname"><span class="pre">RelayCommand</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#RelayCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.RelayCommand" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.RelayCommand">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></span><span class="sig-name descname"><span class="pre">RelayCommand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#RelayCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.RelayCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#lvmnps.switch.iboot.iboot.IOCommand" title="lvmnps.switch.iboot.iboot.IOCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">lvmnps.switch.iboot.iboot.IOCommand</span></code></a></p>
 <dl class="py attribute">
-<dt id="lvmnps.switch.iboot.iboot.RelayCommand.STATE_MAP">
-<code class="sig-name descname"><span class="pre">STATE_MAP</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{True:</span> <span class="pre">1,</span> <span class="pre">False:</span> <span class="pre">0,</span> <span class="pre">'NO_CHANGE':</span> <span class="pre">2}</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.RelayCommand.STATE_MAP" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.RelayCommand.STATE_MAP">
+<span class="sig-name descname"><span class="pre">STATE_MAP</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{True:</span> <span class="pre">1,</span> <span class="pre">False:</span> <span class="pre">0,</span> <span class="pre">'NO_CHANGE':</span> <span class="pre">2}</span></em><a class="headerlink" href="#lvmnps.switch.iboot.iboot.RelayCommand.STATE_MAP" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="lvmnps.switch.iboot.iboot.iBootInterface">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></code><code class="sig-name descname"><span class="pre">iBootInterface</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_relays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.iBootInterface">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.iboot.</span></span><span class="sig-name descname"><span class="pre">iBootInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_relays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.iboot.iBootInterface.connect">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">connect</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.connect" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.iBootInterface.connect">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.connect" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.iboot.iBootInterface.disconnect">
-<code class="sig-name descname"><span class="pre">disconnect</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.disconnect" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.iBootInterface.disconnect">
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.disconnect" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.iboot.iBootInterface.get_relays">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">get_relays</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.get_relays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.get_relays" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.iBootInterface.get_relays">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">get_relays</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.get_relays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.get_relays" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.iboot.iBootInterface.get_seq_num">
-<code class="sig-name descname"><span class="pre">get_seq_num</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.get_seq_num"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.get_seq_num" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.iBootInterface.get_seq_num">
+<span class="sig-name descname"><span class="pre">get_seq_num</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.get_seq_num"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.get_seq_num" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.iboot.iBootInterface.increment_seq_num">
-<code class="sig-name descname"><span class="pre">increment_seq_num</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.increment_seq_num"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.increment_seq_num" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.iBootInterface.increment_seq_num">
+<span class="sig-name descname"><span class="pre">increment_seq_num</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.increment_seq_num"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.increment_seq_num" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.iboot.iBootInterface.pulse_relay">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">pulse_relay</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.pulse_relay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.pulse_relay" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.iBootInterface.pulse_relay">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">pulse_relay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.pulse_relay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.pulse_relay" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.iboot.iBootInterface.switch">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">switch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.switch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.switch" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.iBootInterface.switch">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">switch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.switch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.switch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Switch the given relay on or off</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.iboot.iBootInterface.switch_multiple">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">switch_multiple</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relay_state_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.switch_multiple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.switch_multiple" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.iboot.iBootInterface.switch_multiple">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">switch_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">relay_state_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/iboot.html#iBootInterface.switch_multiple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.iboot.iBootInterface.switch_multiple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the state of multiple relays at once</p>
 <dl class="simple">
 <dt>State dictionary should be of the form:</dt><dd><p>{1: True}</p>
@@ -541,34 +559,43 @@ either expressed or implied, of the FreeBSD Project.</p>
 <div class="section" id="id3">
 <h3>Powerswitch<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <span class="target" id="module-lvmnps.switch.iboot.powerswitch"></span><dl class="py class">
-<dt id="lvmnps.switch.iboot.powerswitch.PowerSwitch">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.powerswitch.</span></code><code class="sig-name descname"><span class="pre">PowerSwitch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/powerswitch.html#PowerSwitch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.powerswitch.PowerSwitch" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.powerswitch.PowerSwitch">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lvmnps.switch.iboot.powerswitch.</span></span><span class="sig-name descname"><span class="pre">PowerSwitch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/powerswitch.html#PowerSwitch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.powerswitch.PowerSwitch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#lvmnps.switch.powerswitchbase.PowerSwitchBase" title="lvmnps.switch.powerswitchbase.PowerSwitchBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">lvmnps.switch.powerswitchbase.PowerSwitchBase</span></code></a></p>
 <p>Powerswitch class to manage the iboot power switch</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – </p></li>
+<li><p><strong>config</strong> (<em>[</em><em>]</em>) – </p></li>
+<li><p><strong>log</strong> (<em>sdsstools.logger.SDSSLogger</em>) – </p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.powerswitch.PowerSwitch.isReachable">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">isReachable</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/powerswitch.html#PowerSwitch.isReachable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.powerswitch.PowerSwitch.isReachable" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.powerswitch.PowerSwitch.isReachable">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">isReachable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/powerswitch.html#PowerSwitch.isReachable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.powerswitch.PowerSwitch.isReachable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Verify we can reach the switch, returns true if ok</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.powerswitch.PowerSwitch.start">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">start</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/powerswitch.html#PowerSwitch.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.powerswitch.PowerSwitch.start" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.powerswitch.PowerSwitch.start">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/powerswitch.html#PowerSwitch.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.powerswitch.PowerSwitch.start" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.powerswitch.PowerSwitch.stop">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">stop</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/powerswitch.html#PowerSwitch.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.powerswitch.PowerSwitch.stop" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.powerswitch.PowerSwitch.stop">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/powerswitch.html#PowerSwitch.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.powerswitch.PowerSwitch.stop" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.powerswitch.PowerSwitch.switch">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">switch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outlets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/powerswitch.html#PowerSwitch.switch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.powerswitch.PowerSwitch.switch" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.powerswitch.PowerSwitch.switch">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">switch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outlets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/powerswitch.html#PowerSwitch.switch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.powerswitch.PowerSwitch.switch" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="lvmnps.switch.iboot.powerswitch.PowerSwitch.update">
-<em class="property"><span class="pre">async</span> </em><code class="sig-name descname"><span class="pre">update</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outlets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/powerswitch.html#PowerSwitch.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.powerswitch.PowerSwitch.update" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lvmnps.switch.iboot.powerswitch.PowerSwitch.update">
+<em class="property"><span class="pre">async</span> </em><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outlets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lvmnps/switch/iboot/powerswitch.html#PowerSwitch.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lvmnps.switch.iboot.powerswitch.PowerSwitch.update" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -644,7 +671,7 @@ either expressed or implied, of the FreeBSD Project.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -658,7 +685,7 @@ either expressed or implied, of the FreeBSD Project.</p>
       &copy;2021, SDSS LVMI softwareteam in Kyung Hee university.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
