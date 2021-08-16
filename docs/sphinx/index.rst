@@ -16,12 +16,6 @@ Contents
   Commands
   actor-schema
   Exceptions
-
-.. toctree::
-  :caption: Development
-  :maxdepth: 3
-  :hidden:
-
   Changelog <changelog>
   GitHub Repository <https://github.com/sdss/lvmnps>
 
