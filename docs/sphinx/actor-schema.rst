@@ -3,7 +3,7 @@
 Actor schema
 ============
 
-.. jsonschema::
+This is configuration file for the hardware connected with the NPS.
 
    ::
 
