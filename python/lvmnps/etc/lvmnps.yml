@@ -1,6 +1,6 @@
 # A dictionary of controller name to NPS controller connection parameters.
 switches:
-    nps1:
+    DLI Controller:
         type: dli
         hostname: 163.180.145.123
         port: 80
