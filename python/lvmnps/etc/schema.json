@@ -1,4 +1,8 @@
 {
+   "$schema": "http://json-schema.org/draft-07/schema",
+   "definitions": {},
+   "type": "object",
+   
     "switches": {
        "DLI-NPS-01": {
           "type": "dli",
