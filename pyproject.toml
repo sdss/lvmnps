@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "sdss-lvmnps"
-version = "0.1.4"
+version = "0.2.0"
 description = "Simple Template package for creating SDSS Python projects"
 authors = ["Changgon Kim <changgonkim@khu.ac.kr>"]
 license = "BSD-3-Clause"
 readme = "README.md"
 homepage = "https://github.com/sdss/lvmnps"
 repository = "https://github.com/sdss/lvmnps"
-documentation = "https://sdss-lvmnps.readthedocs.org"
+documentation = "https://lvmnps.readthedocs.org"
 keywords = ["astronomy", "software"]
 classifiers = [
     "Intended Audience :: Science/Research",

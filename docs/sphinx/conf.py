@@ -15,11 +15,11 @@ from pkg_resources import parse_version
 
 
 try:
-    from npsactor import __version__
+    from lvmnps import __version__
 except ModuleNotFoundError:
     from sdsstools import get_package_version
 
-    __version__ = get_package_version(__file__, "sdss-npsactor") or "dev"
+    __version__ = get_package_version(__file__, "sdss-lvmnps") or "dev"
 
 
 # Are we building in RTD?
