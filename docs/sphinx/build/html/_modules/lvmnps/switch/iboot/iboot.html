@@ -1,0 +1,462 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lvmnps.switch.iboot.iboot &#8212; lvmnps 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for lvmnps.switch.iboot.iboot</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2013, Luke Fitzgerald</span>
+<span class="sd">All rights reserved.</span>
+
+<span class="sd">Redistribution and use in source and binary forms, with or without</span>
+<span class="sd">modification, are permitted provided that the following conditions are met:</span>
+
+<span class="sd">1. Redistributions of source code must retain the above copyright notice, this</span>
+<span class="sd">   list of conditions and the following disclaimer.</span>
+<span class="sd">2. Redistributions in binary form must reproduce the above copyright notice,</span>
+<span class="sd">   this list of conditions and the following disclaimer in the documentation</span>
+<span class="sd">   and/or other materials provided with the distribution.</span>
+
+<span class="sd">THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND</span>
+<span class="sd">ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</span>
+<span class="sd">WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</span>
+<span class="sd">DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR</span>
+<span class="sd">ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</span>
+<span class="sd">(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</span>
+<span class="sd">LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</span>
+<span class="sd">ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span>
+<span class="sd">(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</span>
+<span class="sd">SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+
+<span class="sd">The views and conclusions contained in the software and documentation are those</span>
+<span class="sd">of the authors and should not be interpreted as representing official policies,</span>
+<span class="sd">either expressed or implied, of the FreeBSD Project.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+
+
+<span class="n">HELLO_STR</span> <span class="o">=</span> <span class="s2">&quot;hello-000&quot;</span>
+
+<span class="n">HEADER_STRUCT</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">Struct</span><span class="p">(</span><span class="s2">&quot;&lt;B21s21sBBH&quot;</span><span class="p">)</span>
+
+<span class="n">COMMAND_MAP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;NULL&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;SET&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;GET&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;IO&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;KEEPALIVE&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s2">&quot;RSS&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s2">&quot;RCU&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">SOCKET_TIMEOUT</span> <span class="o">=</span> <span class="mi">1</span>
+
+
+<div class="viewcode-block" id="DXPCommand"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.DXPCommand">[docs]</a><span class="k">class</span> <span class="nc">DXPCommand</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">COMMAND</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">DESCRIPTOR_MAP</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">DESCRIPTOR</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">PAYLOAD_STRUCT</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interface</span> <span class="o">=</span> <span class="n">interface</span>
+
+    <span class="k">def</span> <span class="nf">_build_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">COMMAND</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;&#39;COMMAND&#39; type not specified for class&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">DESCRIPTOR_MAP</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;&#39;DESCRIPTOR_MAP&#39; not specified for class&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">DESCRIPTOR</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;&#39;DESCRIPTOR&#39; type not specified for class&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">HEADER_STRUCT</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span>
+            <span class="n">COMMAND_MAP</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">COMMAND</span><span class="p">],</span>
+            <span class="nb">bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
+            <span class="nb">bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DESCRIPTOR_MAP</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">DESCRIPTOR</span><span class="p">],</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">get_seq_num</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_build_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">pack_args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">PAYLOAD_STRUCT</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;&#39;PAYLOAD_STRUCT&#39; not specified for class&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">PAYLOAD_STRUCT</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="o">*</span><span class="n">pack_args</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_get_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">socket</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse the response from the request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;get_response method not implemented&quot;</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_get_boolean_response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># response = self.interface.socket.recv(1)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">sock_recv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">socket</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">increment_seq_num</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_bool</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_parse_bool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">string</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<div class="viewcode-block" id="DXPCommand.do_request"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.DXPCommand.do_request">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">do_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_header</span><span class="p">()</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_payload</span><span class="p">()</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">payload</span>
+        <span class="c1"># self.interface.socket.sendall(request)</span>
+        <span class="c1"># self.interface.socket.sendall(bytes(request, &#39;utf-8&#39;))</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">sock_sendall</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">socket</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_response</span><span class="p">()</span></div>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_do_payloadless_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_header</span><span class="p">()</span>
+        <span class="c1"># self.interface.socket.sendall(request)</span>
+        <span class="c1"># self.interface.socket.sendall(bytes(request, &#39;utf-8&#39;))</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">sock_sendall</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">socket</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_response</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="IOCommand"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.IOCommand">[docs]</a><span class="k">class</span> <span class="nc">IOCommand</span><span class="p">(</span><span class="n">DXPCommand</span><span class="p">):</span>
+    <span class="n">COMMAND</span> <span class="o">=</span> <span class="s2">&quot;IO&quot;</span>
+    <span class="n">DESCRIPTOR_MAP</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;NULL&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;CHANGE_RELAY&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;CHANGE_RELAYS&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;GET_RELAY&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="s2">&quot;GET_RELAYS&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s2">&quot;GET_INPUT&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s2">&quot;GET_INPUTS&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s2">&quot;PULSE_RELAY&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="RelayCommand"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.RelayCommand">[docs]</a><span class="k">class</span> <span class="nc">RelayCommand</span><span class="p">(</span><span class="n">IOCommand</span><span class="p">):</span>
+    <span class="n">STATE_MAP</span> <span class="o">=</span> <span class="p">{</span><span class="kc">True</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">False</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;NO_CHANGE&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_get_response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_boolean_response</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ChangeRelayCommand"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.ChangeRelayCommand">[docs]</a><span class="k">class</span> <span class="nc">ChangeRelayCommand</span><span class="p">(</span><span class="n">RelayCommand</span><span class="p">):</span>
+    <span class="n">DESCRIPTOR</span> <span class="o">=</span> <span class="s2">&quot;CHANGE_RELAY&quot;</span>
+    <span class="n">PAYLOAD_STRUCT</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">Struct</span><span class="p">(</span><span class="s2">&quot;&lt;BB&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="p">,</span> <span class="n">relay</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ChangeRelayCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relay</span> <span class="o">=</span> <span class="n">relay</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span>
+
+    <span class="k">def</span> <span class="nf">_build_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ChangeRelayCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_build_payload</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">relay</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">STATE_MAP</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">]</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ChangeRelaysCommand"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.ChangeRelaysCommand">[docs]</a><span class="k">class</span> <span class="nc">ChangeRelaysCommand</span><span class="p">(</span><span class="n">RelayCommand</span><span class="p">):</span>
+    <span class="n">DESCRIPTOR</span> <span class="o">=</span> <span class="s2">&quot;CHANGE_RELAYS&quot;</span>
+    <span class="n">PAYLOAD_STRUCT</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">Struct</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;B&quot;</span> <span class="o">*</span> <span class="mi">32</span><span class="p">))</span>  <span class="c1"># 32 unsigned chars</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="p">,</span> <span class="n">relay_state_dict</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ChangeRelaysCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relay_state_dict</span> <span class="o">=</span> <span class="n">relay_state_dict</span>
+
+    <span class="k">def</span> <span class="nf">_build_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">state_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">relay_state_dict</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">relay</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">relay</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">relay_state_dict</span><span class="p">:</span>
+                <span class="n">state_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STATE_MAP</span><span class="p">[</span><span class="s2">&quot;NO_CHANGE&quot;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">state_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STATE_MAP</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">relay_state_dict</span><span class="p">[</span><span class="n">relay</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">state_list</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ChangeRelaysCommand</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_build_payload</span><span class="p">(</span><span class="o">*</span><span class="n">state_list</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GetRelaysRequest"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.GetRelaysRequest">[docs]</a><span class="k">class</span> <span class="nc">GetRelaysRequest</span><span class="p">(</span><span class="n">IOCommand</span><span class="p">):</span>
+    <span class="n">DESCRIPTOR</span> <span class="o">=</span> <span class="s2">&quot;GET_RELAYS&quot;</span>
+
+<div class="viewcode-block" id="GetRelaysRequest.do_request"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.GetRelaysRequest.do_request">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">do_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_do_payloadless_request</span><span class="p">()</span></div>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_get_response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># response = self.interface.socket.recv(self.interface.num_relays)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">sock_recv</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">socket</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">num_relays</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">increment_seq_num</span><span class="p">()</span>
+        <span class="c1"># return [True if ord(str(relay_status)) == 1 else False</span>
+        <span class="k">return</span> <span class="p">[</span><span class="kc">True</span> <span class="k">if</span> <span class="n">relay_status</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">relay_status</span> <span class="ow">in</span> <span class="n">response</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="PulseRelayRequest"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.PulseRelayRequest">[docs]</a><span class="k">class</span> <span class="nc">PulseRelayRequest</span><span class="p">(</span><span class="n">RelayCommand</span><span class="p">):</span>
+    <span class="n">DESCRIPTOR</span> <span class="o">=</span> <span class="s2">&quot;PULSE_RELAY&quot;</span>
+    <span class="n">PAYLOAD_STRUCT</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">Struct</span><span class="p">(</span><span class="s2">&quot;&lt;BBH&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="p">,</span> <span class="n">relay</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PulseRelayRequest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">interface</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relay</span> <span class="o">=</span> <span class="n">relay</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+
+    <span class="k">def</span> <span class="nf">_build_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PulseRelayRequest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_build_payload</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">relay</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">STATE_MAP</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="iBootInterface"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.iBootInterface">[docs]</a><span class="k">class</span> <span class="nc">iBootInterface</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">num_relays</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9100</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="n">ip</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_relays</span> <span class="o">=</span> <span class="n">num_relays</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq_num</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">log</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">log</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;iBootInterface&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+
+<div class="viewcode-block" id="iBootInterface.get_seq_num"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.iBootInterface.get_seq_num">[docs]</a>    <span class="k">def</span> <span class="nf">get_seq_num</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">seq_num</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq_num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq_num</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">seq_num</span></div>
+
+<div class="viewcode-block" id="iBootInterface.increment_seq_num"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.iBootInterface.increment_seq_num">[docs]</a>    <span class="k">def</span> <span class="nf">increment_seq_num</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq_num</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="iBootInterface.connect"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.iBootInterface.connect">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="n">SOCKET_TIMEOUT</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># self.socket.connect((self.ip, self.port))</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">sock_connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Socket failed to connect&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># self.socket.sendall(bytes(HELLO_STR, &#39;utf-8&#39;))</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">sock_sendall</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">HELLO_STR</span><span class="p">,</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_initial_seq_num</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Socket error&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_get_initial_seq_num</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># response = self.socket.recv(2)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">sock_recv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq_num</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="iBootInterface.disconnect"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.iBootInterface.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="iBootInterface.switch"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.iBootInterface.switch">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">switch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relay</span><span class="p">,</span> <span class="n">on</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Switch the given relay on or off&quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">ChangeRelayCommand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relay</span><span class="p">,</span> <span class="n">on</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">do_request</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="iBootInterface.switch_multiple"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.iBootInterface.switch_multiple">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">switch_multiple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relay_state_dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Change the state of multiple relays at once</span>
+
+<span class="sd">        State dictionary should be of the form:</span>
+<span class="sd">            {1: True}</span>
+<span class="sd">        where the key is the relay and the value is the new state</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">relay</span><span class="p">,</span> <span class="n">new_state</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">relay_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="n">request</span> <span class="o">=</span> <span class="n">ChangeRelayCommand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relay</span><span class="p">,</span> <span class="n">new_state</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">do_request</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="iBootInterface.get_relays"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.iBootInterface.get_relays">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_relays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">GetRelaysRequest</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">do_request</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="iBootInterface.pulse_relay"><a class="viewcode-back" href="../../../../switch.html#lvmnps.switch.iboot.iboot.iBootInterface.pulse_relay">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">pulse_relay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relay</span><span class="p">,</span> <span class="n">on</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">PulseRelayRequest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relay</span><span class="p">,</span> <span class="n">on</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">request</span><span class="o">.</span><span class="n">do_request</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">interface</span> <span class="o">=</span> <span class="n">iBootInterface</span><span class="p">(</span><span class="s2">&quot;192.168.0.105&quot;</span><span class="p">,</span> <span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">interface</span><span class="o">.</span><span class="n">get_relays</span><span class="p">()))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">interface</span><span class="o">.</span><span class="n">switch</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="kc">False</span><span class="p">)))</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/sdssv_logo.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=sdss&repo=lvmnps&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../lvmnps.html">lvmnps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../switch.html">switch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../actor-schema.html">Actor schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Exceptions.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/sdss/lvmnps">GitHub Repository</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, SDSS LVMI softwareteam in Kyung Hee university.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+    <a href="https://github.com/sdss/lvmnps" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
