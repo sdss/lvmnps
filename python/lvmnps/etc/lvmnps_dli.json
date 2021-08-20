@@ -1,103 +1,148 @@
 {
-    "switches": {
-       "DLI-NPS-01": {
-          "type": "dli",
-          "name": "LVM-PSU-01",
-          "hostname": "10.7.45.22",
-          "use_https": false,
-          "user": "admin",
-          "password": "rLXR3KxUqiCPGvA",
-          "numports": 8,
-          "ouo": false,
-          "ports": {
-             "1": {
-                "name": "LVM-ARCHON-02",
-                "desc": "Archon controller"
-             },
-             "2": {
-                "name": "-",
-                "desc": ""
-             },
-             "3": {
-                "name": "Hg-Ar Lamp",
-                "desc": "spectral calibrationh lamp"
-             },
-             "4": {
-                "name": "MI-150 Light Source",
-                "desc": ""
-             },
-             "5": {
-                "name": "LVM IEB 02 (Spec Controller)",
-                "desc": "OSU spectrograph controller"
-             },
-             "6": {
-                "name": "LVM-ARCHON-01",
-                "desc": "Archon controller"
-             },
-             "7": {
-                "name": "625 nm LED (M625L4)",
-                "desc": "LED"
-             },
-             "8": {
-                "name": "LVM IEB 06 (Spec Controller) ",
-                "desc": "OSU spectrograph controller"
-             },
-             "num": 1
-          }
-       },
-       "DLI-NPS-02": {
-          "type": "dli",
-          "name": "LVM-PSU-02",
-          "hostname": "10.7.45.29",
-          "use_https": false,
-          "user": "admin",
-          "password": "VCrht9wfx2CQN9b",
-          "numports": 8,
-          "ouo": false,
-          "ports": {
-             "1": {
-                "name": "Router/Switch",
-                "desc": "Router power switch"
-             },
-             "2": {
-                "name": "Ln2 NIR valve",
-                "desc": "LVM Instrument Electronic Box"
-             },
-             "3": {
-                "name": "LVM-Archon-02",
-                "desc": ""
-             },
-             "4": {
-                "name": "IEB06",
-                "desc": "Archon controller"
-             },
-             "5": {
-                "name": null,
-                "desc": "Raspberry Pi PC"
-             },
-             "6": {
-                "name": "RPi",
-                "desc": "Cryogenic solenoid valve for liquid nitrogen."
-             },
-             "7": {
-                "name": "FFS LED",
-                "desc": ""
-             },
-             "8": {
-                "name": "Pressure transducers",
-                "desc": "Pressure transducers"
-             },
-             "num": 1
-          }
-       }
-    },
-    "timeouts": {
-       "switch_connect": 3
-    },
-    "actor": {
-       "name": "lvmnps",
-       "host": "localhost",
-       "port": 5672,
-       "log_dir": "~/tmp/log"
-    }
- }
+   "switches": {
+      "DLI-NPS-01": {
+         "type": "dli",
+         "name": null,
+         "hostname": "10.7.45.22",
+         "use_https": false,
+         "user": "admin",
+         "password": "rLXR3KxUqiCPGvA",
+         "numports": 8,
+         "ouo": false,
+         "ports": {
+            "1": {
+               "name": "",
+               "desc": ""
+            },
+            "2": {
+               "name": "-",
+               "desc": ""
+            },
+            "3": {
+               "name": "",
+               "desc": ""
+            },
+            "4": {
+               "name": "",
+               "desc": ""
+            },
+            "5": {
+               "name": "",
+               "desc": ""
+            },
+            "6": {
+               "name": "",
+               "desc": ""
+            },
+            "7": {
+               "name": "",
+               "desc": ""
+            },
+            "8": {
+               "name": "625 nm LED (M625L4)",
+               "desc": "LED"
+            },
+            "num": 1
+         }
+      },
+      "DLI-NPS-02": {
+         "type": "dli",
+         "name": "LVM-PSU-02",
+         "hostname": "10.7.45.29",
+         "use_https": false,
+         "user": "admin",
+         "password": "VCrht9wfx2CQN9b",
+         "numports": 8,
+         "ouo": false,
+         "ports": {
+            "1": {
+               "name": "Router/Switch",
+               "desc": "Router power switch"
+            },
+            "2": {
+               "name": "LN2 NIR valve",
+               "desc": "Cryogenic solenoid valve of NIR camera for liquid nitrogen."
+            },
+            "3": {
+               "name": "LVM-Archon-02",
+               "desc": "Archon controller"
+            },
+            "4": {
+               "name": "IEB06",
+               "desc": "LVM Instrument Electronic Box"
+            },
+            "5": {
+               "name": "LN2 Red Valve",
+               "desc": "Cryogenic solenoid valve of Red camera for liquid nitrogen."
+            },
+            "6": {
+               "name": "RPi",
+               "desc": "Raspberry Pi"
+            },
+            "7": {
+               "name": "FFS LED",
+               "desc": "LED"
+            },
+            "8": {
+               "name": "Pressure transducers",
+               "desc": "Pressure transducers"
+            },
+            "num": 1
+         }
+      },
+      "DLI-NPS-03": {
+         "type": "dli",
+         "name": "DLI Controller",
+         "hostname": "10.7.45.31",
+         "use_https": false,
+         "user": "admin",
+         "password": "JNC_zbf5tdc4deb*npx",
+         "numports": 8,
+         "ouo": false,
+         "ports": {
+            "1": {
+               "name": "Argon",
+               "desc": "Hg-Ar spectral calibration Lamp"
+            },
+            "2": {
+               "name": "Outlet 2",
+               "desc": ""
+            },
+            "3": {
+               "name": "Outlet 3",
+               "desc": ""
+            },
+            "4": {
+               "name": "LDLS",
+               "desc": "LDLS spectral calibration Lamp"
+            },
+            "5": {
+               "name": "Krypton",
+               "desc": "Krypton spectral calibration Lamp"
+            },
+            "6": {
+               "name": "Neon",
+               "desc": "Neon spectral calibration Lamp"
+            },
+            "7": {
+               "name": "Outlet 7",
+               "desc": ""
+            },
+            "8": {
+               "name": "Outlet 8",
+               "desc": ""
+            },
+            "num": 1
+         }
+      }
+   },
+   "timeouts": {
+      "switch_connect": 3
+   },
+   "actor": {
+      "name": "lvmnps",
+      "host": "localhost",
+      "port": 5672,
+      "log_dir": "~/tmp/log"
+   }
+}
