@@ -72,7 +72,7 @@ switches:
           num: 5
           5:
             name: 
-            desc: "Raspberry Pi PC"
+            desc: ""
           num: 6
           6:
             name: "RPi"
