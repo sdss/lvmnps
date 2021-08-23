@@ -14,7 +14,6 @@ Contents
   lvmnps
   switch
   Commands
-  actor-schema
   Exceptions
   Changelog <changelog>
   GitHub Repository <https://github.com/sdss/lvmnps>
