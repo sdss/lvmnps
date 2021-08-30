@@ -63,8 +63,8 @@ Help command
 First you can confirm the existing commands of *lvmnps* by the *help* command ::
 
     lvmnps help
-    04:59:02.371 lvmnps > 
-    04:59:02.383 lvmnps : {
+    09:26:59.497 lvmnps > 
+    09:26:59.512 lvmnps : {
         "help": [
             "Usage: lvmnps [OPTIONS] COMMAND [ARGS]...",
             "",
@@ -72,21 +72,80 @@ First you can confirm the existing commands of *lvmnps* by the *help* command ::
             "  --help  Show this message and exit.",
             "",
             "Commands:",
-            "  cycle    cycle power to an Outlet",
-            "  help     Shows the help.",
-            "  off      Turn off the Outlet",
-            "  on       Turn on the Outlet",
-            "  ping     Pings the actor.",
-            "  status   print the status of the NPS.",
-            "  version  Reports the version."
+            "  cycle     cycle power to an Outlet",
+            "  device    return the list of devices connected with switch",
+            "  help      Shows the help.",
+            "  off       Turn off the Outlet",
+            "  on        Turn on the Outlet",
+            "  ping      Pings the actor.",
+            "  status    print the status of the NPS.",
+            "  switches  return the list of switches",
+            "  version   Reports the version."
         ]
+    }
+
+
+switches command
+---------------
+
+If you run the switches command via lvmnps, you can get the list of switches.::
+
+    lvmnps switches
+
+will return this kind of reply.::
+
+    lvmnps switches
+    09:27:25.948 lvmnps > 
+    09:27:25.960 lvmnps i {
+        "text": "the list of switches"
+    }
+    09:27:25.973 lvmnps i {
+        "list": [
+            "DLI-NPS-01",
+            "DLI-NPS-02",
+            "DLI-NPS-03"
+        ]
+    }
+    09:27:25.985 lvmnps : {
+        "text": "done"
+    }
+
+
+device command
+---------------
+
+If you run the device command via lvmnps, you can get the list of devices connected with the switch.::
+
+    lvmnps device DLI-NPS-01
+
+will return this kind of reply.::
+
+    lvmnps device DLI-NPS-01
+    08:19:36.478 lvmnps > 
+    08:19:36.491 lvmnps i {
+        "text": "Individual Control of DLI-NPS-01..."
+    }
+    08:19:37.191 lvmnps i {
+        "IndividualControl": [
+            "DLI-NPS-01.port1",
+            "-",
+            "DLI-NPS-01.port3",
+            "DLI-NPS-01.port4",
+            "DLI-NPS-01.port5",
+            "DLI-NPS-01.port6",
+            "DLI-NPS-01.port7",
+            "625 nm LED (M625L4)"
+        ]
+    }
+    08:19:37.204 lvmnps : {
+        "text": "done"
     }
 
 
 On command
 ---------------
 
-If you run the on status via lvmnps, you can turn on the power of the device which you want to control.::
+If you run the on command via lvmnps, you can turn on the power of the device which you want to control.::
 
     lvmnps on eight
 
@@ -117,7 +176,7 @@ will return this kind of reply.::
 Off command
 ---------------
 
-If you run the off status via lvmnps, you can turn off the power of the device which you want to control.::
+If you run the off command via lvmnps, you can turn off the power of the device which you want to control.::
 
     lvmnps off eight
 
@@ -148,7 +207,7 @@ will return this kind of reply.::
 Cycle command
 ---------------
 
-If you run the cycle status via lvmnps, you can cycle the power of the device which you want to control.::
+If you run the cycle command via lvmnps, you can cycle the power of the device which you want to control.::
 
     lvmnps cycle eight
 
