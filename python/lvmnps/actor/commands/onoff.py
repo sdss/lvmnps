@@ -18,32 +18,31 @@ from lvmnps.switch.exceptions import PowerException
 
 
 async def switch_control(
-    command, switches: PowerSwitch, on: bool, name: str, portnum: int
+    command, switch, on: bool, name: str, portnum: int
 ):
 
     status = {}
 
-    for switch in switches:
-        try:
-            if command == "on" or command == "off":
-                await switch.setState(on, name, portnum)
-                # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-                status[switch.name] = dict(
-                    list(status.items())
-                    + list(  # noqa: W503
-                        (await switch.statusAsJson(name, portnum)).items()
-                    )
+    try:
+        if command == "on" or command == "off":
+            await switch.setState(on, name, portnum)
+            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
+            status[switch.name] = dict(
+                list(status.items())
+                + list(  # noqa: W503
+                    (await switch.statusAsJson(name, portnum)).items()
                 )
-            elif command == "cycle":
-                await switch.cycle(name, portnum)
-                status[switch.name] = dict(
-                    list(status.items())
-                    + list(  # noqa: W503
-                        (await switch.statusAsJson(name, portnum)).items()
-                    )
+            )
+        elif command == "cycle":
+            await switch.cycle(name, portnum)
+            status[switch.name] = dict(
+                list(status.items())
+                + list(  # noqa: W503
+                    (await switch.statusAsJson(name, portnum)).items()
                 )
-        except NpsActorError as err:
-            return {str(err)}
+            )
+    except NpsActorError as err:
+        return {str(err)}
 
     return status
 
@@ -60,18 +59,17 @@ async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
         current_status = await switch.statusAsJson(name, portnum)
 
         if current_status:
+            the_switch = switch
             break
-        else:
-            current_status = {}
-            continue
 
     # print(current_status)
 
     try:
         if current_status[name]["STATE"] == 0:
-            current_status = await switch_control("on", switches, True, name, portnum)
+            current_status = await switch_control("on", the_switch, True, name, portnum)
+            print(current_status)
         elif current_status[name]["STATE"] == -1:
-            current_status = await switch_control("on", switches, True, name, portnum)
+            current_status = await switch_control("on", the_switch, True, name, portnum)
         elif current_status[name]["STATE"] == 1:
             return command.fail(text=f"The Outlet {name} is already ON")
         else:
@@ -96,19 +94,17 @@ async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
         current_status = await switch.statusAsJson(name, portnum)
 
         if current_status:
+            the_switch = switch
             break
-        else:
-            current_status = {}
-            continue
 
     # print(current_status)
     # current_status = await switch.statusAsJson(name, portnum)
 
     try:
         if current_status[name]["STATE"] == 1:
-            current_status = await switch_control("off", switches, False, name, portnum)
+            current_status = await switch_control("off", the_switch, False, name, portnum)
         elif current_status[name]["STATE"] == -1:
-            current_status = await switch_control("off", switches, False, name, portnum)
+            current_status = await switch_control("off", the_switch, False, name, portnum)
         elif current_status[name]["STATE"] == 0:
             return command.fail(text=f"The Outlet {name} is already OFF")
         else:
@@ -131,11 +127,10 @@ async def cycle(command: Command, switches: PowerSwitch, name: str, portnum: int
 
     for switch in switches:
         current_status = await switch.statusAsJson(name, portnum)
+
         if current_status:
+            the_switch = switch
             break
-        else:
-            current_status = {}
-            continue
 
     # print(current_status)
 
@@ -146,7 +141,7 @@ async def cycle(command: Command, switches: PowerSwitch, name: str, portnum: int
         # off
         if current_status[name]["STATE"] == 1:
             current_status = await switch_control(
-                "cycle", switches, False, name, portnum
+                "cycle", the_switch, False, name, portnum
             )
         elif current_status[name]["STATE"] == 0:
             return command.fail(text=f"The Outlet {name} is OFF")
