@@ -32,6 +32,12 @@ class lvmnps(AMQPActor):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        if "schema" not in kwargs:
+            kwargs["schema"] = os.path.join(
+                os.path.dirname(__file__),
+                "../etc/schema.json",
+            )
+
     async def start(self):
         await super().start()
 

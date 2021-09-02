@@ -23,7 +23,7 @@ async def device(command: Command, switches: PowerSwitch, name: str, portnum: in
     """return the list of devices connected with switch"""
     
     if name:    
-        command.info(text=f"Individual Control of {name}...")
+        command.info(info=f"Individual Control of {name}...")
         
         for switch in switches:
             current_status = await switch.statusAsJson(name, portnum)
@@ -43,7 +43,7 @@ async def device(command: Command, switches: PowerSwitch, name: str, portnum: in
         except NpsActorError as err:
             return {str(err)}
         
-        return command.finish(text="done")
+        return command.finish()
     
     else:
         return command.fail(text="write the name of NPS you want to know")

@@ -1,0 +1,69 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "definitions": {},
+    "type":"object",
+    "properties": {
+        "device": {
+            "type":"object",
+            "properties":{
+                "info":{"type":"string"},
+                "IndividualControl":{"type":"array", "items": { "type": "string" }}
+            },
+            "additionalProperties":false,
+            "required": ["IndividualControl"]
+        },
+        "switches":{
+            "type":"object",
+            "properties": {
+                "info":{"type":"string"},
+                "list":{"type":"array", "items": { "type": "string" }}
+            },
+            "additionalProperties":false,
+            "required": ["info", "list"]
+        },
+        "onoff": {
+            "type":"object",
+            "properties":{
+                "info":{"type":"string"},
+                "STATUS":{
+                    "type":"object",
+                    "properties": {
+                        "name":{
+                            "type":"object",
+                            "properties": {
+                                "STATE": {"type":"integer"},
+                                "DESCR": {"type":"string"},
+                                "SWITCH": {"type":"string"},
+                                "PORT": {"type":"integer"}
+                            }
+                        }
+                    }
+                }
+            },
+            "additionalProperties":false,
+            "required": ["info","STATUS"]
+        },
+        "status": {
+            "type":"object",
+            "properties":{
+                "info":{"type":"string"},
+                "STATUS":{
+                    "type":"object",
+                    "properties": {
+                        "name":{
+                            "type":"object",
+                            "properties": {
+                                "STATE": {"type":"integer"},
+                                "DESCR": {"type":"string"},
+                                "SWITCH": {"type":"string"},
+                                "PORT": {"type":"integer"}
+                            }
+                        }
+                    }
+                }
+            },
+            "additionalProperties":false,
+            "required": ["info","STATUS"]
+        }
+    }
+}

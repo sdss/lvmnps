@@ -102,12 +102,12 @@ switches:
             desc: "Hg-Ar spectral calibration Lamp"
           num: 2
           2:
-            name: "Outlet 2"
-            desc: ""
+            name: "Xenon"
+            desc: "Xenon spectral calibration Lamp"
           num: 3
           3:
-            name: "Outlet 3"
-            desc: ""
+            name: "Hg (Ar)"
+            desc: "Hg (Ar) spectral calibration Lamp"
           num: 4
           4:
             name: "LDLS"
@@ -122,8 +122,8 @@ switches:
             desc: "Neon spectral calibration Lamp"
           num: 7
           7:
-            name: "Outlet 7"
-            desc: ""
+            name: "Hg (Ne)"
+            desc: "Hg (Ne) spectral calibration Lamp"
           num: 8
           8:
             name: "Outlet 8"

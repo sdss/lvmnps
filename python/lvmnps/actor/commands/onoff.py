@@ -53,7 +53,7 @@ async def switch_control(
 async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """Turn on the Outlet"""
 
-    command.info(text=f"Turning on port {name}...")
+    command.info(info=f"Turning on port {name}...")
 
     for switch in switches:
         current_status = await switch.statusAsJson(name, portnum)
@@ -79,7 +79,7 @@ async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
         return command.fail(error=str(ex))
 
     command.info(STATUS=current_status)
-    return command.finish(text="done")
+    return command.finish()
 
 
 @parser.command()
@@ -88,7 +88,7 @@ async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
 async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """Turn off the Outlet"""
 
-    command.info(text=f"Turning off port {name}...")
+    command.info(info=f"Turning off port {name}...")
 
     for switch in switches:
         current_status = await switch.statusAsJson(name, portnum)
@@ -114,7 +114,7 @@ async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
         return command.fail(error=str(ex))
 
     command.info(STATUS=current_status)
-    return command.finish(text="done")
+    return command.finish()
 
 
 @parser.command()
@@ -123,7 +123,7 @@ async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
 async def cycle(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """cycle power to an Outlet"""
 
-    command.info(text=f"Cycle port {name}...")
+    command.info(info=f"Cycle port {name}...")
 
     for switch in switches:
         current_status = await switch.statusAsJson(name, portnum)
@@ -151,7 +151,7 @@ async def cycle(command: Command, switches: PowerSwitch, name: str, portnum: int
     except PowerException as ex:
         return command.fail(error=str(ex))
 
-    return command.finish(text="done")
+    return command.finish()
 
 
 """

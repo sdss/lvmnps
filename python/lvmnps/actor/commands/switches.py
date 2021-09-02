@@ -20,7 +20,7 @@ from lvmnps.exceptions import NpsActorError
 async def switches(command: Command, switches: PowerSwitch,):
     """return the list of switches"""
     
-    command.info(text=f"the list of switches")
+    command.info(info=f"the list of switches")
     
     try:
         names = []
@@ -33,4 +33,4 @@ async def switches(command: Command, switches: PowerSwitch,):
     except NpsActorError as err:
         return {str(err)}
     
-    return command.finish(text="done")
+    return command.finish()
