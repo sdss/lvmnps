@@ -12,6 +12,8 @@ from __future__ import annotations
 import httpx
 from bs4 import BeautifulSoup
 
+from sdsstools.logger import SDSSLogger
+
 
 CONFIG_DEFAULTS = {
     "userid": "admin",
@@ -25,6 +27,7 @@ CONFIG_DEFAULTS = {
 class PowerSwitch(object):
     def __init__(
         self,
+        log=None,
         userid=None,
         password=None,
         hostname=None,
@@ -37,6 +40,7 @@ class PowerSwitch(object):
         """
 
         config = self.load_configuration()
+        self.log = log
         if userid:
             self.userid = userid
         else:
@@ -57,7 +61,7 @@ class PowerSwitch(object):
             self.name = name
         else:
             self.name = config["name"]
-
+            
         self.scheme = "http"
         self.base_url = "%s://%s" % (self.scheme, self.hostname)
         self.clients = {}
@@ -68,33 +72,34 @@ class PowerSwitch(object):
 
     async def add_client(self):
         """Access the url object"""
+        
+        try:
+            auth = httpx.DigestAuth(self.userid, self.password)
+            self.clients[self.hostname] = httpx.AsyncClient(
+                auth=auth,
+                base_url=self.base_url,
+                headers={},
+            )
+            
+        except Exception as ex:
+            self.log.error(f"{type(ex)}: {ex} couldn't access to clients {self.host}")
 
-        auth = httpx.DigestAuth(self.userid, self.password)
-        self.clients[self.hostname] = httpx.AsyncClient(
-            auth=auth,
-            base_url=self.base_url,
-            headers={},
-        )
 
     async def login(self):
         """Access plaintext URL logins"""
 
         login_url = "%s/login.tgi" % self.base_url
         data = {"Username": self.userid, "Password": self.password}
-        headers = {
-            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0)\
-                Gecko/20100101 Firefox/89.0",
-            "Content-Type": "application/x-www-form-urlencoded",
-        }
 
         try:
             res = await self.clients[self.hostname].post(
                 url=login_url,
                 data=data,
-                headers=headers,
             )
+            self.log.info("login to web control page of the NPS")
+            
         except httpx.RequestError as exc:
-            print(f"An error {exc} occurred while requesting {login_url!r}.")
+            self.log.error(f"An error {exc} occurred while requesting {login_url!r}.")
 
         if res.status_code != 200:
             raise Exception(
@@ -103,11 +108,16 @@ class PowerSwitch(object):
 
     async def close(self):
         """Close the Connection with URL"""
-        await self.clients[self.hostname].aclose()
+        try:
+            await self.clients[self.hostname].aclose()
+        
+        except Exception as ex:
+            self.log.error(f"{type(ex)}: {ex} couldn't close the request")
 
     async def verify(self):
         """Verify we can reach the switch, returns true if ok"""
         if await self.geturl():
+            self.log.debug("reach the switch")
             return True
         return False
 
@@ -119,11 +129,13 @@ class PowerSwitch(object):
         full_url = "%s/%s" % (self.base_url, url)
 
         if self.hostname not in self.clients:
+            self.log.error(f"Client for hostname {self.hostname} not defined.")
             raise ValueError(f"Client for hostname {self.hostname} not defined.")
 
         res = await self.clients[self.hostname].get(url=full_url)
 
         if res.status_code != 200:
+            self.log.error(f"GET returned code {res.status_code}.")
             raise RuntimeError(f"GET returned code {res.status_code}.")
         else:
             result = res.content
@@ -134,19 +146,24 @@ class PowerSwitch(object):
 
     async def on(self, outlet_number=0):
         """Turn on power to an outlet"""
-        await self.geturl(url="outlet?%d=ON" % outlet_number)
-
-    async def onall(self):
-        """Turn on all outlets"""
-        await self.geturl(url="outlet?%s=ON" % "a")
+        try:
+            await self.geturl(url="outlet?%d=ON" % outlet_number)
+        except:
+            self.log.error("couldn't turn on power")
 
     async def off(self, outlet_number=0):
         """Turn off power to an outlet"""
-        await self.geturl(url="outlet?%d=OFF" % outlet_number)
+        try:
+            await self.geturl(url="outlet?%d=OFF" % outlet_number)
+        except:
+            self.log.error("couldn't turn off power")
 
     async def cycle(self, outlet_number: int):
         """cycle power to an outlet"""
-        await self.geturl(url="outlet?%d=CCL" % outlet_number)
+        try:
+            await self.geturl(url="outlet?%d=CCL" % outlet_number)
+        except:
+            self.log.error("couldn't cycle power")
 
     async def statuslist(self):
         """Return the status of all outlets in a list,
@@ -154,6 +171,7 @@ class PowerSwitch(object):
         outlets = []
         url = await self.geturl("index.htm")
         if not url:
+            self.log.error("couldn't reach the switch")
             return None
         soup = BeautifulSoup(url, "html.parser")
         # Get the root of the table containing the port status info
@@ -191,13 +209,3 @@ class PowerSwitch(object):
             outlets_dict[plugnumber] = outlets[n][2]
 
         return outlets_dict
-
-    async def printstatus(self):
-        """Print the status off all the outlets as a table to stdout"""
-        if not await self.statuslist():
-            print("Unable to communicate to the Web power switch at %s" % self.hostname)
-            return None
-        print("Outlet\t%-15.15s\tState" % "Name")
-        for item in await self.statuslist():
-            print("%d\t%-15.15s\t%s" % (item[0], item[1], item[2]))
-        return

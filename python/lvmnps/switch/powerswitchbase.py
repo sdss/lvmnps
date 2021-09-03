@@ -46,8 +46,6 @@ class PowerSwitchBase(object):
             c = config.get(
                 k[0] if not k[0].isnumeric() else int(k[0])
             )  # keys can be numeric
-            # print(k)
-            # print(c)
             return (
                 d
                 if c is None
@@ -67,9 +65,6 @@ class PowerSwitchBase(object):
 
     def collectOutletsByNameAndPort(self, name: str, portnum: int = 0):
 
-        # print(self.numports)
-        # print(portnum)
-
         if not name or name == self.name:
             if portnum:
                 if portnum > self.numports:
@@ -78,11 +73,11 @@ class PowerSwitchBase(object):
             else:
                 outlets = []
                 self.log.debug(str(self.onlyusedones))
-                # print(self.outlets)
+
                 for o in self.outlets:
                     if o.inuse or not self.onlyusedones:
                         outlets.append(o)
-                # print(outlets)
+
                 return outlets
         else:
             o = self.findOutletByName(name)
@@ -93,7 +88,7 @@ class PowerSwitchBase(object):
     async def setState(self, state, name: str = "", portnum: int = 0):
         if portnum > self.numports:
             return []
-        # print(Outlet.parse(state))
+
         return await self.switch(
             Outlet.parse(state), self.collectOutletsByNameAndPort(name, portnum)
         )
@@ -102,14 +97,13 @@ class PowerSwitchBase(object):
         # name: can be a switch or an outlet name
 
         outlets = self.collectOutletsByNameAndPort(name, portnum)
-        # print(outlets)
 
         await self.update(outlets)
 
         status = {}
         for o in outlets:
             status[f"{o.name}"] = o.toJson()
-        # print(status)
+
         return status
 
     @abstractmethod

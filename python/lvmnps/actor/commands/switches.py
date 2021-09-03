@@ -13,7 +13,6 @@ from clu.command import Command
 
 from lvmnps.actor.commands import parser
 from lvmnps.switch.dli.powerswitch import PowerSwitch
-from lvmnps.switch.exceptions import PowerException
 from lvmnps.exceptions import NpsActorError
 
 @parser.command()

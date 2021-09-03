@@ -14,7 +14,6 @@ from clu.command import Command
 from lvmnps.actor.commands import parser
 from lvmnps.exceptions import NpsActorError
 from lvmnps.switch.dli.powerswitch import PowerSwitch
-from lvmnps.switch.exceptions import PowerException
 
 
 async def switch_control(
@@ -62,8 +61,6 @@ async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
             the_switch = switch
             break
 
-    # print(current_status)
-
     try:
         if current_status[name]["STATE"] == 0:
             current_status = await switch_control("on", the_switch, True, name, portnum)
@@ -75,7 +72,7 @@ async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
         else:
             return command.fail(text=f"The Outlet {name} returns wrong value")
 
-    except PowerException as ex:
+    except NpsActorError as ex:
         return command.fail(error=str(ex))
 
     command.info(STATUS=current_status)
@@ -97,9 +94,6 @@ async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
             the_switch = switch
             break
 
-    # print(current_status)
-    # current_status = await switch.statusAsJson(name, portnum)
-
     try:
         if current_status[name]["STATE"] == 1:
             current_status = await switch_control("off", the_switch, False, name, portnum)
@@ -110,7 +104,7 @@ async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
         else:
             return command.fail(text=f"The Outlet {name} returns wrong value")
 
-    except PowerException as ex:
+    except NpsActorError as ex:
         return command.fail(error=str(ex))
 
     command.info(STATUS=current_status)
@@ -132,8 +126,6 @@ async def cycle(command: Command, switches: PowerSwitch, name: str, portnum: int
             the_switch = switch
             break
 
-    # print(current_status)
-
     # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
     # current_status = await switch.statusAsJson(name, portnum)
 
@@ -148,26 +140,7 @@ async def cycle(command: Command, switches: PowerSwitch, name: str, portnum: int
         else:
             return command.fail(text=f"The Outlet {name} returns wrong value")
 
-    except PowerException as ex:
+    except NpsActorError as ex:
         return command.fail(error=str(ex))
 
     return command.finish()
-
-
-"""
-@parser.command()
-@click.argument("NAME", type=str, default="")
-async def onall(command: Command, switches: PowerSwitch, name: str):
-
-    status = {}
-    for switch in switches:
-        # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-        await switch_control(switch, True, 0, name)
-
-        current_status = await switch.statusAsJson(name)
-        status = dict(list(status.items()) + list((current_status.items())))
-
-    command.info(STATUS=status)
-
-    return command.finish(text="done")
-"""

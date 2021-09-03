@@ -13,7 +13,7 @@ from clu.command import Command
 
 from lvmnps.actor.commands import parser
 from lvmnps.switch.dli.powerswitch import PowerSwitch
-from lvmnps.switch.exceptions import PowerException
+from lvmnps.exceptions import NpsActorError
 
 
 @parser.group()
@@ -39,7 +39,7 @@ async def what(command: Command, switches: PowerSwitch, name: str, portnum: int)
             if current_status:
                 status[switch.name] = current_status
 
-    except PowerException as ex:
+    except NpsActorError as ex:
         return command.fail(error=str(ex))
 
     command.info(STATUS=status)
@@ -62,7 +62,7 @@ async def all(command: Command, switches: PowerSwitch):
             status[switch.name] = current_status
             command.info(STATUS=status)
 
-    except PowerException as ex:
+    except NpsActorError as ex:
         return command.fail(error=str(ex))
 
     return command.finish()
