@@ -108,7 +108,7 @@ async def test_actor(switches):
     assert status[2]["STATUS"]["nps_dummy_3"]["skyw.pwi"]["STATE"] == -1
 
     # switch all ports on  nps_dummy_1 on
-    # status = await send_command(test_actor, "on nps_dummy_1")
+    #status = await send_command(test_actor, "on nps_dummy_1")
     # assert status["nps_dummy_1.port1"]["STATE"] == 1
     # assert status["skye.what.ever"]["STATE"] == 1
     # assert status["skyw.what.ever"]["STATE"] == 1
