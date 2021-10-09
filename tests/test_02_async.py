@@ -38,7 +38,7 @@ async def send_command(actor, command_string):
     # print("number of swithces are ",len(actor.parser_args[0]))
     switch_num = len(actor.parser_args[0])
     status_all_reply = []
-    #assert actor.mock_replies[-1]["text"] == "done"
+    # assert actor.mock_replies[-1]["text"] == "done"
     status_reply = actor.mock_replies[-2]
     # print(status_reply)
     if command_string == "status all":
