@@ -6,12 +6,6 @@ import click
 from clu.parsers.click import CluGroup, help_, ping, version
 
 
-# import warnings
-
-
-# from lvmnps.exceptions import NpsActorUserWarning
-
-
 @click.group(cls=CluGroup)
 def parser(*args):
     pass
@@ -20,7 +14,6 @@ def parser(*args):
 parser.add_command(ping)
 parser.add_command(version)
 parser.add_command(help_)
-
 
 # Autoimport all modules in this directory so that they are added to the parser.
 

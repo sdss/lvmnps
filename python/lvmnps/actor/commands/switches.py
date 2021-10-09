@@ -8,28 +8,31 @@
 
 from __future__ import annotations
 
-import click
 from clu.command import Command
 
 from lvmnps.actor.commands import parser
-from lvmnps.switch.dli.powerswitch import PowerSwitch
 from lvmnps.exceptions import NpsActorError
+from lvmnps.switch.dli.powerswitch import PowerSwitch
+
 
 @parser.command()
-async def switches(command: Command, switches: PowerSwitch,):
-    """return the list of switches"""
-    
-    command.info(info=f"the list of switches")
-    
+async def switches(
+    command: Command,
+    switches: PowerSwitch,
+):
+    """Returns the list of switches which is reachable."""
+
+    command.info(info="the list of switches")
+
     try:
         names = []
-        
+
         for switch in switches:
             names.append(switch.name)
 
         command.info(list=names)
-        
+
     except NpsActorError as err:
         return {str(err)}
-    
+
     return command.finish()

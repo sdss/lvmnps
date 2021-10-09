@@ -12,13 +12,13 @@ import click
 from clu.command import Command
 
 from lvmnps.actor.commands import parser
-from lvmnps.switch.dli.powerswitch import PowerSwitch
 from lvmnps.exceptions import NpsActorError
+from lvmnps.switch.dli.powerswitch import PowerSwitch
 
 
 @parser.group()
 def status(*args):
-    """print the status of the NPS."""
+    """Print the status of the NPS."""
     pass
 
 
@@ -26,15 +26,15 @@ def status(*args):
 @click.argument("NAME", type=str, default="")
 @click.argument("PORTNUM", type=int, default=0)
 async def what(command: Command, switches: PowerSwitch, name: str, portnum: int):
-    """Returns the status of the outlets."""
+    """Returns the dictionary of a specific outlet."""
 
     command.info(info=f"Printing the current status of port {name}")
 
     try:
         status = {}
         for switch in switches:
-            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-            current_status = await switch.statusAsJson(name, portnum)
+            # status |= await switch.statusAsDict(name, portnum) works only with python 3.9
+            current_status = await switch.statusAsDict(name, portnum)
 
             if current_status:
                 status[switch.name] = current_status
@@ -48,16 +48,16 @@ async def what(command: Command, switches: PowerSwitch, name: str, portnum: int)
 
 @status.command()
 async def all(command: Command, switches: PowerSwitch):
-    """Returns the status of ALL outlets in the NPS."""
+    """Returns the dictionary of all outlets and devices connected."""
 
     status = {}
 
     try:
         for switch in switches:
-            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
+            # status |= await switch.statusAsDict(name, portnum) works only with python 3.9
             command.info(info=f"Printing the current status of switch {switch.name}")
 
-            current_status = await switch.statusAsJson()
+            current_status = await switch.statusAsDict()
             # status[switch.name] = dict(list(status.items()) + list((current_status.items())))
             status[switch.name] = current_status
             command.info(STATUS=status)

@@ -1,99 +1,13 @@
 # A dictionary of controller name to NPS controller connection parameters.
 switches:
-    DLI-NPS-01:
-        type: dli
-        name: NULL
-        hostname: 10.7.45.22
-        use_https: False
-        user: 'admin'
-        password: 'rLXR3KxUqiCPGvA'
-        numports: 8
-        ouo: False # handle also unconfigured ports
-        ports:
-          num: 1  
-          1:
-            name: ""
-            desc: ""
-          num: 2
-          2:
-            name: "-"
-            desc: ""
-          num: 3
-          3:
-            name: ""
-            desc: ""
-          num: 4
-          4:
-            name: ""
-            desc: ""
-          num: 5
-          5:
-            name: ""
-            desc: ""
-          num: 6
-          6:
-            name: ""
-            desc: ""
-          num: 7
-          7:
-            name: ""
-            desc: ""
-          num: 8
-          8:
-            name: "625 nm LED (M625L4)"
-            desc: "LED"
-
-    DLI-NPS-02:
-        type: dli
-        name: LVM-PSU-02
-        hostname: 10.7.45.29
-        use_https: False
-        user: 'admin'
-        password: 'VCrht9wfx2CQN9b'
-        numports: 8
-        ouo: False # handle also unconfigured ports
-        ports:
-          num: 1
-          1:
-            name: "Router/Switch"
-            desc: "Router power switch"
-          num: 2
-          2:
-            name: "LN2 NIR valve"
-            desc: "Cryogenic solenoid valve of NIR camera for liquid nitrogen."
-          num: 3
-          3:
-            name: "LVM-Archon-02"
-            desc: "Archon controller"
-          num: 4
-          4:
-            name: "IEB06"
-            desc: "LVM Instrument Electronic Box"
-          num: 5
-          5:
-            name: "LN2 Red Valve"
-            desc: "Cryogenic solenoid valve of Red camera for liquid nitrogen."
-          num: 6
-          6:
-            name: "RPi"
-            desc: "Raspberry Pi"
-          num: 7
-          7:
-            name: "FFS LED"
-            desc: "LED"
-          num: 8
-          8:
-            name: "Pressure transducers"
-            desc: "Pressure transducers"
-    
     DLI-NPS-03:
         type: dli
         name: DLI Controller
         hostname: 10.7.45.31
-        use_https: False
         user: 'admin'
         password: 'JNC_zbf5tdc4deb*npx'
         numports: 8
+        onoff_timeout: 3
         ouo: False # handle also unconfigured ports
         ports:
           num: 1  

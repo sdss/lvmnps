@@ -25,7 +25,7 @@ from lvmnps.actor.actor import lvmnps as NpsActorInstance
 )
 @click.pass_context
 def lvmnps(ctx, config_file, verbose):
-    """Nps controller"""
+    """Nps Actor."""
 
     ctx.obj = {"verbose": verbose, "config_file": config_file}
 

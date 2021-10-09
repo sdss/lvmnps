@@ -3,10 +3,12 @@
 #
 # Licensed under a 3-clause BSD license.
 #
-# @Author: Brian Cherinka
-# @Date:   2017-12-05 12:01:21
-# @Last modified by:   Brian Cherinka
-# @Last Modified time: 2017-12-05 12:19:32
+# @Author: Mingyeong Yang (mingyeong@khu.ac.kr), Changgon Kim (changgonkim@khu.ac.kr)
+# @Date: 2021-08-24
+# @Update: 2021-10-09
+# @Filename: lvmnps/switch/dli/dli.py
+# @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
+
 
 from __future__ import absolute_import, division, print_function
 
@@ -32,7 +34,7 @@ class NpsActorNotImplemented(NpsActorError):
 
 
 class NpsActorAPIError(NpsActorError):
-    """A custom exception for API errors"""
+    """A custom exception for API errors."""
 
     def __init__(self, message=None):
         if not message:
@@ -44,7 +46,7 @@ class NpsActorAPIError(NpsActorError):
 
 
 class NpsActorApiAuthError(NpsActorAPIError):
-    """A custom exception for API authentication errors"""
+    """A custom exception for API authentication errors."""
 
     pass
 
@@ -73,5 +75,11 @@ class NpsActorSkippedTestWarning(NpsActorUserWarning):
 
 class NpsActorDeprecationWarning(NpsActorUserWarning):
     """A warning for deprecated features."""
+
+    pass
+
+
+class PowerException(Exception):
+    """An error Exception class for powerswitch factory."""
 
     pass
