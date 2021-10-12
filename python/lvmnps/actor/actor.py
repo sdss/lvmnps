@@ -39,7 +39,7 @@ class lvmnps(AMQPActor):
         super().__init__(*args, **kwargs)
 
         self._fetch_log_jobs = []
-        self.connect_timeout
+        self.connect_timeout = 3
 
     async def start(self):
         """Start the actor and connect the power switches."""
