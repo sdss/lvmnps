@@ -35,7 +35,7 @@ class PowerSwitchBase(object):
         self.log = log
         self.config = config
 
-        self.numports = self.config_get("ports.num", 8)
+        self.numports = self.config_get("ports.number_of_ports", 8)
         self.outlets = [
             Outlet(
                 name,

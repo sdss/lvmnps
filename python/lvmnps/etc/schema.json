@@ -3,41 +3,53 @@
     "definitions": {},
     "type":"object",
     "properties": {
-        "device": {
+        "reachable_outlets": {
             "type":"object",
             "properties":{
-                "info":{"type":"string"},
-                "IndividualControl":{"type":"array", "items": { "type": "string" }}
+                "text":{"type":"string"},
+                "outlets":{"type": "array", "items": {"type": "string"}}
             },
-            "additionalProperties":false,
-            "required": ["IndividualControl"]
+            "additionalProperties": false
         },
-        "switches":{
+        "reachable_switches":{
             "type":"object",
             "properties": {
-                "info":{"type":"string"},
-                "list":{"type":"array", "items": { "type": "string" }}
+                "text":{"type":"string"},
+                "switches":{"type": "array", "items": {"type": "string"}}
             },
-            "additionalProperties":false,
-            "required": ["info", "list"]
+            "additionalProperties":false
         },
         "onoff": {
             "type":"object",
             "properties":{
-                "info":{"type":"string"},
-                "STATUS":{"type":"object"}
+                "text":{"type":"string"},
+                "status":{"type":"object"}
             },
-            "additionalProperties":false,
-            "required": ["info","STATUS"]
+            "patternProperties": {
+                "^[A-Za-z0-9_.-]+$": {
+                    "state": {"type": "number"},
+                    "descr": {"type": "string"},
+                    "switch": {"type": "string"},
+                    "port": {"type": "number"}            
+            },
+            "additionalProperties":false
         },
         "status": {
             "type":"object",
             "properties":{
-                "info":{"type":"string"},
-                "STATUS":{"type":"object"}
+                "text":{"type":"string"},
+                "status":{"type":"object"}
             },
-            "additionalProperties":false,
-            "required": ["info","STATUS"]
+            "patternProperties": {
+                "^[A-Za-z0-9_.-]+$": {
+                    "state": {"type": "number"},
+                    "descr": {"type": "string"},
+                    "switch": {"type": "string"},
+                    "port": {"type": "number"}            
+            }
+        },
+            "additionalProperties": false
         }
     }, "additionalProperties": false
+}
 }

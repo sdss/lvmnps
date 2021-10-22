@@ -10,12 +10,10 @@ from __future__ import annotations
 
 import asyncio
 import os
-from contextlib import suppress
 
 from clu.actor import AMQPActor
 
 from lvmnps.actor.commands import parser as nps_command_parser
-from lvmnps.switch.dli.powerswitch import PowerSwitch
 from lvmnps.switch.factory import powerSwitchFactory
 
 
@@ -37,8 +35,6 @@ class lvmnps(AMQPActor):
                 "../etc/schema.json",
             )
         super().__init__(*args, **kwargs)
-
-        self._fetch_log_jobs = []
         self.connect_timeout = 3
 
     async def start(self):
@@ -58,11 +54,10 @@ class lvmnps(AMQPActor):
             except Exception as ex:
                 self.log.error(f"Unexpected exception {type(ex)}: {ex}")
 
-        self._fetch_log_jobs = [
-            asyncio.create_task(self._fetch_log(switch))
-            for switch in self.parser_args[0]
-        ]
+        # self.load_schema(self.schema, is_file=False)
+
         self.log.debug("Start done")
+        # self.log.debug(str(self.schema))
 
     async def stop(self):
         """Stop the actor and connect the power switches."""
@@ -72,12 +67,8 @@ class lvmnps(AMQPActor):
                 await asyncio.wait_for(switch.stop(), timeout=self.connect_timeout)
 
             except Exception as ex:
-                self.log.error(f"Unexpected exception {type(ex)}: {ex}")
+                self.log.error(f"Unexpected exception dd {type(ex)}: {ex}")
 
-        with suppress(asyncio.CancelledError):
-            for task in self._fetch_log_jobs:
-                task.cancel()
-                await task
         return super().stop()
 
     @classmethod
@@ -103,6 +94,3 @@ class lvmnps(AMQPActor):
             instance.parser_args = [switches]
 
         return instance
-
-    async def _fetch_log(self, switch: PowerSwitch):  # pragma: no cover
-        """Fetches the log and outputs new messages."""

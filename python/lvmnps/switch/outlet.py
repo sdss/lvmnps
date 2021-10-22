@@ -66,8 +66,8 @@ class Outlet(object):
     def toDict(self):
         """Return the dictionary describing the status of the outlet."""
         return {
-            "STATE": self.state,
-            "DESCR": self.description,
-            "SWITCH": self.swname,
-            "PORT": self.portnum,
+            "state": self.state,
+            "descr": self.description,
+            "switch": self.swname,
+            "port": self.portnum,
         }

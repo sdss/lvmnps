@@ -13,7 +13,7 @@ from clu.command import Command
 
 from lvmnps.actor.commands import parser
 from lvmnps.exceptions import NpsActorError
-from lvmnps.switch.dli.powerswitch import PowerSwitch
+from lvmnps.switch.powerswitchbase import PowerSwitchBase as PowerSwitch
 
 
 async def switch_control(command, switch, on: bool, name: str, portnum: int):
@@ -28,41 +28,43 @@ async def switch_control(command, switch, on: bool, name: str, portnum: int):
                 + list((await switch.statusAsDict(name, portnum)).items())  # noqa: W503
             )
     except NpsActorError as err:
-        return {str(err)}
+        command.fail(error=str(err))
 
     return status
 
 
 @parser.command()
-@click.argument("NAME", type=str, default="")
+@click.argument("NAME", type=str, required=False)
 @click.argument("PORTNUM", type=int, default=0)
 async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """Turn on the outlet."""
 
-    command.info(info=f"Turning on port {name}...")
-
+    if portnum:
+        command.info(text=f"Turning on {name} port {portnum}...")
+    else:
+        command.info(text=f"Turning on Outlet {name}...")
     for switch in switches:
-        current_status = await switch.statusAsDict(name, portnum)
 
+        current_status = await switch.statusAsDict(name, portnum)
         if current_status:
             the_switch = switch
             break
-
+    outletname_list = list(current_status.keys())
+    outletname = outletname_list[0]
     try:
-        if current_status[name]["STATE"] == 0:
+        if current_status[outletname]["state"] == 0:
             current_status = await switch_control("on", the_switch, True, name, portnum)
-            print(current_status)
-        elif current_status[name]["STATE"] == -1:
+        elif current_status[outletname]["state"] == -1:
             current_status = await switch_control("on", the_switch, True, name, portnum)
-        elif current_status[name]["STATE"] == 1:
-            return command.fail(text=f"The Outlet {name} is already ON")
+        elif current_status[outletname]["state"] == 1:
+            return command.fail(text=f"The Outlet {outletname} is already ON")
         else:
-            return command.fail(text=f"The Outlet {name} returns wrong value")
+            return command.fail(text=f"The Outlet {outletname} returns wrong value")
 
     except NpsActorError as ex:
         return command.fail(error=str(ex))
 
-    command.info(STATUS=current_status)
+    command.info(status=current_status)
     return command.finish()
 
 
@@ -71,8 +73,10 @@ async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
 @click.argument("PORTNUM", type=int, default=0)
 async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
     """Turn off the outlet."""
-
-    command.info(info=f"Turning off port {name}...")
+    if portnum:
+        command.info(text=f"Turning off {name} port {portnum}...")
+    else:
+        command.info(text=f"Turning off Outlet {name}...")
 
     for switch in switches:
         current_status = await switch.statusAsDict(name, portnum)
@@ -80,23 +84,24 @@ async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
         if current_status:
             the_switch = switch
             break
-
+    outletname_list = list(current_status.keys())
+    outletname = outletname_list[0]
     try:
-        if current_status[name]["STATE"] == 1:
+        if current_status[outletname]["state"] == 1:
             current_status = await switch_control(
                 "off", the_switch, False, name, portnum
             )
-        elif current_status[name]["STATE"] == -1:
+        elif current_status[outletname]["state"] == -1:
             current_status = await switch_control(
                 "off", the_switch, False, name, portnum
             )
-        elif current_status[name]["STATE"] == 0:
-            return command.fail(text=f"The Outlet {name} is already OFF")
+        elif current_status[outletname]["state"] == 0:
+            return command.fail(text=f"The Outlet {outletname} is already OFF")
         else:
-            return command.fail(text=f"The Outlet {name} returns wrong value")
+            return command.fail(text=f"The Outlet {outletname} returns wrong value")
 
     except NpsActorError as ex:
         return command.fail(error=str(ex))
 
-    command.info(STATUS=current_status)
+    command.info(status=current_status)
     return command.finish()
