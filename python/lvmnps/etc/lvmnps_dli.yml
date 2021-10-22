@@ -10,6 +10,7 @@ switches:
         numports: 8
         ouo: False # handle also unconfigured ports
         ports:
+          number_of_ports: 8
           1:
             name: "Router/Switch"
             desc: "Router power switch"
