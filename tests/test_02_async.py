@@ -41,7 +41,7 @@ async def send_command(actor, command_string):
     # assert actor.mock_replies[-1]["text"] == "done"
     status_reply = actor.mock_replies[-2]
     # print(status_reply)
-    if command_string == "status all":
+    if command_string == "status":
         length = len(actor.mock_replies)
         print(
             actor.mock_replies[
@@ -54,7 +54,7 @@ async def send_command(actor, command_string):
         status_all_reply.reverse()
         return status_all_reply
     else:
-        return status_reply["STATUS"]
+        return status_reply["status"]
 
 
 @pytest.mark.asyncio
@@ -74,13 +74,13 @@ async def test_actor(switches):
     await asyncio.sleep(0.2)
 
     status_task = []
-    status_task.append(asyncio.create_task(send_command(test_actor, "status all")))
+    status_task.append(asyncio.create_task(send_command(test_actor, "status")))
 
     status = await asyncio.gather(*status_task)
-    assert status[0][0]["STATUS"]["slow"]["slow"]["STATE"] == -1
-    assert status[0][1]["STATUS"]["slow"]["slow"]["STATE"] == -1
-    assert status[0][1]["STATUS"]["fast"]["fast"]["STATE"] == 1
+    assert status[0][1]["status"]["slow"]["slow"]["state"] == -1
+    assert status[0][1]["status"]["slow"]["slow"]["state"] == -1
+    assert status[0][1]["status"]["fast"]["fast"]["state"] == 1
 
     status_after = await asyncio.gather(*task)
-    assert status_after[0]["slow"]["slow"]["STATE"] == 1
-    assert status_after[1]["fast"]["fast"]["STATE"] == 1
+    assert status_after[0]["slow"]["slow"]["state"] == 1
+    assert status_after[1]["fast"]["fast"]["state"] == 1

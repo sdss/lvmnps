@@ -54,10 +54,7 @@ class lvmnps(AMQPActor):
             except Exception as ex:
                 self.log.error(f"Unexpected exception {type(ex)}: {ex}")
 
-        # self.load_schema(self.schema, is_file=False)
-
         self.log.debug("Start done")
-        # self.log.debug(str(self.schema))
 
     async def stop(self):
         """Stop the actor and connect the power switches."""
