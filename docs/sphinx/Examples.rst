@@ -85,6 +85,32 @@ First you can confirm the existing commands of *lvmnps* by the *help* command ::
     }
 
 
+switches command
+-------------------
+
+If you run the switches command via lvmnps, you can get the list of switches ::
+
+    lvmnps switches
+
+will return this kind of reply.::
+
+    lvmnps switches
+    09:27:25.948 lvmnps > 
+    09:27:25.960 lvmnps i {
+        "text": "the list of switches"
+    }
+    09:27:25.973 lvmnps i {
+        "list": [
+            "DLI-NPS-01",
+            "DLI-NPS-02",
+            "DLI-NPS-03"
+        ]
+    }
+    09:27:25.985 lvmnps : {
+        "text": "done"
+    }
+
+
 device command
 ---------------
 
