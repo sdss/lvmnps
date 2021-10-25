@@ -60,10 +60,9 @@ class PowerSwitchBase(object):
             The tree structure as a string to extract the data.
             For example, if the configuration structure is
 
-            ports:
-                num:1
-                1:
-                    desc: "Hg-Ar spectral callibration lamp"
+            ports;
+                1;
+                    desc; "Hg-Ar spectral callibration lamp"
 
             You can input the key as
             "ports.1.desc" to take the information "Hg-Ar spectral callibration lamp"

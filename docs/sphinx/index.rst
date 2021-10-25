@@ -15,7 +15,6 @@ Contents
   Examples
 
 .. toctree::
-
   :caption: api
   :maxdepth: 3
   :hidden:
@@ -26,7 +25,6 @@ Contents
   Exceptions
   
 .. toctree::
-
   :caption: Development
   :maxdepth: 3
   :hidden:

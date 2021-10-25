@@ -294,8 +294,7 @@ class iBootInterface(object):
         """
         Change the state of multiple relays at once
 
-        State dictionary should be of the form:
-            {1: True}
+        State dictionary should be of the form; {1: True}
         where the key is the relay and the value is the new state
         """
         await self.connect()

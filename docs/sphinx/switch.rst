@@ -21,22 +21,13 @@ outlet
     :show-inheritance:
 
 
-exceptions
--------------
-
-.. automodule:: lvmnps.switch.exceptions
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
 digital-loggers
 -------------------
 
 lvmpower
 ~~~~~~~~~~~
 
-.. automodule:: lvmnps.switch.dli.lvmpower
+.. automodule:: lvmnps.switch.dli.dli
     :members:
     :undoc-members:
     :show-inheritance:
