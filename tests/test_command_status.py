@@ -19,8 +19,7 @@ async def test_status(actor: NpsActor):
     print(f"reply 2 is {command.replies[2].message}")
     print(f"reply 3 is {command.replies[3].message}")
     """
-    
+
     assert len(command.replies) == 4
-    
-    #assert command.replies[1].message["text"] == "Pong."
-    
+
+    # assert command.replies[1].message["text"] == "Pong."

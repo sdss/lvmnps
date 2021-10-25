@@ -11,18 +11,21 @@ more information.
 """
 
 import os
-# import shutil
 
 import clu.testing
-
 import pytest
 from clu import AMQPActor, AMQPClient
-from lvmnps import config
-from lvmnps.actor.actor import lvmnps as NpsActor
-from sdsstools import merge_config, read_yaml_file
-
 from clu.actor import AMQPBaseActor
 
+from sdsstools import merge_config, read_yaml_file
+from sdsstools.logger import get_logger
+
+from lvmnps import config
+from lvmnps.actor.actor import lvmnps as NpsActor
+from lvmnps.switch.factory import powerSwitchFactory
+
+
+# import shutil
 # from pytest_rabbitmq import factories
 
 
@@ -66,7 +69,9 @@ async def amqp_client(rabbitmq, amqp_actor, event_loop):
 @pytest.fixture()
 def test_config():
 
-    extra = read_yaml_file(os.path.join(os.path.dirname(__file__), "test_01_switch.yml"))
+    extra = read_yaml_file(
+        os.path.join(os.path.dirname(__file__), "test_01_switch.yml")
+    )
     yield merge_config(extra, config)
 
 
@@ -78,15 +83,16 @@ def switches():
     assert "switches" in default_config
 
     switches = []
-    for (name, config) in default_config["switches"].items():
-        print(f"Switch {name}: {config}")
+    for (name, conf) in default_config["switches"].items():
+        print(f"Switch {name}: {conf}")
         try:
-            switches.append(powerSwitchFactory(name, config, get_logger("test")))
+            switches.append(powerSwitchFactory(name, conf, get_logger("test")))
 
         except Exception as ex:
             print(f"Error in power switch factory {type(ex)}: {ex}")
 
     return switches
+
 
 @pytest.fixture()
 async def actor(test_config: dict, switches, mocker):
@@ -96,8 +102,8 @@ async def actor(test_config: dict, switches, mocker):
     # on the actor.
     mocker.patch.object(AMQPBaseActor, "start")
 
-    #test_config["controllers"]["sp1"]["host"] = controller.host
-    #test_config["controllers"]["sp1"]["port"] = controller.port
+    # test_config["controllers"]["sp1"]["host"] = controller.host
+    # test_config["controllers"]["sp1"]["port"] = controller.port
 
     _actor = NpsActor.from_config(test_config)
     await _actor.start()
