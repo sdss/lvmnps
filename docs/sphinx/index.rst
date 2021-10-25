@@ -22,6 +22,7 @@ Contents
   lvmnps
   switch
   Commands
+  actor-schema
   Exceptions
   
 .. toctree::

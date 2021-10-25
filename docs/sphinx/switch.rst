@@ -24,7 +24,7 @@ outlet
 digital-loggers
 -------------------
 
-lvmpower
+dli
 ~~~~~~~~~~~
 
 .. automodule:: lvmnps.switch.dli.dli
