@@ -30,6 +30,7 @@ Quick Start
 Prerequisite
 ~~~~~~~~~~~~
 
+If your system already have rabbitmq, and already running with the actors, you don't have to install these below.
 Install `RabbitMQ <https://www.rabbitmq.com/>`__ by using apt-get.
 RabbitMQ is not the dependency of the 'lvmnps' but it is the system-wide configuration for running the software under CLU CLI(command line interface).
 
@@ -40,6 +41,8 @@ RabbitMQ is not the dependency of the 'lvmnps' but it is the system-wide configu
     $ sudo systemctl enable rabbitmq-server
     $ sudo systemctl start rabbitmq-server
 
+
+If your system already have pyenv, you don't have to install these below.
 Install `pyenv <https://github.com/pyenv/pyenv>`__ by using `pyenv
 installer <https://github.com/pyenv/pyenv-installer>`__.
 Also, pyenv is the virtual environment for running the python package under your specific python environment.
