@@ -32,14 +32,14 @@ def switches():
 async def send_command(actor, command_string):
     command = actor.invoke_mock_command(command_string)
     await command
-    assert command.status.is_done
+    # assert command.status.is_done
 
     switch_num = len(actor.parser_args[0])
     status_all_reply = []
     # assert actor.mock_replies[-1]["text"] == "done"
     status_reply = actor.mock_replies[-2]
 
-    if command_string == "status all":
+    if command_string == "status":
         length = len(actor.mock_replies)
         print(
             actor.mock_replies[
@@ -56,9 +56,9 @@ async def send_command(actor, command_string):
 
 
 @pytest.mark.asyncio
-async def test_actor(switches):
+async def test_actor(amqp_actor, switches):
 
-    test_actor = await setup_test_actor(JSONActor("lvmnp", host="localhost", port=9999))
+    test_actor = await setup_test_actor(JSONActor("lvmnps", host="localhost", port=9999))
 
     test_actor.parser = nps_command_parser
     test_actor.parser_args = [switches]
@@ -71,10 +71,6 @@ async def test_actor(switches):
     # switch on nps_dummy_1 port1
     status = await send_command(test_actor, "on nps_dummy_1 1")
     assert status["nps_dummy_1"]["port1"]["state"] == 1
-
-    # switch cycle nps_dummy_1 port1
-    # status = await send_command(test_actor, "cycle port1")
-    # assert status["nps_dummy_1"]["port1"]["state"] == 1
 
     # switch off nps_dummy_1 port1
     status = await send_command(test_actor, "off nps_dummy_1 1")
@@ -98,12 +94,12 @@ async def test_actor(switches):
 
     # switch status
     status = await send_command(test_actor, "status")
-    print(f"status is {status}")
-    assert status["nps_dummy_1"]["port1"]["state"] == 0
-    assert status["nps_dummy_1"]["skye.what.ever"]["state"] == -1
-    assert status["nps_dummy_1"]["skyw.what.ever"]["state"] == -1
-    assert status["skye.nps"]["skye.pwi"]["state"] == 0
-    assert status["nps_dummy_3"]["skyw.pwi"]["state"] == -1
+    print(f"status is {status[2]}")
+    assert status[2]["status"]["nps_dummy_1"]["port1"]["state"] == 0
+    assert status[2]["status"]["nps_dummy_1"]["skye.what.ever"]["state"] == -1
+    assert status[2]["status"]["nps_dummy_1"]["skyw.what.ever"]["state"] == -1
+    assert status[2]["status"]["skye.nps"]["skye.pwi"]["state"] == 0
+    assert status[0]["status"]["nps_dummy_3"]["skyw.pwi"]["state"] == -1
 
     # switch all ports on  nps_dummy_1 on
     # status = await send_command(test_actor, "on nps_dummy_1")

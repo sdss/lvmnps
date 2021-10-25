@@ -7,6 +7,7 @@
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from __future__ import annotations
+from typing import ClassVar, Dict, Type
 
 import asyncio
 import os
@@ -25,7 +26,8 @@ class lvmnps(AMQPActor):
     Subclassed from the AMQPActor class.
     """
 
-    parser = nps_command_parser
+    parser: ClassVar[click.Group] = nps_command_parser
+    BASE_CONFIG: ClassVar[str | Dict | None] = None
 
     def __init__(self, *args, **kwargs):
 
@@ -66,11 +68,16 @@ class lvmnps(AMQPActor):
             except Exception as ex:
                 self.log.error(f"Unexpected exception dd {type(ex)}: {ex}")
 
-        return super().stop()
+        return await super().stop()
 
     @classmethod
     def from_config(cls, config, *args, **kwargs):
         """Creates an actor from a configuration file."""
+
+        if config is None:
+            if cls.BASE_CONFIG is None:
+                raise RuntimeError("The class does not have a base configuration.")
+            config = cls.BASE_CONFIG
 
         instance = super(lvmnps, cls).from_config(config, *args, **kwargs)
 
