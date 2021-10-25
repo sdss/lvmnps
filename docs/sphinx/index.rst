@@ -30,6 +30,7 @@ Contents
   :maxdepth: 3
   :hidden:
 
+  developer-env
   Changelog <changelog>
   GitHub Repository <https://github.com/sdss/lvmnps>
   Issues  <https://github.com/sdss/lvmnps/issues>
