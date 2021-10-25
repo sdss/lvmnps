@@ -26,7 +26,7 @@ iboot
 
 
 Start the actor
-~~~~~~~~~~~~~~~
+----------------
 
 Start ``lvmnps`` actor.
 
