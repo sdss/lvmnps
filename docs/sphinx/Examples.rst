@@ -85,16 +85,16 @@ First you can confirm the existing commands of *lvmnps* by the *help* command ::
     }
 
 
-switches command
+reachable command
 -------------------
 
 If you run the switches command via lvmnps, you can get the list of switches ::
 
-    lvmnps switches
+    lvmnps reachable switches
 
 will return this kind of reply.::
 
-    lvmnps switches
+    lvmnps reachable switches
     09:27:25.948 lvmnps > 
     09:27:25.960 lvmnps i {
         "text": "the list of switches"
@@ -111,16 +111,13 @@ will return this kind of reply.::
     }
 
 
-device command
----------------
+If you run the outlet command via lvmnps reachable command, you can get the list of devices connected with the switch.::
 
-If you run the device command via lvmnps, you can get the list of devices connected with the switch.::
-
-    lvmnps device DLI-NPS-01
+    lvmnps reachable outlets DLI-NPS-01
 
 will return this kind of reply.::
 
-    lvmnps device DLI-NPS-01
+    lvmnps reachable outlets DLI-NPS-01
     08:19:36.478 lvmnps > 
     08:19:36.491 lvmnps i {
         "text": "Individual Control of DLI-NPS-01..."
@@ -200,25 +197,6 @@ will return this kind of reply.::
         }
     }
     05:42:02.426 lvmnps : {
-        "text": "done"
-    }
-
-
-Cycle command
----------------
-
-If you run the cycle command via lvmnps, you can cycle the power of the device which you want to control.::
-
-    lvmnps cycle eight
-
-will return this kind of reply.::
-
-    lvmnps cycle eight
-    05:43:26.118 lvmnps > 
-    05:43:26.135 lvmnps i {
-        "text": "Cycle port eight..."
-    }
-    05:43:26.841 lvmnps : {
         "text": "done"
     }
 

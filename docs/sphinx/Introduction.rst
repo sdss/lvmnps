@@ -106,7 +106,7 @@ Run the example lvmnps\_dummy
 
    ::
 
-            lvmnps status all
+            lvmnps statu
 
             12:02:08.649 lvmnps > 
             12:02:08.660 lvmnps i {

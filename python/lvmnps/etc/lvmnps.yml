@@ -67,8 +67,8 @@ switches:
             name: "RPi"
             desc: "Raspberry Pi"
           7:
-            name: "FFS LED"
-            desc: "LED"
+            name: "Heidenhain Gauge reader"
+            desc: "Heidenhain Gauge reader for measurement of linear gages"
           8:
             name: "Pressure transducers"
             desc: "Pressure transducers"

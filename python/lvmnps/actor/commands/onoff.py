@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+import asyncio
+
 import click
 from clu.command import Command
 
@@ -35,8 +37,11 @@ async def switch_control(command, switch, on: bool, name: str, portnum: int):
 
 @parser.command()
 @click.argument("NAME", type=str, required=False)
-@click.argument("PORTNUM", type=int, default=0)
-async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
+@click.argument("PORTNUM", type=int, required=False, default=0)
+@click.argument("OFFAFTER", type=int, default=0)
+async def on(
+    command: Command, switches: PowerSwitch, name: str, portnum: int, offafter: int
+):
     """Turn on the outlet."""
 
     if portnum:
@@ -60,11 +65,15 @@ async def on(command: Command, switches: PowerSwitch, name: str, portnum: int):
             return command.fail(text=f"The Outlet {outletname} is already ON")
         else:
             return command.fail(text=f"The Outlet {outletname} returns wrong value")
-
     except NpsActorError as ex:
         return command.fail(error=str(ex))
 
     command.info(status=current_status)
+    if offafter > 0:
+        command.info(f"The switch will be turned off after {offafter} seconds.")
+        await asyncio.sleep(offafter - 1)
+        current_status = await switch_control("off", the_switch, False, name, portnum)
+        command.info(status=current_status)
     return command.finish()
 
 

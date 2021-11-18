@@ -20,11 +20,6 @@ Lvm Network Power Switch
 
 ## Installation
 
-Install [CLU](https://clu.readthedocs.io/en/latest/) by using PyPI.
-```
-$ pip install sdss-clu
-```
-
 Clone this repository.
 ```
 $ git clone https://github.com/sdss/lvmnps
@@ -32,54 +27,6 @@ $ cd lvmnps
 ```
 
 ## Quick Start
-
-### Prerequisite
-
-Install [RabbitMQ](https://www.rabbitmq.com/) by using apt-get.
-
-```
-$ sudo apt-get install -y erlang
-$ sudo apt-get install -y rabbitmq-server
-$ sudo systemctl enable rabbitmq-server
-$ sudo systemctl start rabbitmq-server
-```
-
-Install [pyenv](https://github.com/pyenv/pyenv) by using [pyenv installer](https://github.com/pyenv/pyenv-installer).
-
-```
-$ curl https://pyenv.run | bash
-```
-
-You should add the code below to `~/.bashrc` by using your preferred editor.
-```
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv init --path)"
-eval "$(pyenv virtualenv-init -)"
-```
-
-`pyenv` builds Python from source. So you should install build dependencies. For more information, check [Common build problems](https://github.com/pyenv/pyenv/wiki/Common-build-problems).
-```
-$ sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
-libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
-```
-
-Set the python 3.9.1 virtual environment.
-```
-$ pyenv install 3.9.1
-$ pyenv virtualenv 3.9.1 lvmnps-with-3.9.1
-$ pyenv local lvmnps-with-3.9.1
-```
-
-Install [poetry](https://python-poetry.org/) and dependencies. For more information, check [sdss/archon](https://github.com/sdss/archon).
-```
-$ pip install poetry
-$ python create_setup.py
-$ pip install -e .
-```
 
 ### Start the actor
 
