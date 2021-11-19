@@ -131,7 +131,3 @@ class PowerSwitch(PowerSwitchBase):
 
         except Exception as ex:
             self.log.error(f"Unexpected exception to {type(ex)}: {ex}")
-
-    async def scripting(self):
-        result = await self.dli.script()
-        return result
