@@ -1,55 +1,22 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "definitions": {},
-    "type":"object",
+    "type": "object",
     "properties": {
-        "reachable_outlets": {
-            "type":"object",
-            "properties":{
-                "text":{"type":"string"},
-                "outlets":{"type": "array", "items": {"type": "string"}}
-            },
-            "additionalProperties": false
-        },
-        "reachable_switches":{
-            "type":"object",
-            "properties": {
-                "text":{"type":"string"},
-                "switches":{"type": "array", "items": {"type": "string"}}
-            },
-            "additionalProperties":false
-        },
-        "onoff": {
-            "type":"object",
-            "properties":{
-                "text":{"type":"string"},
-                "status":{"type":"object"}
-            },
-            "patternProperties": {
-                "^[A-Za-z0-9_.-]+$": {
-                    "state": {"type": "number"},
+        "text": {"type": "string"},
+        "status": {"type": "object", 
+            "switch": {"type": "object", 
+                "outlet": {"type": "object",
+                    "state": {"type": "integer"},
                     "descr": {"type": "string"},
                     "switch": {"type": "string"},
-                    "port": {"type": "number"}            
-            },
-            "additionalProperties":false
-        },
-        "status": {
-            "type":"object",
-            "properties":{
-                "text":{"type":"string"},
-                "status":{"type":"object"}
-            },
-            "patternProperties": {
-                "^[A-Za-z0-9_.-]+$": {
-                    "state": {"type": "number"},
-                    "descr": {"type": "string"},
-                    "switch": {"type": "string"},
-                    "port": {"type": "number"}            
+                    "port": {"type": "integer"}
+                }
             }
         },
-            "additionalProperties": false
-        }
-    }, "additionalProperties": false
-}
+        "switches":{"type": "array", "items": {"type": "string"}},
+        "outlets": {"type": "array", "items": {"type": "string"}},
+        "error": {"type": "string"}
+    },
+    "additionalProperties": false
 }

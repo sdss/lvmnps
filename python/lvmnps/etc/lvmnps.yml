@@ -67,8 +67,8 @@ switches:
             name: "RPi"
             desc: "Raspberry Pi"
           7:
-            name: "Heidenhain Gauge reader"
-            desc: "Heidenhain Gauge reader for measurement of linear gages"
+            name: "LN2 Blue Valve"
+            desc: "Cryogenic solenoid valve of Blue camera for liquid nitrogen."
           8:
             name: "Pressure transducers"
             desc: "Pressure transducers"

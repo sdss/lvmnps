@@ -64,7 +64,7 @@ async def switches(
 ):
     """Returns the list of switches which is reachable."""
 
-    command.info(info="the list of switches")
+    command.info(text="the list of switches")
 
     try:
         names = []
