@@ -5,9 +5,11 @@ from lvmnps.actor.actor import lvmnps as NpsActor
 
 pytestmark = [pytest.mark.asyncio]
 
+
 async def test_actor(actor: NpsActor):
 
     assert actor
+
 
 async def test_ping(actor):
 
@@ -22,4 +24,4 @@ async def test_ping(actor):
 async def test_actor_no_config():
 
     with pytest.raises(RuntimeError):
-        NpsActor.from_config(None) 
+        NpsActor.from_config(None)
