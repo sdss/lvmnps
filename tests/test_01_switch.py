@@ -56,7 +56,7 @@ async def send_command(actor, command_string):
 
 
 @pytest.mark.asyncio
-async def test_actor(amqp_actor, switches):
+async def test_actor(switches):
 
     test_actor = await setup_test_actor(
         JSONActor("lvmnps", host="localhost", port=9999)

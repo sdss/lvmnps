@@ -14,7 +14,7 @@ import os
 
 import clu.testing
 import pytest
-from clu import AMQPActor, AMQPClient
+from clu import AMQPActor
 from clu.actor import AMQPBaseActor
 
 from sdsstools import merge_config, read_yaml_file
@@ -39,7 +39,7 @@ from lvmnps.switch.factory import powerSwitchFactory
 #                                         server=rabbitmq_local_proc,
 #                                         ctl=f"{os.path.dirname(rabbitmq_local_proc)}/rabbitmqctl")
 
-
+"""
 @pytest.fixture
 async def amqp_actor(rabbitmq, event_loop):
 
@@ -64,6 +64,7 @@ async def amqp_client(rabbitmq, amqp_actor, event_loop):
     yield client
 
     await client.stop()
+"""
 
 
 @pytest.fixture()
