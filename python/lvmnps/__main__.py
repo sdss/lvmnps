@@ -25,7 +25,7 @@ from lvmnps.actor.actor import lvmnps as NpsActorInstance
 )
 @click.pass_context
 def lvmnps(ctx, config_file, verbose):
-    """Nps controller"""
+    """Nps Actor."""
 
     ctx.obj = {"verbose": verbose, "config_file": config_file}
 
@@ -35,7 +35,7 @@ def lvmnps(ctx, config_file, verbose):
 @cli_coro
 async def actor(ctx):
     """Runs the actor."""
-    default_config_file = os.path.join(os.path.dirname(__file__), "etc/lvmnps_dli.yml")
+    default_config_file = os.path.join(os.path.dirname(__file__), "etc/lvmnps.yml")
     config_file = ctx.obj["config_file"] or default_config_file
 
     lvmnps_obj = NpsActorInstance.from_config(config_file)

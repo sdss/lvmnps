@@ -12,57 +12,49 @@ import click
 from clu.command import Command
 
 from lvmnps.actor.commands import parser
-from lvmnps.switch.dli.powerswitch import PowerSwitch
-from lvmnps.switch.exceptions import PowerException
+from lvmnps.exceptions import NpsActorError
+from lvmnps.switch.powerswitchbase import PowerSwitchBase as PowerSwitch
 
 
-@parser.group()
-def status(*args):
-    """print the status of the NPS."""
-    pass
-
-
-@status.command()
-@click.argument("NAME", type=str, default="")
+@parser.command()
+@click.argument("SWITCHNAME", type=str, required=False)
 @click.argument("PORTNUM", type=int, default=0)
-async def what(command: Command, switches: PowerSwitch, name: str, portnum: int):
-    """Returns the status of the outlets."""
+async def status(
+    command: Command, switches: PowerSwitch, switchname: str, portnum: int
+):
+    """Returns the dictionary of a specific outlet."""
 
-    command.info(text=f"Printing the current status of port {name}")
+    if switchname is None:
+        command.info(text="Printing the current status of all outlets")
+    elif switchname:
+        if portnum:
+            command.info(
+                text=f"Printing the current status of switch {switchname}, port {portnum}"
+            )
+        else:
+            command.info(text=f"Printing the current status of switch {switchname}")
 
     try:
         status = {}
-        for switch in switches:
-            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-            current_status = await switch.statusAsJson(name, portnum)
+        if switchname is None:
+            for switch in switches:
+                current_status = await switch.statusAsDict()
+                if current_status:
+                    status[switch.name] = current_status
+        elif switchname:
+            for switch in switches:
+                # status |= await switch.statusAsDict(name, portnum) works only with python 3.9
+                if switchname == switch.name:
+                    if portnum:
+                        current_status = await switch.statusAsDict(switchname, portnum)
+                    else:
+                        current_status = await switch.statusAsDict(switchname)
+                    if current_status:
+                        status[switch.name] = current_status
+                        break
 
-            if current_status:
-                status[switch.name] = current_status
-
-    except PowerException as ex:
+    except NpsActorError as ex:
         return command.fail(error=str(ex))
 
-    command.info(STATUS=status)
-    return command.finish(text="done")
-
-
-@status.command()
-async def all(command: Command, switches: PowerSwitch):
-    """Returns the status of ALL outlets in the NPS."""
-
-    status = {}
-
-    try:
-        for switch in switches:
-            # status |= await switch.statusAsJson(name, portnum) works only with python 3.9
-            command.info(text=f"Printing the current status of switch {switch.name}")
-
-            current_status = await switch.statusAsJson()
-            # status[switch.name] = dict(list(status.items()) + list((current_status.items())))
-            status[switch.name] = current_status
-            command.info(STATUS=status)
-
-    except PowerException as ex:
-        return command.fail(error=str(ex))
-
-    return command.finish(text="done")
+    command.info(status=status)
+    return command.finish()

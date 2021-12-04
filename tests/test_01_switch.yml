@@ -26,6 +26,19 @@ switches:
           1:  
             name: "skyw.pwi"
             desc: "PlaneWavemount Skyw"
+    slow:
+        type: dummy
+        delay: 2.0
+        ports:
+          num: 1
+          1:
+            name: "slow"
+    fast:
+        type: dummy
+        ports:
+          num: 1
+          1:
+            name: "fast"
 
 timeouts:
         switch_connect: 1
@@ -35,4 +48,4 @@ actor:
     name: lvmnps
     host: localhost
     port: 5672
-    log_dir: '~/tmp/log'
+    log_dir: '~/data/logs/lvmnps'

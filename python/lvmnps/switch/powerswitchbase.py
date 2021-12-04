@@ -16,14 +16,26 @@ __all__ = ["PowerSwitchBase"]
 
 
 class PowerSwitchBase(object):
-    """Powerswitch class to manage the Digital Loggers Web power switch"""
+    """PowerswitchBase class for multiple power switches from different manufacturers
+    The Powerswitch classes will inherit the PowerSwitchBase class.
+
+    Parameters
+    ----------
+    name
+        A name identifying the power switch.
+        'DLI Controller' for Dli switch
+    config
+        The configuration defined on the .yaml file under /etc/lvmnps.yml
+    log
+        The logger for logging
+    """
 
     def __init__(self, name: str, config: [], log: SDSSLogger):
         self.name = name
         self.log = log
         self.config = config
 
-        self.numports = self.config_get("ports.num", 8)
+        self.numports = self.config_get("ports.number_of_ports", 8)
         self.outlets = [
             Outlet(
                 name,
@@ -39,15 +51,46 @@ class PowerSwitchBase(object):
         self.log.debug(f"Only used ones: {self.onlyusedones}")
 
     def config_get(self, key, default=None):
-        """DOESNT work for keys with dots !!!"""
+        """Read the configuration and extract the data as a structure that we want.
+        Notice: DOESNT work for keys with dots !!!
+
+        Parameters
+        ----------
+        key
+            The tree structure as a string to extract the data.
+            For example, if the configuration structure is
+
+            ports;
+                1;
+                    desc; "Hg-Ar spectral callibration lamp"
+
+            You can input the key as
+            "ports.1.desc" to take the information "Hg-Ar spectral callibration lamp"
+        """
 
         def g(config, key, d=None):
+            """Internal function for parsing the key from the configuration.
+
+            Parameters
+            ----------
+            config
+                config from the class member, which is saved from the class instance
+            key
+                The tree structure as a string to extract the data.
+                For example, if the configuration structure is
+
+                ports:
+                    num:1
+                    1:
+                        desc: "Hg-Ar spectral callibration lamp"
+
+                You can input the key as
+                "ports.1.desc" to take the information "Hg-Ar spectral callibration lamp"
+            """
             k = key.split(".", maxsplit=1)
             c = config.get(
                 k[0] if not k[0].isnumeric() else int(k[0])
             )  # keys can be numeric
-            # print(k)
-            # print(c)
             return (
                 d
                 if c is None
@@ -61,15 +104,28 @@ class PowerSwitchBase(object):
         return g(self.config, key, default)
 
     def findOutletByName(self, name: str):
+        """Find the outlet by the name, comparing with the name from the Outlet object.
+
+        Parameters
+        ----------
+        name
+            The string to compare with the name in Outlet instance.
+        """
         for o in self.outlets:
             if o.name == name:
                 return o
 
     def collectOutletsByNameAndPort(self, name: str, portnum: int = 0):
+        """Collects the outlet by the name and ports,
+        comparing with the name and ports from the Outlet object.
 
-        # print(self.numports)
-        # print(portnum)
-
+        Parameters
+        ----------
+        name
+            The string to compare with the name in Outlet instance.
+        portnum
+            The integer for indicating each Outlet instances
+        """
         if not name or name == self.name:
             if portnum:
                 if portnum > self.numports:
@@ -78,11 +134,11 @@ class PowerSwitchBase(object):
             else:
                 outlets = []
                 self.log.debug(str(self.onlyusedones))
-                # print(self.outlets)
+
                 for o in self.outlets:
                     if o.inuse or not self.onlyusedones:
                         outlets.append(o)
-                # print(outlets)
+
                 return outlets
         else:
             o = self.findOutletByName(name)
@@ -91,25 +147,44 @@ class PowerSwitchBase(object):
         return []
 
     async def setState(self, state, name: str = "", portnum: int = 0):
+        """Set the state of the Outlet instance to On/Off. (On = 1, Off = 0)
+
+        Parameters
+        ----------
+        state
+            The boolian value (True, False) to set the state inside the Outlet object.
+        name
+            The string to compare with the name in Outlet instance.
+        portnum
+            The integer for indicating each Outlet instances
+        """
         if portnum > self.numports:
             return []
-        # print(Outlet.parse(state))
+
         return await self.switch(
             Outlet.parse(state), self.collectOutletsByNameAndPort(name, portnum)
         )
 
-    async def statusAsJson(self, name: str = "", portnum: int = 0):
-        # name: can be a switch or an outlet name
+    async def statusAsDict(self, name: str = "", portnum: int = 0):
+        """Get the status of the Outlets by dictionary.
+
+        Parameters
+        ----------
+        name
+            The string to compare with the name in Outlet instance.
+            'name' can be a switch or an outlet name.
+        portnum
+            The integer for indicating each Outlet instances
+        """
 
         outlets = self.collectOutletsByNameAndPort(name, portnum)
-        # print(outlets)
 
         await self.update(outlets)
 
         status = {}
         for o in outlets:
-            status[f"{o.name}"] = o.toJson()
-        # print(status)
+            status[f"{o.name}"] = o.toDict()
+
         return status
 
     @abstractmethod
