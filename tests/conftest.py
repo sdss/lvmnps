@@ -61,9 +61,6 @@ async def actor(test_config: dict, switches, mocker):
     # on the actor.
     mocker.patch.object(AMQPBaseActor, "start")
 
-    # test_config["controllers"]["sp1"]["host"] = controller.host
-    # test_config["controllers"]["sp1"]["port"] = controller.port
-
     _actor = NpsActor.from_config(test_config)
     await _actor.start()
 

@@ -3,15 +3,14 @@ import pytest
 from lvmnps.actor.actor import lvmnps as NpsActor
 
 
-pytestmark = [pytest.mark.asyncio]
-
-
+@pytest.mark.asyncio
 async def test_actor(actor: NpsActor):
 
     assert actor
 
 
-async def test_ping(actor):
+@pytest.mark.asyncio
+async def test_ping(actor: NpsActor):
 
     command = await actor.invoke_mock_command("ping")
     await command
@@ -21,6 +20,7 @@ async def test_ping(actor):
     assert command.replies[1].message["text"] == "Pong."
 
 
+@pytest.mark.asyncio
 async def test_actor_no_config():
 
     with pytest.raises(RuntimeError):
