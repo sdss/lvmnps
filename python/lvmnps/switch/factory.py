@@ -12,7 +12,9 @@ from lvmnps.exceptions import PowerException
 
 from .dli.powerswitch import PowerSwitch as DliPowerSwitch
 from .dummy.powerswitch import PowerSwitch as DummyPowerSwitch
-from .iboot.powerswitch import PowerSwitch as IBootPowerSwitch
+
+
+# from .iboot.powerswitch import PowerSwitch as IBootPowerSwitch
 
 
 def powerSwitchFactory(name: str, config: dict, log: SDSSLogger):
@@ -35,7 +37,7 @@ def powerSwitchFactory(name: str, config: dict, log: SDSSLogger):
 
     factorymap = {
         "dli": DliPowerSwitch,
-        "iboot": IBootPowerSwitch,
+        # "iboot": IBootPowerSwitch,
         "dummy": DummyPowerSwitch,
     }
 
