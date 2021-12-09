@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sdss-lvmnps"
-version = "0.2.1"
+version = "0.2.2"
 description = "A library and actor to communicate with an SDSS-V LVM network power switch"
 authors = ["Florian Briegel <briegel@mpia.de>","José Sánchez-Gallego <gallegoj@uw.edu>","Changgon Kim <changgonkim@khu.ac.kr>","Mingyeong Yang <mingyeong@khu.ac.kr>"]
 license = "BSD-3-Clause"
@@ -84,12 +84,14 @@ addopts = "--cov lvmnps --cov-report xml --cov-report html --cov-report term"
 branch = true
 include = ["python/lvmnps/*"]
 omit = [
-    "*/__init__.py",
+    "python/lvmnps/__main__.py",
 ]
+
 
 [tool.coverage.report]
 exclude_lines = [
 ]
+
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools>=49.6.0"]

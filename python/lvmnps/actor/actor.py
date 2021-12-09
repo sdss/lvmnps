@@ -60,7 +60,7 @@ class lvmnps(AMQPActor):
         self.log.debug("Start done")
 
     async def stop(self):
-        """Stop the actor and connect the power switches."""
+        """Stop the actor and disconnect the power switches."""
         for switch in self.parser_args[0]:
             try:
                 self.log.debug(f"Stop {switch.name} ...")

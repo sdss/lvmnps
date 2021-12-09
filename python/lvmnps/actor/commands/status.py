@@ -12,7 +12,6 @@ import click
 from clu.command import Command
 
 from lvmnps.actor.commands import parser
-from lvmnps.exceptions import NpsActorError
 from lvmnps.switch.powerswitchbase import PowerSwitchBase as PowerSwitch
 
 
@@ -34,27 +33,23 @@ async def status(
         else:
             command.info(text=f"Printing the current status of switch {switchname}")
 
-    try:
-        status = {}
-        if switchname is None:
-            for switch in switches:
-                current_status = await switch.statusAsDict()
+    status = {}
+    if switchname is None:
+        for switch in switches:
+            current_status = await switch.statusAsDict()
+            if current_status:
+                status[switch.name] = current_status
+    elif switchname:
+        for switch in switches:
+            # status |= await switch.statusAsDict(name, portnum) works only with python 3.9
+            if switchname == switch.name:
+                if portnum:
+                    current_status = await switch.statusAsDict(switchname, portnum)
+                else:
+                    current_status = await switch.statusAsDict(switchname)
                 if current_status:
                     status[switch.name] = current_status
-        elif switchname:
-            for switch in switches:
-                # status |= await switch.statusAsDict(name, portnum) works only with python 3.9
-                if switchname == switch.name:
-                    if portnum:
-                        current_status = await switch.statusAsDict(switchname, portnum)
-                    else:
-                        current_status = await switch.statusAsDict(switchname)
-                    if current_status:
-                        status[switch.name] = current_status
-                        break
-
-    except NpsActorError as ex:
-        return command.fail(error=str(ex))
+                    break
 
     command.info(status=status)
     return command.finish()

@@ -12,7 +12,6 @@ import click
 from clu.command import Command
 
 from lvmnps.actor.commands import parser
-from lvmnps.exceptions import NpsActorError
 from lvmnps.switch.powerswitchbase import PowerSwitchBase as PowerSwitch
 
 
@@ -41,16 +40,13 @@ async def outlets(
                 the_switch = switch
                 break
 
-        try:
-            outlets = []
-            status = {}
+        outlets = []
+        status = {}
 
-            status = await the_switch.statusAsDict(switchname, portnum)
-            outlets = list(status.keys())
-            command.info(outlets=outlets)
+        status = await the_switch.statusAsDict(switchname, portnum)
+        outlets = list(status.keys())
+        command.info(outlets=outlets)
 
-        except NpsActorError as err:
-            return command.error(str(err))
         return command.finish()
 
     else:
@@ -66,15 +62,11 @@ async def switches(
 
     command.info(text="the list of switches")
 
-    try:
-        names = []
+    names = []
 
-        for switch in switches:
-            names.append(switch.name)
+    for switch in switches:
+        names.append(switch.name)
 
-        command.info(switches=names)
-
-    except NpsActorError as err:
-        command.fail(error=str(err))
+    command.info(switches=names)
 
     return command.finish()

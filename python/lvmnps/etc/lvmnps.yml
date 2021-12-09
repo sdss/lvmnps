@@ -4,10 +4,8 @@ switches:
         type: dli
         name: Dli Controller
         hostname: 10.7.45.22
-        use_https: False
         user: 'admin'
         password: 'rLXR3KxUqiCPGvA'
-        numports: 8
         onoff_timeout: 3
         ouo: False # handle also unconfigured ports
         ports:
@@ -40,10 +38,8 @@ switches:
         type: dli
         name: Dli Controller
         hostname: 10.7.45.29
-        use_https: False
         user: 'admin'
         password: 'VCrht9wfx2CQN9b'
-        numports: 8
         onoff_timeout: 3
         ouo: False # handle also unconfigured ports
         ports:
@@ -78,7 +74,6 @@ switches:
         hostname: 10.7.45.31
         user: 'admin'
         password: 'JNC_zbf5tdc4deb*npx'
-        numports: 8
         onoff_timeout: 3
         ouo: False # handle also unconfigured ports
         ports:
