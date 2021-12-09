@@ -14,7 +14,6 @@ import click
 from clu.command import Command
 
 from lvmnps.actor.commands import parser
-# from lvmnps.exceptions import NpsActorError
 from lvmnps.switch.powerswitchbase import PowerSwitchBase as PowerSwitch
 
 
