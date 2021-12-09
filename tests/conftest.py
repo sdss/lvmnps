@@ -54,7 +54,7 @@ def switches():
 
 
 @pytest.fixture()
-async def actor(test_config: dict, switches, mocker):
+async def actor(switches, test_config: dict, mocker):
 
     # We need to call the actor .start() method to force it to create the
     # controllers and to start the tasks, but we don't want to run .start()
@@ -62,6 +62,8 @@ async def actor(test_config: dict, switches, mocker):
     mocker.patch.object(AMQPBaseActor, "start")
 
     _actor = NpsActor.from_config(test_config)
+
+    _actor.parser_args = [switches]
     await _actor.start()
 
     _actor = await clu.testing.setup_test_actor(_actor)  # type: ignore
