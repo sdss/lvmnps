@@ -39,18 +39,6 @@ switches:
           num: 1
           1:
             name: "fast"
-    dli_dummy:
-        type: dli
-        name: Dli Controller
-        hostname: 10.7.45.22
-        user: 'admin'
-        password: 'rLXR3KxUqiCPGvA'
-        onoff_timeout: 3
-        ports:
-          number_of_ports: 1
-          1:
-            name: "Outlet 1"
-            desc: ""
 
 
 timeouts:

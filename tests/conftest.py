@@ -52,6 +52,25 @@ def switches():
 
     return switches
 
+# now working to define the fixture for the dli power class...
+@pytest.fixture
+def dli_switches():
+    default_config_file = os.path.join(os.path.dirname(__file__), "test_02_dli_switch.yml")
+    default_config = AMQPActor._parse_config(default_config_file)
+
+    assert "switches" in default_config
+
+    switches = []
+    for (name, conf) in default_config["switches"].items():
+        print(f"Switch {name}: {conf}")
+        try:
+            switches.append(powerSwitchFactory(name, conf, get_logger("test")))
+
+        except Exception as ex:
+            print(f"Error in power switch factory {type(ex)}: {ex}")
+
+    return switches
+
 
 @pytest.fixture()
 async def actor(switches, test_config: dict, mocker):
