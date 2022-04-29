@@ -90,7 +90,7 @@ class Dli(object):
             list of Outlet objects defined on /switch/outlet.py
             each Oulet object indicates one of eight outlets of the dli power switch.
         """
-
+        result = False
         if self.hostname not in self.clients:
             raise ValueError(f"Client for host {self.hostname} not defined.")
 

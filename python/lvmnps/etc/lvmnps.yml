@@ -11,29 +11,29 @@ switches:
         ports:
           number_of_ports: 8
           1:
-            name: "Outlet 1"
+            name: "Red ln2"
             desc: ""
           2:
-            name: "–"
+            name: "Blue ln2"
             desc: ""
           3:
-            name: "Outlet 3"
+            name: "IEB02"
             desc: ""
           4:
-            name: "Outlet 4"
+            name: "Pressure Transducers"
             desc: ""
           5:
-            name: "Outlet 5"
+            name: "Switch"
             desc: ""
           6:
-            name: "Outlet 6"
+            name: "NIR ln2"
             desc: ""
           7:
-            name: "Outlet 7"
+            name: "LVM-Archon-01"
             desc: ""
           8:
-            name: "625 nm LED (M625L4)"
-            desc: "LED"
+            name: "RPi"
+            desc: ""
     DLI-02:
         type: dli
         name: Dli Controller
@@ -100,8 +100,8 @@ switches:
             name: "Hg (Ne)"
             desc: "Hg (Ne) spectral calibration Lamp"
           8:
-            name: "Outlet 8"
-            desc: ""
+            name: "NIR LED"
+            desc: "NIR LED Lamp"
 
 timeouts:
         switch_connect: 3
