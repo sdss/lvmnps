@@ -52,10 +52,13 @@ def switches():
 
     return switches
 
+
 # now working to define the fixture for the dli power class...
 @pytest.fixture
 def dli_switches():
-    default_config_file = os.path.join(os.path.dirname(__file__), "test_02_dli_switch.yml")
+    default_config_file = os.path.join(
+        os.path.dirname(__file__), "test_02_dli_switch.yml"
+    )
     default_config = AMQPActor._parse_config(default_config_file)
 
     assert "switches" in default_config
