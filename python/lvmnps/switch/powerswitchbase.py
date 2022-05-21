@@ -84,8 +84,8 @@ class PowerSwitchBase(object):
                     1:
                         desc: "Hg-Ar spectral callibration lamp"
 
-                You can input the key as
-                "ports.1.desc" to take the information "Hg-Ar spectral callibration lamp"
+                You can input the key as "ports.1.desc" to take the information
+                "Hg-Ar spectral callibration lamp"
             """
             k = key.split(".", maxsplit=1)
             c = config.get(

@@ -43,9 +43,9 @@ changed the way connecting to the powerswitch using 'get' and 'put' method from 
 
 ## 0.2.0 - August 13, 2021
 
-    * Initial version of the library and actor. Supports communication with the Network power switch, lvmnps command to on, off and cycle the nps and return the status of power.
-    
-    * wrench Basic documentation(https://lvmnps.readthedocs.io/en/latest/).
+* Initial version of the library and actor. Supports communication with the Network power switch, lvmnps command to on, off and cycle the nps and return the status of power.
+
+* Basic documentation(https://lvmnps.readthedocs.io/en/latest/).
 
 
 ## 0.1.4 - July 28, 2021

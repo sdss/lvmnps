@@ -11,6 +11,7 @@ from __future__ import annotations
 import asyncio
 
 import click
+
 from clu.command import Command
 
 from lvmnps.actor.commands import parser

@@ -82,7 +82,9 @@ class Dli(object):
 
     async def verify(self, outlets):
         """Verifies if we can reach the switch by the "get" method.
-        Also compares the outlet lists with the configuration, and returns true if it's identical.
+
+        Also compares the outlet lists with the configuration, and returns true
+        if it's identical.
 
         Parameters
         ----------
@@ -105,7 +107,8 @@ class Dli(object):
     async def compare(self, json, outlets):
         """Compares the name of outlets from the json object and the
         name of the Outlet object list.
-        The name of the Outlet object is from the configuration file in /etc/lvmnps_dli.yml
+        The name of the Outlet object is from the configuration file in
+        `/etc/lvmnps_dli.yml`.
 
         Parameters
         ----------
@@ -194,7 +197,9 @@ class Dli(object):
             raise RuntimeError(f"PUT returned code {r.status_code}.")
 
     async def statusdictionary(self):
-        """Sets the status as a dictionary memeber of the class from the outlets of the real switch.
+        """Sets the status as a dictionary member of the class from the outlets
+        of the real switch.
+
         Receives the data from the switch by the 'get' method as a json.
         """
 

@@ -13,6 +13,7 @@ import os
 from typing import ClassVar, Dict
 
 import click
+
 from clu.actor import AMQPActor
 
 from lvmnps.actor.commands import parser as nps_command_parser

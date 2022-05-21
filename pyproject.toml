@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "sdss-lvmnps"
-version = "0.2.2"
+version = "0.3.0-alpha.0"
 description = "A library and actor to communicate with an SDSS-V LVM network power switch"
-authors = ["Florian Briegel <briegel@mpia.de>","José Sánchez-Gallego <gallegoj@uw.edu>","Changgon Kim <changgonkim@khu.ac.kr>","Mingyeong Yang <mingyeong@khu.ac.kr>"]
+authors = ["Florian Briegel <briegel@mpia.de>", "José Sánchez-Gallego <gallegoj@uw.edu>", "Changgon Kim <changgonkim@khu.ac.kr>", "Mingyeong Yang <mingyeong@khu.ac.kr>"]
 license = "BSD-3-Clause"
 readme = "README.md"
 homepage = "https://github.com/sdss/lvmnps"
@@ -24,27 +24,15 @@ packages = [
 ]
 include = ["python/lvmnps/etc/*"]
 
-[tool.poetry.build]
-script = "build.py"
-generate-setup-file = false
-
 [tool.poetry.scripts]
 lvmnps = "lvmnps.__main__:lvmnps"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-sdss-tree = ">=2.15.2"
-sdss-access = ">=0.2.3"
 sdsstools = ">=0.4.0"
-daemonocle = "^1.1.1"
 click-default-group = "^1.2.2"
-dlipower = "^1.0.176"
 sdss-clu = "^1.0.3"
 httpx = "^0.18.1"
-asyncinit = "^0.2.4"
-myst-parser = "^0.15.1"
-sphinx-jsonschema = "^1.16.11"
-sphinx-click = "^3.0.1"
 
 [tool.poetry.dev-dependencies]
 ipython = ">=7.11.0"
@@ -60,22 +48,33 @@ isort = ">=4.3.21"
 codecov = ">=2.0.15"
 coverage = {version = ">=5.0", extras = ["toml"]}
 ipdb = ">=0.12.3"
-rstcheck = "^3.3.1"
-pylint = "^2.8.2"
-Sphinx = "4.1.2"
-sphinx-click = "^3.0.1"
-black = "^21.7b0"
+rstcheck = ">=3.3.1"
+pylint = ">=2.8.2"
+Sphinx = ">=4.1.2"
+sphinx-click = ">=3.0.1"
+black = ">=21.7b0"
+sphinx-jsonschema = ">=1.16.7"
+myst-parser = ">=0.14.0"
+furo = ">=2021.6.18-beta.36"
+nox = ">=2021.6.12"
+sphinx-autobuild = ">=2021.3.14"
+sphinx-copybutton = ">=0.3.3"
 
 [tool.isort]
 line_length = 79
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "SDSS", "FIRSTPARTY", "LOCALFOLDER"]
 default_section = "THIRDPARTY"
 known_first_party = "lvmnps"
-known_sdss = ["sdsstools"]
+known_sdss = ["sdsstools", "clu"]
 balanced_wrapping = true
 include_trailing_comma = false
 lines_after_imports = 2
 use_parentheses = true
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+fast = true
 
 [tool.pytest.ini_options]
 addopts = "--cov lvmnps --cov-report xml --cov-report html --cov-report term"
@@ -87,12 +86,11 @@ omit = [
     "python/lvmnps/__main__.py",
 ]
 
-
 [tool.coverage.report]
 exclude_lines = [
+    "pragma: no cover"
 ]
 
-
 [build-system]
-requires = ["poetry-core>=1.0.0", "setuptools>=49.6.0"]
+requires = ["poetry-core>=1.1.0a7"]
 build-backend = "poetry.core.masonry.api"

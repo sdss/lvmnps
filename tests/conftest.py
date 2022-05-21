@@ -12,11 +12,11 @@ more information.
 
 import os
 
-import clu.testing
 import pytest
+
+import clu.testing
 from clu import AMQPActor
 from clu.actor import AMQPBaseActor
-
 from sdsstools import merge_config, read_yaml_file
 from sdsstools.logger import get_logger
 

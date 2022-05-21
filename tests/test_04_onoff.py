@@ -149,8 +149,6 @@ async def test_status_off_after(switches, actor: NpsActor):
     status.append(asyncio.create_task(actor.invoke_mock_command("on nps_dummy_1 1 3")))
     status.append(asyncio.create_task(say_after(0.2, actor)))
 
-    # status.append(asyncio.create_task(actor.invoke_mock_command("status nps_dummy_1 1")))
-
     status_result = await asyncio.gather(*status)
 
     assert (

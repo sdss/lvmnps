@@ -2,8 +2,8 @@ import os
 
 import click
 from click_default_group import DefaultGroup
-from clu.tools import cli_coro
 
+from clu.tools import cli_coro
 from sdsstools.daemonizer import DaemonGroup
 
 from lvmnps.actor.actor import lvmnps as NpsActorInstance
