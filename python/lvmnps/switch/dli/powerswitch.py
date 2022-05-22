@@ -99,6 +99,17 @@ class DLIPowerSwitch(PowerSwitchBase):
                 outlet[0].description = outlet_data[i]["name"]
                 outlet[0].inuse = True
 
+        try:
+            inuse = [
+                outlet
+                for outlet in self.outlets
+                if outlet.inuse or not self.onlyusedones
+            ]
+            self.reachable = await self.dli.verify(inuse)
+
+        except Exception as ex:
+            raise RuntimeError(f"Unexpected exception is {type(ex)}: {ex}")
+
     async def stop(self):
         """Closes the connection to the client."""
 
@@ -106,11 +117,6 @@ class DLIPowerSwitch(PowerSwitchBase):
 
     async def isReachable(self):
         """Check if the power switch is reachable."""
-
-        try:
-            self.reachable = await self.dli.verify(self.outlets)
-        except Exception as ex:
-            raise RuntimeError(f"Unexpected exception is {type(ex)}: {ex}")
 
         return self.reachable
 
