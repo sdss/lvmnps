@@ -20,10 +20,10 @@ from lvmnps.actor.commands import parser as nps_command_parser
 from lvmnps.switch.factory import powerSwitchFactory
 
 
-__all__ = ["lvmnps"]
+__all__ = ["NPSActor"]
 
 
-class lvmnps(AMQPActor):
+class NPSActor(AMQPActor):
     """LVM network power switches base actor.
 
     Subclassed from the `.AMQPActor` class.
@@ -87,9 +87,9 @@ class lvmnps(AMQPActor):
                 raise RuntimeError("The class does not have a base configuration.")
             config = cls.BASE_CONFIG
 
-        instance = super(lvmnps, cls).from_config(config, *args, **kwargs)
+        instance = super(NPSActor, cls).from_config(config, *args, **kwargs)
 
-        assert isinstance(instance, lvmnps)
+        assert isinstance(instance, NPSActor)
         assert isinstance(instance.config, dict)
 
         switches = []
