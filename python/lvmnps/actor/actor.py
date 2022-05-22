@@ -56,26 +56,49 @@ class NPSActor(AMQPActor):
 
         assert len(self.parser_args) == 1
 
+        switches = list(self.parser_args[0].values())
+
         # self.parser_args[0] is the list of switch instances
-        for switch in self.parser_args[0]:
-            # switch is the instance of the power switch from the PowerSwitchFactory
-            try:
-                self.log.debug(f"Start {switch.name} ...")
-                await asyncio.wait_for(switch.start(), timeout=self.connect_timeout)
-            except Exception as ex:
-                self.log.error(f"Unexpected exception {type(ex)}: {ex}")
+
+        tasks = [
+            asyncio.wait_for(switch.start(), timeout=self.connect_timeout)
+            for switch in switches
+        ]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        valid_switches = []
+        for ii, result in enumerate(results):
+            switch_name = switches[ii].name
+            if isinstance(result, Exception):
+                self.log.error(
+                    f"Unexpected exception of type {type(result)} while initialising "
+                    f"switch {switch_name}: {str(result)}"
+                )
+            else:
+                valid_switches.append(switches[ii])
+
+        self.parser_args[0] = {switch.name: switch for switch in valid_switches}
+
+        all_names = [
+            outlet.name.lower()
+            for switch in valid_switches
+            for outlet in switch.outlets
+        ]
+
+        if len(all_names) != len(list(set(all_names))):
+            self.log.warning("Repeated outlet names. This may lead to errors.")
 
         self.log.debug("Start done")
 
     async def stop(self):
         """Stop the actor and disconnect the power switches."""
 
-        for switch in self.parser_args[0]:
+        for switch in self.parser_args[0].values():
             try:
                 self.log.debug(f"Stop {switch.name} ...")
                 await asyncio.wait_for(switch.stop(), timeout=self.connect_timeout)
             except Exception as ex:
-                self.log.error(f"Unexpected exception dd {type(ex)}: {ex}")
+                self.log.error(f"Unexpected exception of {type(ex)}: {ex}")
 
         return await super().stop()
 
@@ -96,10 +119,15 @@ class NPSActor(AMQPActor):
         switches = {}
 
         if "switches" in instance.config:
-            for (name, config) in instance.config["switches"].items():
-                instance.log.info(f"Instance {name}: {config}")
+            for (key, swconfig) in instance.config["switches"].items():
+                if "name" in swconfig:
+                    name = swconfig["name"]
+                else:
+                    name = key
+
+                instance.log.info(f"Instance {name}: {swconfig}")
                 try:
-                    switches[name] = powerSwitchFactory(name, config, instance.log)
+                    switches[name] = powerSwitchFactory(name, swconfig, instance.log)
                 except Exception as ex:
                     instance.log.error(f"Power switch factory error {type(ex)}: {ex}")
 
