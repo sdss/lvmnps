@@ -26,11 +26,10 @@ class PowerSwitchBase(object):
     ----------
     name
         A name identifying the power switch.
-        'DLI Controller' for Dli switch
     config
-        The configuration defined on the .yaml file under /etc/lvmnps.yml
+        The configuration defined on the .yaml file under ``/etc/lvmnps.yml``.
     log
-        The logger for logging
+        The logger for logging.
 
     """
 
@@ -40,14 +39,14 @@ class PowerSwitchBase(object):
         self.log = log
         self.config = config
 
-        numports = self.config_get("ports.number_of_ports", 8)
+        numports = self.config_get("ports.number_of_ports")
         if numports is None:
             raise ValueError(f"{name}: unknown number of ports.")
         self.numports: int = numports
 
         self.outlets = [
             Outlet(
-                name,
+                self,
                 self.config_get(f"ports.{portnum}.name"),
                 portnum,
                 self.config_get(f"ports.{portnum}.desc"),
@@ -56,7 +55,6 @@ class PowerSwitchBase(object):
             for portnum in range(1, self.numports + 1)
         ]
 
-        self.log.debug(f"{self.outlets}")
         self.onlyusedones = self.config_get("ouo", True)
         self.log.debug(f"Only used ones: {self.onlyusedones}")
 
@@ -130,7 +128,11 @@ class PowerSwitchBase(object):
             if o.name == name:
                 return o
 
-    def collectOutletsByNameAndPort(self, name: str, portnum: int = 0):
+    def collectOutletsByNameAndPort(
+        self,
+        name: str | None = None,
+        portnum: int | None = None,
+    ):
         """Collects the outlet by the name and ports,
         comparing with the name and ports from the Outlet object.
 
@@ -139,8 +141,19 @@ class PowerSwitchBase(object):
         name
             The string to compare with the name in Outlet instance.
         portnum
-            The integer for indicating each Outlet instances
+            The integer for indicating each Outlet instances. If zero or `None`,
+            identifies the outlet only by name.
+
+        Returns
+        -------
+        outlets
+            A list of `.Outlet` that match the name and port number. If ``name=None``,
+            the outlet matching the port number is returned. If both ``name`` and
+            ``portnum`` are `None`, a list with all the outlets connected to this
+            switch is returned.
+
         """
+
         if not name or name == self.name:
             if portnum:
                 if portnum > self.numports:
@@ -148,7 +161,6 @@ class PowerSwitchBase(object):
                 return [self.outlets[portnum - 1]]
             else:
                 outlets = []
-                self.log.debug(str(self.onlyusedones))
 
                 for o in self.outlets:
                     if o.inuse or not self.onlyusedones:
@@ -159,35 +171,45 @@ class PowerSwitchBase(object):
             o = self.findOutletByName(name)
             if o:
                 return [o]
+
         return []
 
-    async def setState(self, state, name: str = "", portnum: int = 0):
-        """Set the state of the Outlet instance to On/Off. (On = 1, Off = 0)
+    async def setState(
+        self, state: bool | int, name: str | None = None, portnum: int | None = None
+    ):
+        """Set the state of the Outlet instance to On/Off. (On = 1, Off = 0).
+
+        Note that dependending on the values passed to ``name`` and ``portnum``,
+        multiple outlets may be commanded.
 
         Parameters
         ----------
         state
-            The boolian value (True, False) to set the state inside the Outlet object.
+            The boolean value (True, False) to set the state inside the Outlet object.
         name
             The string to compare with the name in Outlet instance.
         portnum
-            The integer for indicating each Outlet instances
+            The integer for indicating each Outlet instances.
+
         """
-        if portnum > self.numports:
-            return []
+
+        state_int = Outlet.parse(state)
+        if state_int == -1:
+            raise ValueError(f"{self.name}: cannot parse state {state!r}.")
 
         return await self.switch(
-            Outlet.parse(state), self.collectOutletsByNameAndPort(name, portnum)
+            state_int,
+            self.collectOutletsByNameAndPort(name, portnum),
         )
 
-    async def statusAsDict(self, name: str = "", portnum: int = 0):
-        """Get the status of the Outlets by dictionary.
+    async def statusAsDict(self, name: str | None = None, portnum: int | None = None):
+        """Get the status of the `.Outlets` as a dictionary.
 
         Parameters
         ----------
         name
             The string to compare with the name in Outlet instance.
-            'name' can be a switch or an outlet name.
+            ``name`` can be a switch or an outlet name.
         portnum
             The integer for indicating each Outlet instances.
 
@@ -205,10 +227,12 @@ class PowerSwitchBase(object):
 
     @abstractmethod
     async def start(self):
+        """Starts the switch instance, potentially connecting to the device server."""
         pass
 
     @abstractmethod
     async def stop(self):
+        """Stops the connection to the switch server."""
         pass
 
     @abstractmethod
@@ -217,9 +241,27 @@ class PowerSwitchBase(object):
         pass
 
     @abstractmethod
-    async def update(self, outlets):
+    async def update(self, outlets: list[Outlet] | None):
+        """Retrieves the status of a list of outlets and updates the internal mapping.
+
+        Parameters
+        ----------
+        outlets
+            A list of `.Outlets` to update. If `None`, all outlets are updated.
+
+        """
         pass
 
     @abstractmethod
-    async def switch(self, state, outlets):
+    async def switch(self, state: int, outlets: list[Outlet]):
+        """Changes the state of an outlet.
+
+        Parameters
+        ----------
+        state
+            The final state for the outlets. 0: off, 1: on.
+        outlets
+            A list of `.Outlets` which status will be updated.
+
+        """
         pass

@@ -5,31 +5,49 @@
 # @Filename: lvmnps/switch/outlet.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from .powerswitchbase import PowerSwitchBase
+
 
 class Outlet(object):
     """Outlet class to manage the power switch.
 
     Parameters
     ----------
-    swname
-        the name of the switch (from the configuration file)
+    switch
+        The parent `.PowerSwitchBase` instance to which this outlet is associated with.
     name
-        The name of the outlet
+        The name of the outlet.
     portnum
-        The number of the port (in the range of 1~8)
+        The number of the port.
     description
-        The description about the outlet
+        The description about the outlet.
     state
-        the state of the outlet (on: 1, off:0)
+        The state of the outlet (on: 1, off: 0).
 
     """
 
-    def __init__(self, swname, name, portnum, description, state):
+    def __init__(
+        self,
+        switch: PowerSwitchBase,
+        name: str,
+        portnum: int,
+        description: str | None = None,
+        state: int = 0,
+    ):
 
-        self.swname = swname
-        self.name = name if name else f"{swname}.port{portnum}"
+        self.switch = switch
+        self.name = name if name else f"{self.switch.name}.port{portnum}"
         self.portnum = portnum
-        self.description = description if description else f"{swname} Port {portnum}"
+
+        default_description = f"{self.switch.name} Port {portnum}"
+        self.description = description if description else default_description
+
         self.inuse = bool(name) or bool(description)
         self.state = state
 
@@ -43,10 +61,14 @@ class Outlet(object):
     def parse(value):
         """Parse the input data for ON/OFF."""
 
-        if value in ["off", "OFF", "0", 0, False]:
+        if isinstance(value, str):
+            value = value.lower()
+
+        if value in ["off", "0", 0, False]:
             return 0
-        if value in ["on", "ON", "1", 1, True]:
+        if value in ["on", "1", 1, True]:
             return 1
+
         return -1
 
     def setState(self, value):
@@ -70,6 +92,6 @@ class Outlet(object):
         return {
             "state": self.state,
             "descr": self.description,
-            "switch": self.swname,
+            "switch": self.switch.name,
             "port": self.portnum,
         }
