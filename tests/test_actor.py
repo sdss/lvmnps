@@ -13,7 +13,6 @@ async def test_actor(actor: NpsActor):
     assert actor
 
 
-@pytest.mark.asyncio
 async def test_ping(actor: NpsActor):
 
     command = await actor.invoke_mock_command("ping")
@@ -24,7 +23,6 @@ async def test_ping(actor: NpsActor):
     assert command.replies[1].message["text"] == "Pong."
 
 
-@pytest.mark.asyncio
 async def test_actor_no_config():
 
     with pytest.raises(RuntimeError):

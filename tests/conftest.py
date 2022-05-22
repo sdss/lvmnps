@@ -64,11 +64,10 @@ def dli_switches():
 async def actor(switches, test_config: dict, mocker):
 
     _actor = NpsActor.from_config(test_config)
+    _actor = await clu.testing.setup_test_actor(_actor)  # type: ignore
 
     _actor.parser_args = [switches]
     await _actor.start()
-
-    _actor = await clu.testing.setup_test_actor(_actor)  # type: ignore
 
     yield _actor
 
