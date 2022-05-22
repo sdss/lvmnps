@@ -34,31 +34,41 @@ click-default-group = "^1.2.2"
 sdss-clu = "^1.0.3"
 httpx = "^0.18.1"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.helpers]
 ipython = ">=7.11.0"
 matplotlib = ">=3.1.1"
 flake8 = ">=3.7.9"
 doc8 = ">=0.8.0"
+isort = ">=4.3.21"
+ipdb = ">=0.12.3"
+rstcheck = ">=3.3.1"
+pylint = ">=2.8.2"
+black = ">=21.7b0"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
 pytest = ">=5.2.2"
 pytest-asyncio = ">=0.10.0"
 pytest-cov = ">=2.8.1"
 pytest-mock = ">=1.13.0"
 pytest-sugar = ">=0.9.2"
-isort = ">=4.3.21"
 codecov = ">=2.0.15"
 coverage = {version = ">=5.0", extras = ["toml"]}
-ipdb = ">=0.12.3"
-rstcheck = ">=3.3.1"
-pylint = ">=2.8.2"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
 Sphinx = ">=4.1.2"
-sphinx-click = ">=3.0.1"
-black = ">=21.7b0"
 sphinx-jsonschema = ">=1.16.7"
 myst-parser = ">=0.14.0"
 furo = ">=2021.6.18-beta.36"
 nox = ">=2021.6.12"
 sphinx-autobuild = ">=2021.3.14"
 sphinx-copybutton = ">=0.3.3"
+sphinx-click = ">=3.0.1"
 
 [tool.isort]
 line_length = 79
