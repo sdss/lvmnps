@@ -117,7 +117,7 @@ class DLI(object):
 
         for outlet in outlets:
             portnum = outlet.portnum
-            if portnum not in json or json[portnum]["name"] != outlet.name:
+            if json[portnum - 1]["name"] != outlet.name:
                 same = False
                 break
 
