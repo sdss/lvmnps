@@ -92,17 +92,16 @@ class NPSActor(AMQPActor):
         assert isinstance(instance, NPSActor)
         assert isinstance(instance.config, dict)
 
-        switches = []
+        switches = {}
 
         if "switches" in instance.config:
             for (name, config) in instance.config["switches"].items():
                 instance.log.info(f"Instance {name}: {config}")
                 try:
-                    switches.append(powerSwitchFactory(name, config, instance.log))
+                    switches[name] = powerSwitchFactory(name, config, instance.log)
                 except Exception as ex:
-                    instance.log.error(
-                        f"Error in power switch factory {type(ex)}: {ex}"
-                    )
-            instance.parser_args = [switches]
+                    instance.log.error(f"Power switch factory error {type(ex)}: {ex}")
+
+        instance.parser_args = [switches]
 
         return instance
