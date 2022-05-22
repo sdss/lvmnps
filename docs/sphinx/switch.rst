@@ -1,10 +1,7 @@
 .. _switch:
 
-switch
-=========================
-
-powerswitchbase
---------------------
+Switch
+======
 
 .. automodule:: lvmnps.switch.powerswitchbase
     :members:
@@ -12,53 +9,17 @@ powerswitchbase
     :show-inheritance:
 
 
-outlet
--------------
-
 .. automodule:: lvmnps.switch.outlet
     :members:
     :undoc-members:
     :show-inheritance:
-
-
-digital-loggers
--------------------
-
-dli
-~~~~~~~~~~~
 
 .. automodule:: lvmnps.switch.dli.dli
     :members:
     :undoc-members:
     :show-inheritance:
 
-
-Powerswitch
-~~~~~~~~~~~~~~
-
 .. automodule:: lvmnps.switch.dli.powerswitch
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-
-iboot
--------------------
-
-iboot
-~~~~~~~~~~~
-
-.. automodule:: lvmnps.switch.iboot.iboot
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Powerswitch
-~~~~~~~~~~~~~~
-
-.. automodule:: lvmnps.switch.iboot.powerswitch
     :members:
     :undoc-members:
     :show-inheritance:

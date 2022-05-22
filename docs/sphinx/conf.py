@@ -55,10 +55,10 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
     "sphinx.ext.intersphinx",
-    "sdsstools.releases",
     "sphinx.ext.inheritance_diagram",
-    "sphinx_click",
     "myst_parser",
+    "sphinx_copybutton",
+    "sphinx_click",
     "sphinx-jsonschema",
 ]
 
@@ -88,7 +88,7 @@ author = "Mingyeong Yang"
 # built documents.
 
 # The short X.Y version.
-version = parse_version(__version__).base_version
+version = parse_version(__version__).base_version  # type: ignore
 # The full version, including alpha/beta/rc tags.
 release = __version__
 
@@ -142,12 +142,14 @@ intersphinx_mapping = {
 
 autodoc_mock_imports = ["_tkinter", "asynctest", "numpy", "pymodbus"]
 autodoc_member_order = "groupwise"
-# autodoc_default_options = {"members": None, "show-inheritance": None}
+autodoc_default_options = {"members": None, "show-inheritance": None}
 autodoc_typehints = "description"
 
 napoleon_use_rtype = False
 napoleon_use_ivar = True
-napoleon_numpy_docstring = True
+
+copybutton_prompt_text = r">>> |\$ "
+copybutton_prompt_is_regexp = True
 
 rst_epilog = f"""
 .. |numpy_array| replace:: Numpy array
@@ -161,22 +163,10 @@ rst_epilog = f"""
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "alabaster"
 
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-html_theme_options = {
-    "logo": "sdssv_logo.png",
-    "github_user": "sdss",
-    "github_repo": "lvmnps",
-    "github_button": True,
-    "github_type": "star",
-    "sidebar_collapse": True,
-    "github_banner": True,
-    "page_width": "80%",
-}
-
+html_theme = "furo"
+html_logo = "_static/sdssv_logo.png"
+html_title = "lvmieb"
 html_favicon = "./_static/favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -188,81 +178,3 @@ if on_rtd:
     html_static_path = []
 else:
     html_static_path = ["_static"]
-
-# Sidebar templates
-html_sidebars = {
-    "**": [
-        "about.html",
-        "navigation.html",
-        "relations.html",
-        "searchbox.html",
-    ]
-}
-
-
-# -- Options for HTMLHelp output ------------------------------------------
-
-# Output file base name for HTML help builder.
-htmlhelp_basename = "{0}pdoc".format("lvmnps")
-
-
-# -- Options for LaTeX output ---------------------------------------------
-
-latex_elements = {
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    # 'papersize': 'letterpaper',
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
-    # Additional stuff for the LaTeX preamble.
-    #
-    # 'preamble': '',
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
-}
-
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (
-        master_doc,
-        "{0}.tex".format(project),
-        "{0} Documentation".format(project),
-        author,
-        "manual",
-    ),
-]
-
-# -- Options for manual page output ---------------------------------------
-
-# One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "lvmnps", "{0} Documentation".format(project), [author], 1)]
-
-# -- Options for Texinfo output -------------------------------------------
-
-# Grouping the document tree into Texinfo files. List of tuples
-# (source start file, target name, title, author,
-#  dir menu entry, description, category)
-texinfo_documents = [
-    (
-        master_doc,
-        project,
-        "{0} Documentation".format(project),
-        author,
-        project,
-        "One line description of project.",
-        "Miscellaneous",
-    ),
-]
-
-if use_releases == "yes":
-
-    extensions += ["sdsstools.releases"]
-
-    releases_github_path = "sdss/lvmnps"
-    releases_document_name = ["CHANGELOG"]
-    releases_unstable_prehistory = True
