@@ -17,44 +17,35 @@ from lvmnps.switch.powerswitchbase import PowerSwitchBase as PowerSwitch
 
 
 @parser.command()
-@click.argument("SWITCHNAME", type=str, required=False)
-@click.argument("PORTNUM", type=int, default=0)
+@click.argument("SWITCH", type=str, required=False)
+@click.argument("PORT", type=int, required=False)
+@click.option("--outlet", type=str, help="Print only the information for this outlet.")
 async def status(
     command: Command,
-    switches: list[PowerSwitch],
-    switchname: str,
-    portnum: int,
+    switches: dict[str, PowerSwitch],
+    switchname: str | None = None,
+    portnum: int | None = None,
+    outlet: str | None = None,
 ):
     """Returns the dictionary of a specific outlet."""
 
-    if switchname is None:
-        command.info(text="Printing the current status of all outlets")
-    elif switchname:
-        if portnum:
-            command.info(
-                text="Printing the current status of switch "
-                f"{switchname}, port {portnum}"
-            )
-        else:
-            command.info(text=f"Printing the current status of switch {switchname}")
+    if switchname and switchname not in switches:
+        return command.fail(f"Unknown switch {switchname}.")
 
     status = {}
     if switchname is None:
-        for switch in switches:
-            current_status = await switch.statusAsDict()
+        for switch in switches.values():
+            current_status = await switch.statusAsDict(outlet, portnum)
             if current_status:
                 status[switch.name] = current_status
-    elif switchname:
-        for switch in switches:
-            # status |= await switch.statusAsDict(name, portnum) works only with PY 3.9
-            if switchname == switch.name:
-                if portnum:
-                    current_status = await switch.statusAsDict(switchname, portnum)
-                else:
-                    current_status = await switch.statusAsDict(switchname)
-                if current_status:
-                    status[switch.name] = current_status
-                    break
+    else:
+        switch = switches[switchname]
 
-    command.info(status=status)
-    return command.finish()
+        current_status = await switch.statusAsDict(switchname, portnum)
+        if current_status:
+            status[switch.name] = current_status
+
+    if status == {}:
+        return command.fail("Unable to find matching outlets.")
+
+    return command.finish(status=status)
