@@ -96,7 +96,7 @@ class DLIPowerSwitch(PowerSwitchBase):
                     continue
 
                 outlet[0].name = outlet_data[i]["name"]
-                outlet[0].description = ""
+                outlet[0].description = outlet_data[i]["name"]
                 outlet[0].inuse = True
 
     async def stop(self):
