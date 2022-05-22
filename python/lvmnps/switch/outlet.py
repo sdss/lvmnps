@@ -92,6 +92,6 @@ class Outlet(object):
         return {
             "state": self.state,
             "descr": self.description,
-            "switch": self.switch.name,
+            "switch": self.switch.name.replace(" ", "_"),
             "port": self.portnum,
         }
