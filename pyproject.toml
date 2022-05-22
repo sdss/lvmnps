@@ -34,7 +34,7 @@ click-default-group = "^1.2.2"
 sdss-clu = "^1.0.3"
 httpx = "^0.18.1"
 
-[tool.poetry.group.helpers]
+[tool.poetry.group.helpers.dependencies]
 ipython = ">=7.11.0"
 matplotlib = ">=3.1.1"
 flake8 = ">=3.7.9"
