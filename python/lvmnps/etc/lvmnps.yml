@@ -2,7 +2,7 @@
 switches:
   DLI-01:
     type: dli
-    name: Dli Controller
+    name: DLI1
     hostname: 10.7.45.22
     user: 'admin'
     password: 'rLXR3KxUqiCPGvA'
@@ -10,33 +10,9 @@ switches:
     ouo: False # handle also unconfigured ports
     ports:
       number_of_ports: 8
-      1:
-        name: 'Red ln2'
-        desc: ''
-      2:
-        name: 'Blue ln2'
-        desc: ''
-      3:
-        name: 'IEB02'
-        desc: ''
-      4:
-        name: 'Pressure Transducers'
-        desc: ''
-      5:
-        name: 'Switch'
-        desc: ''
-      6:
-        name: 'NIR ln2'
-        desc: ''
-      7:
-        name: 'LVM-Archon-01'
-        desc: ''
-      8:
-        name: 'RPi'
-        desc: ''
   DLI-02:
     type: dli
-    name: Dli Controller
+    name: DLI2
     hostname: 10.7.45.29
     user: 'admin'
     password: 'VCrht9wfx2CQN9b'
@@ -44,33 +20,9 @@ switches:
     ouo: False # handle also unconfigured ports
     ports:
       number_of_ports: 8
-      1:
-        name: 'Router/Switch'
-        desc: 'Router power switch'
-      2:
-        name: 'LN2 NIR Valve'
-        desc: 'Cryogenic solenoid valve of NIR camera for liquid nitrogen.'
-      3:
-        name: 'LVM-Archon-02'
-        desc: 'Archon controller'
-      4:
-        name: 'IEB06'
-        desc: 'LVM Instrument Electronic Box'
-      5:
-        name: 'LN2 Red Valve'
-        desc: 'Cryogenic solenoid valve of Red camera for liquid nitrogen.'
-      6:
-        name: 'RPi'
-        desc: 'Raspberry Pi'
-      7:
-        name: 'LN2 Blue Valve'
-        desc: 'Cryogenic solenoid valve of Blue camera for liquid nitrogen.'
-      8:
-        name: 'Pressure transducers'
-        desc: 'Pressure transducers'
   DLI-03:
     type: dli
-    name: DLI Controller
+    name: DLI3
     hostname: 10.7.45.31
     user: 'admin'
     password: 'JNC_zbf5tdc4deb*npx'
@@ -78,30 +30,6 @@ switches:
     ouo: False # handle also unconfigured ports
     ports:
       number_of_ports: 8
-      1:
-        name: 'Argon'
-        desc: 'Hg-Ar spectral calibration Lamp'
-      2:
-        name: 'Xenon'
-        desc: 'Xenon spectral calibration Lamp'
-      3:
-        name: 'Hg (Ar)'
-        desc: 'Hg (Ar) spectral calibration Lamp'
-      4:
-        name: 'LDLS'
-        desc: 'LDLS spectral calibration Lamp'
-      5:
-        name: 'Krypton'
-        desc: 'Krypton spectral calibration Lamp'
-      6:
-        name: 'Neon'
-        desc: 'Neon spectral calibration Lamp'
-      7:
-        name: 'Hg (Ne)'
-        desc: 'Hg (Ne) spectral calibration Lamp'
-      8:
-        name: 'NIR LED'
-        desc: 'NIR LED Lamp'
 
 timeouts:
   switch_connect: 3
@@ -111,4 +39,4 @@ actor:
   name: lvmnps
   host: localhost
   port: 5672
-  log_dir: '~/data/logs/lvmnps'
+  log_dir: '/data/logs/lvmnps'
