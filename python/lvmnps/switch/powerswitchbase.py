@@ -125,7 +125,7 @@ class PowerSwitchBase(object):
             The string to compare with the name in Outlet instance.
         """
         for o in self.outlets:
-            if o.name == name:
+            if o.name.lower() == name.lower():
                 return o
 
     def collectOutletsByNameAndPort(
