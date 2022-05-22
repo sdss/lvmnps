@@ -48,26 +48,27 @@ jobs:
 
       - name: Install dependencies
         run: |
-          poetry --no-ansi install --without helpers --with test
+          poetry --no-ansi install --without helpers
 
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
-          poetry pip install flake8
+          poetry run pip install flake8
           poetry run flake8 . --count --show-source --statistics
 
       - name: Lint with black
         run: |
-          poetry pip install black
+          poetry run pip install black
           poetry run black --check .
 
       - name: Lint with isort
         run: |
-          poetry pip install isort
+          poetry run pip install isort
           poetry run isort -c . -vvv
 
       - name: Test with pytest
         run: |
+          poetry --no-ansi install --only test
           poetry run pytest
 
       - name: Upload coverage to Codecov
