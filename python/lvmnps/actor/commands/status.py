@@ -21,9 +21,14 @@ if TYPE_CHECKING:
 
 
 @parser.command()
-@click.argument("SWITCH", type=str, required=False)
-@click.argument("PORT", type=int, required=False)
-@click.option("--outlet", type=str, help="Print only the information for this outlet.")
+@click.argument("SWITCHNAME", type=str, required=False)
+@click.argument("PORTNUM", type=int, required=False)
+@click.option(
+    "-o",
+    "--outlet",
+    type=str,
+    help="Print only the information for this outlet.",
+)
 async def status(
     command: NPSCommand,
     switches: dict[str, PowerSwitchBase],
@@ -39,17 +44,19 @@ async def status(
     status = {}
     if switchname is None:
         for switch in switches.values():
+            if not await switch.isReachable():
+                continue
             current_status = await switch.statusAsDict(outlet, portnum)
             if current_status:
                 status[switch.name] = current_status
     else:
         switch = switches[switchname]
-
-        current_status = await switch.statusAsDict(switchname, portnum)
-        if current_status:
-            status[switch.name] = current_status
+        if await switch.isReachable():
+            current_status = await switch.statusAsDict(outlet, portnum)
+            if current_status:
+                status[switch.name] = current_status
 
     if status == {}:
         return command.fail("Unable to find matching outlets.")
 
-    return command.finish(status=status)
+    return command.finish(message={"status": status})

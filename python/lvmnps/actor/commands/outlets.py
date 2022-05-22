@@ -40,6 +40,6 @@ async def outlets(
     for switch in switch_instances:
         for o in switch.outlets:
             if o.inuse or not switch.onlyusedones:
-                outlets.append(o)
+                outlets.append(o.name)
 
     return command.finish(outlets=outlets)

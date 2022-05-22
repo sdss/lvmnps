@@ -63,9 +63,9 @@ async def on(
     """Turn on the outlet."""
 
     if portnum:
-        command.info(text=f"Turning on {outlet} port {portnum}...")
+        command.info(text=f"Turning on {outlet} port {portnum} ...")
     else:
-        command.info(text=f"Turning on outlet {outlet}...")
+        command.info(text=f"Turning on outlet {outlet} ...")
 
     the_switch: PowerSwitchBase | None = None
     current_status: dict | None = None
@@ -121,9 +121,9 @@ async def off(
     """Turn off the outlet."""
 
     if portnum:
-        command.info(text=f"Turning off {outlet} port {portnum}...")
+        command.info(text=f"Turning off {outlet} port {portnum} ...")
     else:
-        command.info(text=f"Turning off outlet {outlet}...")
+        command.info(text=f"Turning off outlet {outlet} ...")
 
     the_switch: PowerSwitchBase | None = None
     current_status: dict | None = None
