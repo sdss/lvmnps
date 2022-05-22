@@ -177,6 +177,16 @@ class DLI(object):
             if r.status_code != 204:
                 raise RuntimeError(f"PUT returned code {r.status_code}.")
 
+    async def get_outlets_response(self):
+        """Returns the raw response to a ``relay/outlets`` GET request.."""
+
+        async with self.client as client:
+            r = await client.get("relay/outlets/")
+            if r.status_code != 200:
+                raise RuntimeError(f"GET returned code {r.status_code}.")
+
+        return r.json()
+
     async def status(self):
         """Returns the status as a dictionary.
 

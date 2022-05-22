@@ -175,7 +175,10 @@ class PowerSwitchBase(object):
         return []
 
     async def setState(
-        self, state: bool | int, name: str | None = None, portnum: int | None = None
+        self,
+        state: bool | int,
+        name: str | None = None,
+        portnum: int | None = None,
     ):
         """Set the state of the Outlet instance to On/Off. (On = 1, Off = 0).
 

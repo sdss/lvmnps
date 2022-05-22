@@ -76,10 +76,28 @@ class DLIPowerSwitch(PowerSwitchBase):
 
         """
 
-        if not await self.isReachable():
-            self.log.warning(f"{self.name} not reachable on start up")
+        # Instead of sending several requests, which makes it a bit slower,
+        # get all the information form the outlets and manually update states.
 
-        await self.update()
+        outlet_data = await self.dli.get_outlets_response()
+
+        for i in range(len(outlet_data)):
+            outlet = self.collectOutletsByNameAndPort(portnum=i + 1)
+            if len(outlet) == 0 or len(outlet) > 1:
+                continue
+
+            outlet[0].setState(outlet_data[i]["state"])
+
+            if self.config_get("handle_undefined") is True:
+                if outlet[0].inuse:
+                    continue
+
+                if outlet_data[i]["name"] == "":
+                    continue
+
+                outlet[0].name = outlet_data[i]["name"]
+                outlet[0].description = ""
+                outlet[0].inuse = True
 
     async def stop(self):
         """Closes the connection to the client."""
