@@ -44,7 +44,7 @@ jobs:
 
       - name: Install poetry
         run: |
-          curl -sSL https://install.python-poetry.org | python3 - --preview
+          curl -sSL https://install.python-poetry.org | python3 - --git https://github.com/python-poetry/poetry.git@master
 
       - name: Install dependencies
         run: |
