@@ -20,6 +20,7 @@ from lvmnps.switch.powerswitchbase import PowerSwitchBase as PowerSwitch
 
 async def switch_control(command, switch, on: bool, name: str, portnum: int):
     """The function for parsing the actor command to the switch library."""
+
     status = {}
     if command == "on" or command == "off":
         await switch.setState(on, name, portnum)
@@ -28,6 +29,7 @@ async def switch_control(command, switch, on: bool, name: str, portnum: int):
             list(status.items())
             + list((await switch.statusAsDict(name, portnum)).items())  # noqa: W503
         )
+
     return status
 
 
@@ -36,7 +38,11 @@ async def switch_control(command, switch, on: bool, name: str, portnum: int):
 @click.argument("PORTNUM", type=int, required=False, default=0)
 @click.argument("OFFAFTER", type=int, default=0)
 async def on(
-    command: Command, switches: PowerSwitch, name: str, portnum: int, offafter: int
+    command: Command,
+    switches: list[PowerSwitch],
+    name: str,
+    portnum: int,
+    offafter: int,
 ):
     """Turn on the outlet."""
 
@@ -44,12 +50,20 @@ async def on(
         command.info(text=f"Turning on {name} port {portnum}...")
     else:
         command.info(text=f"Turning on Outlet {name}...")
-    for switch in switches:
 
+    # TODO: this could fail if multiple switches have outlets with the same name.
+
+    the_switch: PowerSwitch | None = None
+    current_status: dict | None = None
+    for switch in switches:
         current_status = await switch.statusAsDict(name, portnum)
         if current_status:
             the_switch = switch
             break
+
+    if current_status is None or the_switch is None:
+        return command.fail(f"Could not find a match for {name}:{portnum}.")
+
     outletname_list = list(current_status.keys())
     outletname = outletname_list[0]
 
@@ -72,19 +86,30 @@ async def on(
 @parser.command()
 @click.argument("NAME", type=str, default="")
 @click.argument("PORTNUM", type=int, default=0)
-async def off(command: Command, switches: PowerSwitch, name: str, portnum: int):
+async def off(
+    command: Command,
+    switches: list[PowerSwitch],
+    name: str,
+    portnum: int,
+):
     """Turn off the outlet."""
+
     if portnum:
         command.info(text=f"Turning off {name} port {portnum}...")
     else:
         command.info(text=f"Turning off Outlet {name}...")
 
+    the_switch: PowerSwitch | None = None
+    current_status: dict | None = None
     for switch in switches:
         current_status = await switch.statusAsDict(name, portnum)
-
         if current_status:
             the_switch = switch
             break
+
+    if current_status is None or the_switch is None:
+        return command.fail(f"Could not find a match for {name}:{portnum}.")
+
     outletname_list = list(current_status.keys())
     outletname = outletname_list[0]
 

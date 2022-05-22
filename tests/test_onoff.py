@@ -1,11 +1,13 @@
-import asyncio
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-import pytest
+from __future__ import annotations
+
+import asyncio
 
 from lvmnps.actor.actor import lvmnps as NpsActor
 
 
-@pytest.mark.asyncio
 async def test_onoff(switches, actor: NpsActor):
 
     assert switches[0].name == "nps_dummy_1"
@@ -56,7 +58,6 @@ async def test_onoff(switches, actor: NpsActor):
     assert switches[1].outlets[0].state == 0
 
 
-@pytest.mark.asyncio
 async def test_status_already_on(switches, actor: NpsActor):
     assert actor
 
@@ -79,7 +80,6 @@ async def test_status_already_on(switches, actor: NpsActor):
     assert command.status.did_fail
 
 
-@pytest.mark.asyncio
 async def test_status_already_off(switches, actor: NpsActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
@@ -108,7 +108,6 @@ async def test_status_already_off(switches, actor: NpsActor):
     assert command.status.did_fail
 
 
-@pytest.mark.asyncio
 async def test_on_fail(switches, actor: NpsActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
@@ -121,7 +120,6 @@ async def test_on_fail(switches, actor: NpsActor):
     assert command.status.did_fail
 
 
-@pytest.mark.asyncio
 async def test_off_fail(switches, actor: NpsActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
@@ -134,7 +132,6 @@ async def test_off_fail(switches, actor: NpsActor):
     assert command.status.did_fail
 
 
-@pytest.mark.asyncio
 async def test_status_off_after(switches, actor: NpsActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"

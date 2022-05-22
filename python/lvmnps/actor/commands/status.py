@@ -20,7 +20,10 @@ from lvmnps.switch.powerswitchbase import PowerSwitchBase as PowerSwitch
 @click.argument("SWITCHNAME", type=str, required=False)
 @click.argument("PORTNUM", type=int, default=0)
 async def status(
-    command: Command, switches: PowerSwitch, switchname: str, portnum: int
+    command: Command,
+    switches: list[PowerSwitch],
+    switchname: str,
+    portnum: int,
 ):
     """Returns the dictionary of a specific outlet."""
 

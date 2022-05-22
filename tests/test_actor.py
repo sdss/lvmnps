@@ -1,9 +1,13 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from __future__ import annotations
+
 import pytest
 
 from lvmnps.actor.actor import lvmnps as NpsActor
 
 
-@pytest.mark.asyncio
 async def test_actor(actor: NpsActor):
 
     assert actor

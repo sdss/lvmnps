@@ -21,6 +21,7 @@ class Outlet(object):
         The description about the outlet
     state
         the state of the outlet (on: 1, off:0)
+
     """
 
     def __init__(self, swname, name, portnum, description, state):
@@ -41,6 +42,7 @@ class Outlet(object):
     @staticmethod
     def parse(value):
         """Parse the input data for ON/OFF."""
+
         if value in ["off", "OFF", "0", 0, False]:
             return 0
         if value in ["on", "ON", "1", 1, True]:

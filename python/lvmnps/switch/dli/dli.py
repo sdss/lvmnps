@@ -7,7 +7,6 @@
 # @Filename: lvmnps/switch/dli/dli.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
-
 from __future__ import annotations
 
 import asyncio
@@ -21,17 +20,18 @@ class Dli(object):
     Parameters
     ----------
     log
-        The logger for logging
+        The logger for logging.
     name
-        the name of the Dli Controller
+        The name of the DLI Controller.
     userid
-        The username from the configuration (the id for login)
+        The username from the configuration (the id for login).
     password
-        The password from the configuration (the password for login)
+        The password from the configuration (the password for login).
     hostname
-        The hostname from the configuration (the ip address for connection)
+        The hostname from the configuration (the ip address for connection).
     onoff_timeout
-        the onoff_timeout seconds for sending the on/off command.
+        The onoff_timeout seconds for sending the on/off command.
+
     """
 
     def __init__(
@@ -43,7 +43,9 @@ class Dli(object):
         hostname=None,
         onoff_timeout=3,
     ):
+
         self.log = log
+
         if userid:
             self.userid = userid
         if password:
@@ -54,11 +56,12 @@ class Dli(object):
             self.name = name
         if onoff_timeout:
             self.onoff_timeout = onoff_timeout
+
         self.clients = {}
         self.outlets_dict = {}
 
     async def add_client(self):
-        """Add the httpx AsyncClient on the Dli object."""
+        """Add the httpx AsyncClient on the DLI object."""
 
         try:
             auth = httpx.DigestAuth(self.userid, self.password)

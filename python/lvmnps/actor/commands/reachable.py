@@ -27,10 +27,14 @@ def reachable():
 @click.argument("SWITCHNAME", type=str)
 @click.argument("PORTNUM", type=int, default=0)
 async def outlets(
-    command: Command, switches: PowerSwitch, switchname: str, portnum: int
+    command: Command,
+    switches: list[PowerSwitch],
+    switchname: str,
+    portnum: int,
 ):
     """Returns the list of names for each outlet on a specific power switch."""
 
+    the_switch: PowerSwitch | None = None
     if switchname:
         command.info(text=f"Individual Control of {switchname}...")
 
@@ -40,6 +44,9 @@ async def outlets(
             if current_status:
                 the_switch = switch
                 break
+
+        if the_switch is None:
+            return command.fail(f"Cannot find switch {switchname}.")
 
         outlets = []
         status = {}
@@ -51,13 +58,13 @@ async def outlets(
         return command.finish()
 
     else:
-        return command.fail(error="write the name of NPS you want to know")
+        return command.fail(error="Write the name of NPS you want to know")
 
 
 @reachable.command()
 async def switches(
     command: Command,
-    switches: PowerSwitch,
+    switches: list[PowerSwitch],
 ):
     """Returns the list of switches which is reachable."""
 

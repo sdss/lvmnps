@@ -25,7 +25,9 @@ __all__ = ["lvmnps"]
 
 class lvmnps(AMQPActor):
     """LVM network power switches base actor.
-    Subclassed from the AMQPActor class.
+
+    Subclassed from the `.AMQPActor` class.
+
     """
 
     parser: ClassVar[click.Group] = nps_command_parser
@@ -38,23 +40,27 @@ class lvmnps(AMQPActor):
                 os.path.dirname(__file__),
                 "../etc/schema.json",
             )
+
         super().__init__(*args, **kwargs)
+
         self.connect_timeout = 3
 
     async def start(self):
         """Start the actor and connect the power switches."""
+
         await super().start()
 
-        self.connect_timeout = self.config["timeouts"]["switch_connect"]
+        if "timeouts" in self.config and "switch_connect" in self.config["timeouts"]:
+            self.connect_timeout = self.config["timeouts"]["switch_connect"]
 
         assert len(self.parser_args) == 1
+
         # self.parser_args[0] is the list of switch instances
         for switch in self.parser_args[0]:
             # switch is the instance of the power switch from the PowerSwitchFactory
             try:
                 self.log.debug(f"Start {switch.name} ...")
                 await asyncio.wait_for(switch.start(), timeout=self.connect_timeout)
-
             except Exception as ex:
                 self.log.error(f"Unexpected exception {type(ex)}: {ex}")
 
@@ -62,11 +68,11 @@ class lvmnps(AMQPActor):
 
     async def stop(self):
         """Stop the actor and disconnect the power switches."""
+
         for switch in self.parser_args[0]:
             try:
                 self.log.debug(f"Stop {switch.name} ...")
                 await asyncio.wait_for(switch.stop(), timeout=self.connect_timeout)
-
             except Exception as ex:
                 self.log.error(f"Unexpected exception dd {type(ex)}: {ex}")
 
@@ -85,6 +91,7 @@ class lvmnps(AMQPActor):
 
         assert isinstance(instance, lvmnps)
         assert isinstance(instance.config, dict)
+
         switches = []
 
         if "switches" in instance.config:
@@ -92,7 +99,6 @@ class lvmnps(AMQPActor):
                 instance.log.info(f"Instance {name}: {config}")
                 try:
                     switches.append(powerSwitchFactory(name, config, instance.log))
-
                 except Exception as ex:
                     instance.log.error(
                         f"Error in power switch factory {type(ex)}: {ex}"

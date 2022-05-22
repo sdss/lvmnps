@@ -1,22 +1,25 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "definitions": {},
-    "type": "object",
-    "properties": {
-        "text": {"type": "string"},
-        "status": {"type": "object", 
-            "switch": {"type": "object", 
-                "outlet": {"type": "object",
-                    "state": {"type": "integer"},
-                    "descr": {"type": "string"},
-                    "switch": {"type": "string"},
-                    "port": {"type": "integer"}
-                }
-            }
-        },
-        "switches":{"type": "array", "items": {"type": "string"}},
-        "outlets": {"type": "array", "items": {"type": "string"}},
-        "error": {"type": "string"}
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "definitions": {},
+  "type": "object",
+  "properties": {
+    "text": { "type": "string" },
+    "status": {
+      "type": "object",
+      "switch": {
+        "type": "object",
+        "outlet": {
+          "type": "object",
+          "state": { "type": "integer" },
+          "descr": { "type": "string" },
+          "switch": { "type": "string" },
+          "port": { "type": "integer" }
+        }
+      }
     },
-    "additionalProperties": false
+    "switches": { "type": "array", "items": { "type": "string" } },
+    "outlets": { "type": "array", "items": { "type": "string" } },
+    "error": { "type": "string" }
+  },
+  "additionalProperties": false
 }

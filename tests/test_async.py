@@ -1,11 +1,14 @@
-import asyncio
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-import pytest
+from __future__ import annotations
+
+import asyncio
+from typing import Any
 
 from lvmnps.actor.actor import lvmnps as NpsActor
 
 
-@pytest.mark.asyncio
 async def test_async_onoff(switches, actor: NpsActor):
 
     # status check of nps_dummy_1 port1
@@ -24,25 +27,25 @@ async def test_async_onoff(switches, actor: NpsActor):
     assert switches[4].outlets[0].state == 0
 
     task = []
-    task.append(asyncio.create_task(actor.invoke_mock_command("on slow 1")))
-    task.append(asyncio.create_task(actor.invoke_mock_command("on fast 1")))
+    task.append(actor.invoke_mock_command("on slow 1"))
+    task.append(actor.invoke_mock_command("on fast 1"))
 
     await asyncio.gather(*task)
 
     status_task = []
-    status_task.append(asyncio.create_task(actor.invoke_mock_command("status slow 1")))
-    status_task.append(asyncio.create_task(actor.invoke_mock_command("status fast 1")))
+    status_task.append(actor.invoke_mock_command("status slow 1"))
+    status_task.append(actor.invoke_mock_command("status fast 1"))
 
-    status_before = await asyncio.gather(*status_task)
+    status_before: Any = await asyncio.gather(*status_task)
     assert status_before[0].replies[-2].message["status"]["slow"]["slow"]["state"] == 0
     assert status_before[1].replies[-2].message["status"]["fast"]["fast"]["state"] == 1
 
     await asyncio.sleep(2)
 
     status_task = []
-    status_task.append(asyncio.create_task(actor.invoke_mock_command("status slow 1")))
-    status_task.append(asyncio.create_task(actor.invoke_mock_command("status fast 1")))
+    status_task.append(actor.invoke_mock_command("status slow 1"))
+    status_task.append(actor.invoke_mock_command("status fast 1"))
 
-    status_after = await asyncio.gather(*status_task)
+    status_after: Any = await asyncio.gather(*status_task)
     assert status_after[0].replies[-2].message["status"]["slow"]["slow"]["state"] == 1
     assert status_after[1].replies[-2].message["status"]["fast"]["fast"]["state"] == 1

@@ -1,9 +1,11 @@
-import pytest
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from __future__ import annotations
 
 from lvmnps.actor.actor import lvmnps as NpsActor
 
 
-@pytest.mark.asyncio
 async def test_status(switches, actor: NpsActor):
 
     # status check of nps_dummy_1 port1
@@ -34,27 +36,17 @@ async def test_status(switches, actor: NpsActor):
     assert command.status.did_succeed
     assert len(command.replies) == 4
 
-    assert command.replies[-2].message["status"]["nps_dummy_1"]["port1"]["state"] == 0
-    assert (
-        command.replies[-2].message["status"]["nps_dummy_1"]["skye.what.ever"]["state"]
-        == -1  # noqa: W503
-    )
-    assert (
-        command.replies[-2].message["status"]["nps_dummy_1"]["skyw.what.ever"]["state"]
-        == -1  # noqa: W503
-    )
+    status = command.replies[-2].message["status"]
+    assert status["nps_dummy_1"]["port1"]["state"] == 0
+    assert status["nps_dummy_1"]["skye.what.ever"]["state"] == -1
+    assert status["nps_dummy_1"]["skyw.what.ever"]["state"] == -1
 
     # status of all available switches
     command = await actor.invoke_mock_command("status")
     await command
     assert command.status.did_succeed
+    status = command.replies[-2].message["status"]
 
-    assert command.replies[-2].message["status"]["nps_dummy_1"]["port1"]["state"] == 0
-    assert (
-        command.replies[-2].message["status"]["nps_dummy_1"]["skye.what.ever"]["state"]
-        == -1  # noqa: W503
-    )
-    assert (
-        command.replies[-2].message["status"]["nps_dummy_1"]["skyw.what.ever"]["state"]
-        == -1  # noqa: W503
-    )
+    assert status["nps_dummy_1"]["port1"]["state"] == 0
+    assert status["nps_dummy_1"]["skye.what.ever"]["state"] == -1
+    assert status["nps_dummy_1"]["skyw.what.ever"]["state"] == -1
