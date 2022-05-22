@@ -14,7 +14,7 @@ from sdsstools.logger import SDSSLogger
 
 from lvmnps.exceptions import PowerException
 
-from .dli.powerswitch import PowerSwitch as DliPowerSwitch
+from .dli.powerswitch import DLIPowerSwitch
 from .dummy.powerswitch import PowerSwitch as DummyPowerSwitch
 
 
@@ -45,7 +45,7 @@ def powerSwitchFactory(name: str, config: dict, log: SDSSLogger):
         raise PowerException(f"Power switch {n} with type {c['type']} not defined")
 
     factorymap: dict[str, Type[PowerSwitchBase]] = {
-        "dli": DliPowerSwitch,
+        "dli": DLIPowerSwitch,
         # "iboot": IBootPowerSwitch,
         "dummy": DummyPowerSwitch,
     }

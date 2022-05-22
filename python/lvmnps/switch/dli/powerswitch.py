@@ -22,10 +22,10 @@ if TYPE_CHECKING:
     from ..outlet import Outlet
 
 
-__all__ = ["PowerSwitch"]
+__all__ = ["DLIPowerSwitch"]
 
 
-class PowerSwitch(PowerSwitchBase):
+class DLIPowerSwitch(PowerSwitchBase):
     """A DLI power switch.
 
     Parameters
