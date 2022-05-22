@@ -49,7 +49,7 @@ jobs:
       - name: Install dependencies
         run: |
           poetry env use system
-          poetry pip install -U pip setuptools wheel
+          poetry run pip install -U pip setuptools wheel
           poetry --no-ansi install --without helpers
 
       - name: Lint with flake8

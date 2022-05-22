@@ -1,0 +1,20 @@
+coverage:
+  range: 80...95
+  round: up
+  precision: 1
+  status:
+    project:
+      default:
+        target: 85%
+        if_not_found: success
+        if_ci_failed: error
+        informational: false
+        only_pulls: true
+    patch:
+      default:
+        target: 80%
+        if_no_uploads: error
+        if_not_found: success
+        if_ci_failed: error
+        informational: false
+        only_pulls: true
