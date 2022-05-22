@@ -12,19 +12,18 @@ from typing import TYPE_CHECKING
 
 import click
 
-from clu.command import Command
-
 from lvmnps.actor.commands import parser
 
 
 if TYPE_CHECKING:
+    from lvmnps.actor.actor import NPSCommand
     from lvmnps.switch.powerswitchbase import PowerSwitchBase
 
 
 @parser.command()
 @click.argument("SWITCHNAME", type=str, required=False)
 async def outlets(
-    command: Command,
+    command: NPSCommand,
     switches: dict[str, PowerSwitchBase],
     switchname: str | None = None,
 ):

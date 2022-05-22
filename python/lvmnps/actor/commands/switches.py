@@ -14,11 +14,12 @@ from . import parser
 
 
 if TYPE_CHECKING:
+    from lvmnps.actor.actor import NPSCommand
     from lvmnps.switch.powerswitchbase import PowerSwitchBase
 
 
 @parser.command()
-async def switches(command, switches: dict[str, PowerSwitchBase]):
+async def switches(command: NPSCommand, switches: dict[str, PowerSwitchBase]):
     """Lists the available switches."""
 
     return command.finish(switches=list(switches.keys()))

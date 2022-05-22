@@ -14,6 +14,7 @@ from typing import ClassVar, Dict
 
 import click
 
+from clu import Command
 from clu.actor import AMQPActor
 
 from lvmnps.actor.commands import parser as nps_command_parser
@@ -105,3 +106,6 @@ class NPSActor(AMQPActor):
         instance.parser_args = [switches]
 
         return instance
+
+
+NPSCommand = Command[NPSActor]

@@ -8,12 +8,16 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import click
 
-from clu.command import Command
-
 from lvmnps.actor.commands import parser
-from lvmnps.switch.powerswitchbase import PowerSwitchBase as PowerSwitch
+
+
+if TYPE_CHECKING:
+    from lvmnps.actor.actor import NPSCommand
+    from lvmnps.switch.powerswitchbase import PowerSwitchBase
 
 
 @parser.command()
@@ -21,8 +25,8 @@ from lvmnps.switch.powerswitchbase import PowerSwitchBase as PowerSwitch
 @click.argument("PORT", type=int, required=False)
 @click.option("--outlet", type=str, help="Print only the information for this outlet.")
 async def status(
-    command: Command,
-    switches: dict[str, PowerSwitch],
+    command: NPSCommand,
+    switches: dict[str, PowerSwitchBase],
     switchname: str | None = None,
     portnum: int | None = None,
     outlet: str | None = None,

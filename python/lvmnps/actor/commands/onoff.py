@@ -9,16 +9,25 @@
 from __future__ import annotations
 
 import asyncio
+from typing import TYPE_CHECKING
 
 import click
 
-from clu.command import Command
-
 from lvmnps.actor.commands import parser
-from lvmnps.switch.powerswitchbase import PowerSwitchBase as PowerSwitch
 
 
-async def switch_control(command, switch, on: bool, name: str, portnum: int):
+if TYPE_CHECKING:
+    from lvmnps.actor.actor import NPSCommand
+    from lvmnps.switch.powerswitchbase import PowerSwitchBase
+
+
+async def switch_control(
+    command: str,
+    switch: PowerSwitchBase,
+    on: bool,
+    name: str,
+    portnum: int,
+):
     """The function for parsing the actor command to the switch library."""
 
     status = {}
@@ -38,8 +47,8 @@ async def switch_control(command, switch, on: bool, name: str, portnum: int):
 @click.argument("PORTNUM", type=int, required=False, default=0)
 @click.argument("OFFAFTER", type=int, default=0)
 async def on(
-    command: Command,
-    switches: list[PowerSwitch],
+    command: NPSCommand,
+    switches: dict[str, PowerSwitchBase],
     name: str,
     portnum: int,
     offafter: int,
@@ -53,9 +62,9 @@ async def on(
 
     # TODO: this could fail if multiple switches have outlets with the same name.
 
-    the_switch: PowerSwitch | None = None
+    the_switch: PowerSwitchBase | None = None
     current_status: dict | None = None
-    for switch in switches:
+    for switch in switches.values():
         current_status = await switch.statusAsDict(name, portnum)
         if current_status:
             the_switch = switch
@@ -87,8 +96,8 @@ async def on(
 @click.argument("NAME", type=str, default="")
 @click.argument("PORTNUM", type=int, default=0)
 async def off(
-    command: Command,
-    switches: list[PowerSwitch],
+    command: NPSCommand,
+    switches: dict[str, PowerSwitchBase],
     name: str,
     portnum: int,
 ):
@@ -99,9 +108,9 @@ async def off(
     else:
         command.info(text=f"Turning off Outlet {name}...")
 
-    the_switch: PowerSwitch | None = None
+    the_switch: PowerSwitchBase | None = None
     current_status: dict | None = None
-    for switch in switches:
+    for switch in switches.values():
         current_status = await switch.statusAsDict(name, portnum)
         if current_status:
             the_switch = switch
