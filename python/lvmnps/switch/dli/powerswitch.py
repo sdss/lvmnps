@@ -39,7 +39,7 @@ class DLIPowerSwitch(PowerSwitchBase):
 
     """
 
-    def __init__(self, name: str, config: dict, log: SDSSLogger):
+    def __init__(self, name: str, config: dict, log: SDSSLogger | None = None):
 
         super().__init__(name, config, log)
 
@@ -137,6 +137,8 @@ class DLIPowerSwitch(PowerSwitchBase):
                 for o in outlets:
                     o.setState(-1)
         except Exception as ex:
+            for o in outlets:
+                o.setState(-1)
             raise RuntimeError(f"Unexpected exception for {type(ex)}: {ex}")
 
     async def switch(self, state: bool, outlets: list[Outlet]):

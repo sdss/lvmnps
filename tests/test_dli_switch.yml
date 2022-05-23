@@ -7,9 +7,9 @@ switches:
     user: 'admin'
     password: 'rLXR3KxUqiCPGvA'
     onoff_timeout: 3
-    ouo: False # handle also unconfigured ports
+    ouo: True
     ports:
-      number_of_ports: 1
+      number_of_ports: 8
       1:
         name: 'Outlet 1'
         desc: ''

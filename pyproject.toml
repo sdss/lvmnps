@@ -90,14 +90,15 @@ asyncio_mode = "auto"
 
 [tool.coverage.run]
 branch = true
-include = ["python/lvmnps/*"]
+disable_warnings = ["include-ignored"]
 omit = [
     "python/lvmnps/__main__.py",
 ]
 
 [tool.coverage.report]
 exclude_lines = [
-    "pragma: no cover"
+    "pragma: no cover",
+    "if TYPE_CHECKING"
 ]
 
 [build-system]

@@ -27,3 +27,39 @@ async def test_actor_no_config():
 
     with pytest.raises(RuntimeError):
         NPSActor.from_config(None)
+
+
+async def test_actor_start(switches, test_config: dict, mocker):
+
+    actor = NPSActor.from_config(test_config)
+
+    actor.parser_args = [{switch.name: switch for switch in switches}]
+
+    for switch in switches:
+        mocker.patch.object(switch, "start")
+
+    await actor.start()
+
+    assert len(actor.parser_args[0].keys()) == len(switches)
+
+    await actor.stop()
+
+
+async def test_actor_start_one_fails(switches, test_config: dict, mocker):
+
+    actor = NPSActor.from_config(test_config)
+
+    actor.parser_args = [{switch.name: switch for switch in switches}]
+
+    for ii, switch in enumerate(switches):
+        mocker.patch.object(
+            switch,
+            "start",
+            side_effect=None if ii != 1 else RuntimeError,
+        )
+
+    await actor.start()
+
+    assert len(actor.parser_args[0].keys()) == len(switches) - 1
+
+    await actor.stop()
