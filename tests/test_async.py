@@ -6,10 +6,10 @@ from __future__ import annotations
 import asyncio
 from typing import Any
 
-from lvmnps.actor.actor import lvmnps as NpsActor
+from lvmnps.actor.actor import NPSActor
 
 
-async def test_async_onoff(switches, actor: NpsActor):
+async def test_async_onoff(switches, actor: NPSActor):
 
     # status check of nps_dummy_1 port1
     assert actor
@@ -37,8 +37,8 @@ async def test_async_onoff(switches, actor: NpsActor):
     status_task.append(actor.invoke_mock_command("status fast 1"))
 
     status_before: Any = await asyncio.gather(*status_task)
-    assert status_before[0].replies[-2].message["status"]["slow"]["slow"]["state"] == 0
-    assert status_before[1].replies[-2].message["status"]["fast"]["fast"]["state"] == 1
+    assert status_before[0].replies[-1].message["status"]["slow"]["slow"]["state"] == 0
+    assert status_before[1].replies[-1].message["status"]["fast"]["fast"]["state"] == 1
 
     await asyncio.sleep(2)
 
@@ -47,5 +47,5 @@ async def test_async_onoff(switches, actor: NpsActor):
     status_task.append(actor.invoke_mock_command("status fast 1"))
 
     status_after: Any = await asyncio.gather(*status_task)
-    assert status_after[0].replies[-2].message["status"]["slow"]["slow"]["state"] == 1
-    assert status_after[1].replies[-2].message["status"]["fast"]["fast"]["state"] == 1
+    assert status_after[0].replies[-1].message["status"]["slow"]["slow"]["state"] == 1
+    assert status_after[1].replies[-1].message["status"]["fast"]["fast"]["state"] == 1

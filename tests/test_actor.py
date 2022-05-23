@@ -5,15 +5,15 @@ from __future__ import annotations
 
 import pytest
 
-from lvmnps.actor.actor import lvmnps as NpsActor
+from lvmnps.actor.actor import NPSActor
 
 
-async def test_actor(actor: NpsActor):
+async def test_actor(actor: NPSActor):
 
     assert actor
 
 
-async def test_ping(actor: NpsActor):
+async def test_ping(actor: NPSActor):
 
     command = await actor.invoke_mock_command("ping")
     await command
@@ -26,4 +26,4 @@ async def test_ping(actor: NpsActor):
 async def test_actor_no_config():
 
     with pytest.raises(RuntimeError):
-        NpsActor.from_config(None)
+        NPSActor.from_config(None)

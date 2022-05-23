@@ -39,7 +39,7 @@ class PowerSwitchBase(object):
         self.log = log
         self.config = config
 
-        numports = self.config_get("ports.number_of_ports")
+        numports = self.config_get("ports.number_of_ports", 8)
         if numports is None:
             raise ValueError(f"{name}: unknown number of ports.")
         self.numports: int = numports

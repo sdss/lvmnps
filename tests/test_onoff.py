@@ -5,10 +5,10 @@ from __future__ import annotations
 
 import asyncio
 
-from lvmnps.actor.actor import lvmnps as NpsActor
+from lvmnps.actor.actor import NPSActor
 
 
-async def test_onoff(switches, actor: NpsActor):
+async def test_onoff(switches, actor: NPSActor):
 
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
@@ -58,7 +58,7 @@ async def test_onoff(switches, actor: NpsActor):
     assert switches[1].outlets[0].state == 0
 
 
-async def test_status_already_on(switches, actor: NpsActor):
+async def test_status_already_on(switches, actor: NPSActor):
     assert actor
 
     assert switches[0].name == "nps_dummy_1"
@@ -77,10 +77,10 @@ async def test_status_already_on(switches, actor: NpsActor):
     # switch on nps_dummy_1 port1
     command = await actor.invoke_mock_command("on nps_dummy_1 1")
     await command
-    assert command.status.did_fail
+    assert command.status.did_succeed
 
 
-async def test_status_already_off(switches, actor: NpsActor):
+async def test_status_already_off(switches, actor: NPSActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
@@ -105,10 +105,10 @@ async def test_status_already_off(switches, actor: NpsActor):
     # switch off nps_dummy_1 port1
     command = await actor.invoke_mock_command("off nps_dummy_1 1")
     await command
-    assert command.status.did_fail
+    assert command.status.did_succeed
 
 
-async def test_on_fail(switches, actor: NpsActor):
+async def test_on_fail(switches, actor: NPSActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
@@ -120,7 +120,7 @@ async def test_on_fail(switches, actor: NpsActor):
     assert command.status.did_fail
 
 
-async def test_off_fail(switches, actor: NpsActor):
+async def test_off_fail(switches, actor: NPSActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
@@ -132,7 +132,7 @@ async def test_off_fail(switches, actor: NpsActor):
     assert command.status.did_fail
 
 
-async def test_status_off_after(switches, actor: NpsActor):
+async def test_status_off_after(switches, actor: NPSActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
@@ -143,22 +143,22 @@ async def test_status_off_after(switches, actor: NpsActor):
     # switch on nps_dummy_1 port1
     status = []
 
-    status.append(asyncio.create_task(actor.invoke_mock_command("on nps_dummy_1 1 3")))
+    status.append(
+        asyncio.create_task(actor.invoke_mock_command("on --off-after 3 nps_dummy_1 1"))
+    )
     status.append(asyncio.create_task(say_after(0.2, actor)))
 
-    status_result = await asyncio.gather(*status)
+    status_result = list(await asyncio.gather(*status))
 
-    assert (
-        status_result[1].replies[-2].message["status"]["nps_dummy_1"]["port1"]["state"]
-        == 1  # noqa: W503
-    )
+    status = status_result[1].replies[-1].message["status"]
+    assert status["nps_dummy_1"]["port1"]["state"] == 1  # noqa: W503
 
     await asyncio.sleep(2)
 
     command = await actor.invoke_mock_command("status nps_dummy_1 1")
     await command
     assert command.status.did_succeed
-    assert command.replies[-2].message["status"]["nps_dummy_1"]["port1"]["state"] == 0
+    assert command.replies[-1].message["status"]["nps_dummy_1"]["port1"]["state"] == 0
     assert switches[0].outlets[0].state == 0
 
 

@@ -3,17 +3,15 @@
 
 from __future__ import annotations
 
-from lvmnps.actor.actor import lvmnps as NpsActor
+import pytest
+
+from lvmnps.actor.actor import NPSActor
 
 
-# TODO: this need to be rewritten.
-
-
-async def test_status(dli_switches, actor: NpsActor):
-
-    assert actor
+@pytest.mark.xfail
+async def test_status(actor: NPSActor):
 
     command = await actor.invoke_mock_command("status DLI-01")
     await command
     assert command.status.did_succeed
-    assert command.replies[-2].message["status"] == {}
+    assert command.replies[-1].message["status"] == {}
