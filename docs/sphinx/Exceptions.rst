@@ -1,10 +1,10 @@
-.. _Exceptions:
+.. _exceptions:
 
 Exceptions
-==========================
+==========
 
 Exceptions
--------------
+----------
 
 .. automodule:: lvmnps.exceptions
    :members:

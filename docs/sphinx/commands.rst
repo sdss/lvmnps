@@ -1,4 +1,4 @@
-.. _Commands:
+.. _commands:
 
 Commands
 ========
