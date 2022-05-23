@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import pytest
 
-from lvmnps.actor.actor import NPSActor
+from lvmnps.actor.actor import AMQPActor, NPSActor
 
 
 async def test_actor(actor: NPSActor):
@@ -32,6 +32,7 @@ async def test_actor_no_config():
 async def test_actor_start(switches, test_config: dict, mocker):
 
     actor = NPSActor.from_config(test_config)
+    mocker.patch.object(AMQPActor, "start")
 
     actor.parser_args = [{switch.name: switch for switch in switches}]
 
@@ -48,6 +49,7 @@ async def test_actor_start(switches, test_config: dict, mocker):
 async def test_actor_start_one_fails(switches, test_config: dict, mocker):
 
     actor = NPSActor.from_config(test_config)
+    mocker.patch.object(AMQPActor, "start")
 
     actor.parser_args = [{switch.name: switch for switch in switches}]
 
