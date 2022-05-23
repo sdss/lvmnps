@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2 - May 23, 2022
+
+* Added IEB02 to NPS configuration.
+* Removed `iboot` power switch code.
+* Improvements to testing and docs.
+
+
 ## 0.2.1e,f - October 25, 2021
 
 This was a Minor update of version 0.2.1 , based on the code review from @albireox
