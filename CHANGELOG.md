@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2 - May 23, 2022
+
+* Added IEB02 to NPS configuration.
+* Removed `iboot` power switch code.
+* Improvements to testing and docs.
+
+
 ## 0.2.1e,f - October 25, 2021
 
 This was a Minor update of version 0.2.1 , based on the code review from @albireox
@@ -44,7 +51,7 @@ changed the way connecting to the powerswitch using 'get' and 'put' method from 
 ## 0.2.0 - August 13, 2021
 
     * Initial version of the library and actor. Supports communication with the Network power switch, lvmnps command to on, off and cycle the nps and return the status of power.
-    
+
     * wrench Basic documentation(https://lvmnps.readthedocs.io/en/latest/).
 
 
