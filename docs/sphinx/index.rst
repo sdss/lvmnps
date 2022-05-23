@@ -15,7 +15,7 @@ Contents
   :caption: API
   :maxdepth: 3
 
-  lvmnps
+  actor
   switch
   commands
   actor-schema
