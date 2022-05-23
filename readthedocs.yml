@@ -6,8 +6,8 @@ build:
     python: '3.9'
   jobs:
     post_checkout:
-      - git config core.ignorecase false
       - git checkout main
+      - git config core.ignorecase false
       - git checkout update
 
 python:
