@@ -8,7 +8,6 @@ switches:
     password: 'rLXR3KxUqiCPGvA'
     onoff_timeout: 3
     ouo: False # handle also unconfigured ports
-    handle_undefined: true
     ports:
       number_of_ports: 8
   DLI-02:
@@ -19,7 +18,6 @@ switches:
     password: 'VCrht9wfx2CQN9b'
     onoff_timeout: 3
     ouo: False # handle also unconfigured ports
-    handle_undefined: true
     ports:
       number_of_ports: 8
   DLI-03:
@@ -30,7 +28,6 @@ switches:
     password: 'JNC_zbf5tdc4deb*npx'
     onoff_timeout: 3
     ouo: False # handle also unconfigured ports
-    handle_undefined: true
     ports:
       number_of_ports: 8
 

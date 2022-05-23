@@ -88,7 +88,7 @@ class DLIPowerSwitch(PowerSwitchBase):
 
             outlet[0].setState(outlet_data[i]["state"])
 
-            if self.config_get("handle_undefined") is True:
+            if self.onlyusedones is False:
                 if outlet[0].inuse:
                     continue
 
@@ -100,13 +100,8 @@ class DLIPowerSwitch(PowerSwitchBase):
                 outlet[0].inuse = True
 
         try:
-            inuse = [
-                outlet
-                for outlet in self.outlets
-                if outlet.inuse or not self.onlyusedones
-            ]
+            inuse = [outlet for outlet in self.outlets if outlet.inuse]
             self.reachable = await self.dli.verify(inuse)
-
         except Exception as ex:
             raise RuntimeError(f"Unexpected exception is {type(ex)}: {ex}")
 
