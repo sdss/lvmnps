@@ -8,48 +8,55 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import click
-from clu.command import Command
 
 from lvmnps.actor.commands import parser
-from lvmnps.switch.powerswitchbase import PowerSwitchBase as PowerSwitch
+
+
+if TYPE_CHECKING:
+    from lvmnps.actor.actor import NPSCommand
+    from lvmnps.switch.powerswitchbase import PowerSwitchBase
 
 
 @parser.command()
 @click.argument("SWITCHNAME", type=str, required=False)
-@click.argument("PORTNUM", type=int, default=0)
+@click.argument("PORTNUM", type=int, required=False)
+@click.option(
+    "-o",
+    "--outlet",
+    type=str,
+    help="Print only the information for this outlet.",
+)
 async def status(
-    command: Command, switches: PowerSwitch, switchname: str, portnum: int
+    command: NPSCommand,
+    switches: dict[str, PowerSwitchBase],
+    switchname: str | None = None,
+    portnum: int | None = None,
+    outlet: str | None = None,
 ):
     """Returns the dictionary of a specific outlet."""
 
-    if switchname is None:
-        command.info(text="Printing the current status of all outlets")
-    elif switchname:
-        if portnum:
-            command.info(
-                text=f"Printing the current status of switch {switchname}, port {portnum}"
-            )
-        else:
-            command.info(text=f"Printing the current status of switch {switchname}")
+    if switchname and switchname not in switches:
+        return command.fail(f"Unknown switch {switchname}.")
 
     status = {}
     if switchname is None:
-        for switch in switches:
-            current_status = await switch.statusAsDict()
+        for switch in switches.values():
+            if not await switch.isReachable():
+                continue
+            current_status = await switch.statusAsDict(outlet, portnum)
             if current_status:
                 status[switch.name] = current_status
-    elif switchname:
-        for switch in switches:
-            # status |= await switch.statusAsDict(name, portnum) works only with python 3.9
-            if switchname == switch.name:
-                if portnum:
-                    current_status = await switch.statusAsDict(switchname, portnum)
-                else:
-                    current_status = await switch.statusAsDict(switchname)
-                if current_status:
-                    status[switch.name] = current_status
-                    break
+    else:
+        switch = switches[switchname]
+        if await switch.isReachable():
+            current_status = await switch.statusAsDict(outlet, portnum)
+            if current_status:
+                status[switch.name] = current_status
 
-    command.info(status=status)
-    return command.finish()
+    if status == {}:
+        return command.fail("Unable to find matching outlets.")
+
+    return command.finish(message={"status": status})

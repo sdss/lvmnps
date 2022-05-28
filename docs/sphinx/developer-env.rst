@@ -1,7 +1,7 @@
-development-env
-=================
+Developer environment
+=====================
 
-Lvm Network Power Switch
+LVM Network Power Switch
 
 Features
 --------
@@ -31,7 +31,9 @@ Prerequisite
 ~~~~~~~~~~~~
 
 If your system already have rabbitmq, and already running with the actors, you don't have to install these below.
+
 Install `RabbitMQ <https://www.rabbitmq.com/>`__ by using apt-get.
+
 RabbitMQ is not the dependency of the 'lvmnps' but it is the system-wide configuration for running the software under CLU CLI(command line interface).
 
 ::
@@ -98,4 +100,4 @@ Test
 ::
 
      poetry run pytest
-     poetry run pytest -p no:logging -s -vv 
+     poetry run pytest -p no:logging -s -vv

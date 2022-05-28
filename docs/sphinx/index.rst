@@ -1,30 +1,29 @@
 
 lvmnps's documentation
-=========================
+======================
 
 Contents
 --------
 
 .. toctree::
+  :caption: Contents
 
-  Introduction
-  Examples
+  introduction
+  examples
 
 .. toctree::
-  :caption: api
+  :caption: API
   :maxdepth: 3
-  :hidden:
 
-  lvmnps
+  actor
   switch
-  Commands
+  commands
   actor-schema
-  Exceptions
-  
+  exceptions
+
 .. toctree::
   :caption: Development
   :maxdepth: 3
-  :hidden:
 
   developer-env
   Changelog <changelog>

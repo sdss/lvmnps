@@ -5,6 +5,8 @@
 # @Filename: lvmnps/switch/powerswitchbase.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
+from __future__ import annotations
+
 from abc import abstractmethod
 
 from sdsstools.logger import SDSSLogger
@@ -16,29 +18,35 @@ __all__ = ["PowerSwitchBase"]
 
 
 class PowerSwitchBase(object):
-    """PowerswitchBase class for multiple power switches from different manufacturers
-    The Powerswitch classes will inherit the PowerSwitchBase class.
+    """PowerSwitchBase class for multiple power switches from different manufacturers.
+
+    The Powerswitch classes will inherit from the `.PowerSwitchBase` class.
 
     Parameters
     ----------
     name
         A name identifying the power switch.
-        'DLI Controller' for Dli switch
     config
-        The configuration defined on the .yaml file under /etc/lvmnps.yml
+        The configuration defined on the .yaml file under ``/etc/lvmnps.yml``.
     log
-        The logger for logging
+        The logger for logging.
+
     """
 
-    def __init__(self, name: str, config: [], log: SDSSLogger):
+    def __init__(self, name: str, config: dict, log: SDSSLogger | None = None):
+
         self.name = name
-        self.log = log
+        self.log = log or SDSSLogger(f"powerswitchbase.{name}")
         self.config = config
 
-        self.numports = self.config_get("ports.number_of_ports", 8)
+        numports = self.config_get("ports.number_of_ports", 8)
+        if numports is None:
+            raise ValueError(f"{name}: unknown number of ports.")
+        self.numports: int = numports
+
         self.outlets = [
             Outlet(
-                name,
+                self,
                 self.config_get(f"ports.{portnum}.name"),
                 portnum,
                 self.config_get(f"ports.{portnum}.desc"),
@@ -46,26 +54,28 @@ class PowerSwitchBase(object):
             )
             for portnum in range(1, self.numports + 1)
         ]
-        self.log.debug(f"{self.outlets}")
+
         self.onlyusedones = self.config_get("ouo", True)
         self.log.debug(f"Only used ones: {self.onlyusedones}")
 
     def config_get(self, key, default=None):
         """Read the configuration and extract the data as a structure that we want.
-        Notice: DOESNT work for keys with dots !!!
+
+        Notice: DOESN'T work for keys with dots !!!
 
         Parameters
         ----------
         key
             The tree structure as a string to extract the data.
-            For example, if the configuration structure is
+            For example, if the configuration structure is ::
 
-            ports;
-                1;
-                    desc; "Hg-Ar spectral callibration lamp"
+                ports:
+                  1:
+                      desc: "Hg-Ar spectral callibration lamp"
 
             You can input the key as
-            "ports.1.desc" to take the information "Hg-Ar spectral callibration lamp"
+            ``ports.1.desc`` to take the information "Hg-Ar spectral callibration lamp".
+
         """
 
         def g(config, key, d=None):
@@ -77,20 +87,23 @@ class PowerSwitchBase(object):
                 config from the class member, which is saved from the class instance
             key
                 The tree structure as a string to extract the data.
-                For example, if the configuration structure is
+                For example, if the configuration structure is ::
 
                 ports:
-                    num:1
+                  num:1
                     1:
-                        desc: "Hg-Ar spectral callibration lamp"
+                      desc: "Hg-Ar spectral callibration lamp"
 
-                You can input the key as
-                "ports.1.desc" to take the information "Hg-Ar spectral callibration lamp"
+                You can input the key as "ports.1.desc" to take the information
+                "Hg-Ar spectral callibration lamp"
+
             """
+
             k = key.split(".", maxsplit=1)
             c = config.get(
                 k[0] if not k[0].isnumeric() else int(k[0])
             )  # keys can be numeric
+
             return (
                 d
                 if c is None
@@ -112,10 +125,14 @@ class PowerSwitchBase(object):
             The string to compare with the name in Outlet instance.
         """
         for o in self.outlets:
-            if o.name == name:
+            if o.name.lower() == name.lower():
                 return o
 
-    def collectOutletsByNameAndPort(self, name: str, portnum: int = 0):
+    def collectOutletsByNameAndPort(
+        self,
+        name: str | None = None,
+        portnum: int | None = None,
+    ):
         """Collects the outlet by the name and ports,
         comparing with the name and ports from the Outlet object.
 
@@ -124,8 +141,19 @@ class PowerSwitchBase(object):
         name
             The string to compare with the name in Outlet instance.
         portnum
-            The integer for indicating each Outlet instances
+            The integer for indicating each Outlet instances. If zero or `None`,
+            identifies the outlet only by name.
+
+        Returns
+        -------
+        outlets
+            A list of `.Outlet` that match the name and port number. If ``name=None``,
+            the outlet matching the port number is returned. If both ``name`` and
+            ``portnum`` are `None`, a list with all the outlets connected to this
+            switch is returned.
+
         """
+
         if not name or name == self.name:
             if portnum:
                 if portnum > self.numports:
@@ -133,7 +161,6 @@ class PowerSwitchBase(object):
                 return [self.outlets[portnum - 1]]
             else:
                 outlets = []
-                self.log.debug(str(self.onlyusedones))
 
                 for o in self.outlets:
                     if o.inuse or not self.onlyusedones:
@@ -144,37 +171,51 @@ class PowerSwitchBase(object):
             o = self.findOutletByName(name)
             if o:
                 return [o]
+
         return []
 
-    async def setState(self, state, name: str = "", portnum: int = 0):
-        """Set the state of the Outlet instance to On/Off. (On = 1, Off = 0)
+    async def setState(
+        self,
+        state: bool | int,
+        name: str | None = None,
+        portnum: int | None = None,
+    ):
+        """Set the state of the Outlet instance to On/Off. (On = 1, Off = 0).
+
+        Note that dependending on the values passed to ``name`` and ``portnum``,
+        multiple outlets may be commanded.
 
         Parameters
         ----------
         state
-            The boolian value (True, False) to set the state inside the Outlet object.
+            The boolean value (True, False) to set the state inside the Outlet object.
         name
             The string to compare with the name in Outlet instance.
         portnum
-            The integer for indicating each Outlet instances
+            The integer for indicating each Outlet instances.
+
         """
-        if portnum > self.numports:
-            return []
+
+        state_int = Outlet.parse(state)
+        if state_int == -1:
+            raise ValueError(f"{self.name}: cannot parse state {state!r}.")
 
         return await self.switch(
-            Outlet.parse(state), self.collectOutletsByNameAndPort(name, portnum)
+            state_int,
+            self.collectOutletsByNameAndPort(name, portnum),
         )
 
-    async def statusAsDict(self, name: str = "", portnum: int = 0):
-        """Get the status of the Outlets by dictionary.
+    async def statusAsDict(self, name: str | None = None, portnum: int | None = None):
+        """Get the status of the `.Outlets` as a dictionary.
 
         Parameters
         ----------
         name
             The string to compare with the name in Outlet instance.
-            'name' can be a switch or an outlet name.
+            ``name`` can be a switch or an outlet name.
         portnum
-            The integer for indicating each Outlet instances
+            The integer for indicating each Outlet instances.
+
         """
 
         outlets = self.collectOutletsByNameAndPort(name, portnum)
@@ -189,21 +230,41 @@ class PowerSwitchBase(object):
 
     @abstractmethod
     async def start(self):
+        """Starts the switch instance, potentially connecting to the device server."""
         pass
 
     @abstractmethod
     async def stop(self):
+        """Stops the connection to the switch server."""
         pass
 
     @abstractmethod
     async def isReachable(self):
-        """Verify we can reach the switch, returns true if ok"""
+        """Verify we can reach the switch. Returns `True` if ok."""
         pass
 
     @abstractmethod
-    async def update(self, outlets):
+    async def update(self, outlets: list[Outlet] | None):
+        """Retrieves the status of a list of outlets and updates the internal mapping.
+
+        Parameters
+        ----------
+        outlets
+            A list of `.Outlets` to update. If `None`, all outlets are updated.
+
+        """
         pass
 
     @abstractmethod
-    async def switch(self, state, outlets):
+    async def switch(self, state: int, outlets: list[Outlet]):
+        """Changes the state of an outlet.
+
+        Parameters
+        ----------
+        state
+            The final state for the outlets. 0: off, 1: on.
+        outlets
+            A list of `.Outlets` which status will be updated.
+
+        """
         pass

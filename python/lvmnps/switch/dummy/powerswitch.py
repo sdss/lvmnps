@@ -5,7 +5,8 @@
 # @Filename: lvmnps/switch/dummy/powerswitch.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
-# import time
+from __future__ import annotations
+
 import asyncio
 
 from sdsstools.logger import SDSSLogger
@@ -19,7 +20,7 @@ __all__ = ["PowerSwitch"]
 class PowerSwitch(PowerSwitchBase):
     """Powerswitch class to manage the Digital Loggers Web power switch"""
 
-    def __init__(self, name: str, config: [], log: SDSSLogger):
+    def __init__(self, name: str, config: dict, log: SDSSLogger):
         super().__init__(name, config, log)
         self.delay = self.config_get("delay", 0.0)
 
@@ -43,7 +44,6 @@ class PowerSwitch(PowerSwitchBase):
     async def switch(self, state, outlets):
         for o in outlets:
             self.log.debug(f"{self.name} set")
-            #            time.sleep(self.delay)
             await asyncio.sleep(self.delay)
             self.log.debug(f"{self.name} {outlets}")
             o.setState(state)

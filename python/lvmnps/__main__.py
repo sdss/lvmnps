@@ -2,11 +2,11 @@ import os
 
 import click
 from click_default_group import DefaultGroup
-from clu.tools import cli_coro
 
+from clu.tools import cli_coro
 from sdsstools.daemonizer import DaemonGroup
 
-from lvmnps.actor.actor import lvmnps as NpsActorInstance
+from lvmnps.actor.actor import NPSActor
 
 
 @click.group(cls=DefaultGroup, default="actor", default_if_no_args=True)
@@ -35,17 +35,19 @@ def lvmnps(ctx, config_file, verbose):
 @cli_coro
 async def actor(ctx):
     """Runs the actor."""
+
     default_config_file = os.path.join(os.path.dirname(__file__), "etc/lvmnps.yml")
     config_file = ctx.obj["config_file"] or default_config_file
 
-    lvmnps_obj = NpsActorInstance.from_config(config_file)
+    lvmnps = NPSActor.from_config(config_file)
 
     if ctx.obj["verbose"]:
-        lvmnps_obj.log.fh.setLevel(0)
-        lvmnps_obj.log.sh.setLevel(0)
+        if lvmnps.log.fh:
+            lvmnps.log.fh.setLevel(0)
+        lvmnps.log.sh.setLevel(0)
 
-    await lvmnps_obj.start()
-    await lvmnps_obj.run_forever()
+    await lvmnps.start()
+    await lvmnps.run_forever()
 
 
 if __name__ == "__main__":

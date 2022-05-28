@@ -7,207 +7,203 @@
 # @Filename: lvmnps/switch/dli/dli.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
-
 from __future__ import annotations
 
 import asyncio
+import logging
+from typing import TYPE_CHECKING
 
 import httpx
 
 
-class Dli(object):
-    """Powerswitch class to manage the dli power switch.
+if TYPE_CHECKING:
+    from sdsstools.logger import SDSSLogger
+
+    from ..outlet import Outlet
+
+
+class DLI(object):
+    """Powerswitch class to manage the DLI power switch.
 
     Parameters
     ----------
-    log
-        The logger for logging
-    name
-        the name of the Dli Controller
-    userid
-        The username from the configuration (the id for login)
-    password
-        The password from the configuration (the password for login)
     hostname
-        The hostname from the configuration (the ip address for connection)
+        The hostname from the configuration (the IP address for connection).
+    user
+        The username from the configuration (the id for login).
+    password
+        The password from the configuration (the password for login).
+    name
+        The name of the DLI Controller.
+    log
+        The logger for logging.
     onoff_timeout
-        the onoff_timeout seconds for sending the on/off command.
+        The timeout, in seconds, before failing an on/off command.
+
     """
 
     def __init__(
         self,
-        log=None,
-        name=None,
-        userid=None,
-        password=None,
-        hostname=None,
+        hostname: str,
+        user: str,
+        password: str,
+        name: str | None = None,
+        log: SDSSLogger | None = None,
         onoff_timeout=3,
     ):
-        self.log = log
-        if userid:
-            self.userid = userid
-        if password:
-            self.password = password
-        if hostname:
-            self.hostname = hostname
-        if name:
-            self.name = name
-        if onoff_timeout:
-            self.onoff_timeout = onoff_timeout
-        self.clients = {}
-        self.outlets_dict = {}
 
-    async def add_client(self):
-        """Add the httpx AsyncClient on the Dli object."""
+        self.user = user
+        self.hostname = hostname
+        self.name = name or hostname
+
+        self.log = log or logging.getLogger(f"{self.__class__.__name__}_{self.name}")
+
+        self.onoff_timeout = onoff_timeout
+
+        self.client: httpx.AsyncClient
+        self.add_client(password)
+
+    def add_client(self, password: str):
+        """Add the `httpx.AsyncClient` to the DLI object."""
 
         try:
-            auth = httpx.DigestAuth(self.userid, self.password)
-            self.clients[self.hostname] = httpx.AsyncClient(
+            auth = httpx.DigestAuth(self.user, password)
+            self.client = httpx.AsyncClient(
                 auth=auth,
                 base_url=f"http://{self.hostname}/restapi",
                 headers={},
             )
         except Exception as ex:
-            self.log.error(
-                f"{type(ex)}: {ex} couldn't access to clients {self.hostname}"
-            )
+            self.log.error(f"{type(ex)}: couldn't access client {self.hostname}: {ex}")
 
-    async def close(self):
-        """Close the Client."""
-        try:
-            await self.clients[self.hostname].aclose()
-
-        except Exception as ex:
-            self.log.error(f"{type(ex)}: {ex} couldn't close the request")
-
-    async def verify(self, outlets):
+    async def verify(self, outlets: list[Outlet]):
         """Verifies if we can reach the switch by the "get" method.
-        Also compares the outlet lists with the configuration, and returns true if it's identical.
+
+        Also compares the outlet lists with the configuration, and returns true
+        if it's identical.
 
         Parameters
         ----------
         outlets
-            list of Outlet objects defined on /switch/outlet.py
-            each Oulet object indicates one of eight outlets of the dli power switch.
-        """
-        result = False
-        if self.hostname not in self.clients:
-            raise ValueError(f"Client for host {self.hostname} not defined.")
+            The list of `.Outlet` instance to check.
 
-        r = await self.clients[self.hostname].get("relay/outlets/")
-        if r.status_code != 200:
-            raise RuntimeError(f"GET returned code {r.status_code}.")
-        else:
-            result = await self.compare(r.json(), outlets)
+        """
+
+        result = False
+
+        async with self.client as client:
+            r = await client.get("relay/outlets/")
+            if r.status_code != 200:
+                raise RuntimeError(f"GET returned code {r.status_code}.")
+            else:
+                result = self.compare(r.json(), outlets)
 
         return result
 
-    async def compare(self, json, outlets):
-        """Compares the name of outlets from the json object and the
-        name of the Outlet object list.
-        The name of the Outlet object is from the configuration file in /etc/lvmnps_dli.yml
+    def compare(self, json: dict, outlets: list[Outlet]):
+        """Compares the names of the outlets with the response JSON object.
 
         Parameters
         ----------
         json
-            The json list from the restful API.
-            The current status of the power switch is contained here.
+            The json list from the restful API. The current status of the power
+            switch is contained here.
         outlets
-            list of Outlet objects defined on /switch/outlet.py
-            each Oulet object indicates one of eight outlets of the dli power switch.
-        """
-        same = True
-        assert len(outlets) == len(json)
+            List of `.Outlet` objects to compare.
 
-        for i in range(len(outlets)):
-            if json[i]["name"] != "":
-                print(json[i]["name"])
-                print(outlets[i].name)
-                if json[i]["name"] != outlets[i].name:
-                    same = False
-                    break
+        """
+
+        same = True
+
+        for outlet in outlets:
+            portnum = outlet.portnum
+            if json[portnum - 1]["name"] != outlet.name:
+                same = False
+                break
 
         return same
 
-    async def on(self, outlet=0):
-        """Turn on the power of the outlet.
-        Set the value of the outlet state by "put" method.
-        The outlet value is integer, but the outlet number is
-        1, 2, 3, 4, 5, 6, 7 ,8
-        So we have to put
-        0, 1, 2, 3, 4, 5, 6, 7
-        to indicate the outlet inside the python list.
+    async def on(self, outlet: int = 0):
+        """Turn on the power to the outlet.
+
+        Set the value of the outlet state by using a PUT request. Note that the
+        outlets in the RESTful API are zero-indexed.
 
         Parameters
         ----------
         outlet
-            (int) The number indicating the outlet.
-            The input will be 1, 2, 3, 4, 5, 6, 7, 8.
-        """
+            The number indicating the outlet (1-indexed).
 
-        if self.hostname not in self.clients:
-            raise ValueError(f"Client for host {self.hostname} not defined.")
+        """
 
         outlet = outlet - 1
 
-        r = await asyncio.wait_for(
-            self.clients[self.hostname].put(
-                f"relay/outlets/{outlet}/state/",
-                data={"value": True},
-                headers={"X-CSRF": "x"},
-            ),
-            self.onoff_timeout,
-        )
-        if r.status_code != 204:
-            raise RuntimeError(f"PUT returned code {r.status_code}.")
+        async with self.client as client:
+            r = await asyncio.wait_for(
+                client.put(
+                    f"relay/outlets/{outlet}/state/",
+                    data={"value": True},
+                    headers={"X-CSRF": "x"},
+                ),
+                self.onoff_timeout,
+            )
+            if r.status_code != 204:
+                raise RuntimeError(f"PUT returned code {r.status_code}.")
 
     async def off(self, outlet=0):
-        """Turn off the power of the outlet.
-        Set the value of the outlet state by "put" method.
-        The outlet value is integer, but the outlet number is
-        1, 2, 3, 4, 5, 6, 7 ,8
-        So we have to put
-        0, 1, 2, 3, 4, 5, 6, 7
-        to indicate the outlet inside the python list.
+        """Turn off the power to the outlet.
+
+        Set the value of the outlet state by using a PUT request. Note that the
+        outlets in the RESTful API are zero-indexed.
 
         Parameters
         ----------
         outlet
-            (int) The number indicating the outlet.
-            The input will be 1, 2, 3, 4, 5, 6, 7, 8.
-        """
+            The number indicating the outlet (1-indexed).
 
-        if self.hostname not in self.clients:
-            raise ValueError(f"Client for host {self.hostname} not defined.")
+        """
 
         outlet = outlet - 1
 
-        r = await asyncio.wait_for(
-            self.clients[self.hostname].put(
-                f"relay/outlets/{outlet}/state/",
-                data={"value": False},
-                headers={"X-CSRF": "x"},
-            ),
-            self.onoff_timeout,
-        )
-        if r.status_code != 204:
-            raise RuntimeError(f"PUT returned code {r.status_code}.")
+        async with self.client as client:
+            r = await asyncio.wait_for(
+                client.put(
+                    f"relay/outlets/{outlet}/state/",
+                    data={"value": False},
+                    headers={"X-CSRF": "x"},
+                ),
+                self.onoff_timeout,
+            )
+            if r.status_code != 204:
+                raise RuntimeError(f"PUT returned code {r.status_code}.")
 
-    async def statusdictionary(self):
-        """Sets the status as a dictionary memeber of the class from the outlets of the real switch.
-        Receives the data from the switch by the 'get' method as a json.
+    async def get_outlets_response(self):
+        """Returns the raw response to a ``relay/outlets`` GET request.."""
+
+        async with self.client as client:
+            r = await client.get("relay/outlets/")
+            if r.status_code != 200:
+                raise RuntimeError(f"GET returned code {r.status_code}.")
+
+        return r.json()
+
+    async def status(self):
+        """Returns the status as a dictionary.
+
+        Receives the data from the switch by the GET method as a JSON. Note that
+        this method returns the status of all the outlets (ports 1-8).
+
         """
 
-        if self.hostname not in self.clients:
-            raise ValueError(f"Client for host {self.hostname} not defined.")
+        async with self.client as client:
+            r = await client.get("relay/outlets/")
+            if r.status_code != 200:
+                raise RuntimeError(f"GET returned code {r.status_code}.")
 
-        r = await self.clients[self.hostname].get("relay/outlets/")
-        if r.status_code != 200:
-            raise RuntimeError(f"GET returned code {r.status_code}.")
+        outlets_dict = {}
 
         data = r.json()
-        num = range(0, 8)
-        for n in num:
-            outlet_num = n + 1
-            self.outlets_dict[outlet_num] = data[n]["state"]
-        return
+        for n in range(0, 8):
+            outlets_dict[n + 1] = data[n]["state"]
+
+        return outlets_dict

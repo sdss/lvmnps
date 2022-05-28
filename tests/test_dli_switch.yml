@@ -1,0 +1,15 @@
+# A dictionary of controller name to NPS controller connection parameters.
+switches:
+  DLI-01:
+    type: dli
+    name: DLI-01
+    hostname: 10.7.45.22
+    user: 'admin'
+    password: 'rLXR3KxUqiCPGvA'
+    onoff_timeout: 3
+    ouo: True
+    ports:
+      number_of_ports: 8
+      1:
+        name: 'Outlet 1'
+        desc: ''
