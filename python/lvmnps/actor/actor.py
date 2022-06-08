@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# @Author: Mingyeong YANG (mingyeong@khu.ac.kr), Florian Briegel (briegel@mpia.de)
+# @Author: Changgon Kim, Mingyeong YANG (mingyeong@khu.ac.kr), Florian Briegel (briegel@mpia.de)
 # @Date: 2021-03-22
 # @Filename: lvmnps/actor/actor.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)

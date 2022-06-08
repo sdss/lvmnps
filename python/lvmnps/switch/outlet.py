@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# @Author: Florian Briegel (briegel@mpia.de)
+# @Author:  Florian Briegel (briegel@mpia.de), Changgon Kim
 # @Date: 2021-06-22
 # @Filename: lvmnps/switch/outlet.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)

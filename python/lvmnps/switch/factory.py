@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# @Author: Florian Briegel (briegel@mpia.de)
+# @Author:  Florian Briegel (briegel@mpia.de), Changgon Kim
 # @Date: 2021-06-22
 # @Update: 2021-10-09
 # @Filename: lvmnps/switch/factory.py

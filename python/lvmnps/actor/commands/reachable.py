@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# @Author: Mingyeong Yang(mingyeong@khu.ac.kr)
+# @Author: Mingyeong Yang(mingyeong@khu.ac.kr), Changgon Kim
 # @Date: 2021-08-30
 # @Filename: device.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
