@@ -18,16 +18,24 @@ from lvmnps.actor.actor import NPSActor
     help="Path to the user configuration file.",
 )
 @click.option(
+    "-r",
+    "--rmq_url",
+    "rmq_url",
+    default=None,
+    type=str,
+    help="rabbitmq url, eg: amqp://guest:guest@localhost:5672/",
+)
+@click.option(
     "-v",
     "--verbose",
     count=True,
     help="Debug mode. Use additional v for more details.",
 )
 @click.pass_context
-def lvmnps(ctx, config_file, verbose):
+def lvmnps(ctx, config_file, rmq_url, verbose):
     """Nps Actor."""
 
-    ctx.obj = {"verbose": verbose, "config_file": config_file}
+    ctx.obj = {"verbose": verbose, "config_file": config_file, "rmq_url": rmq_url}
 
 
 @lvmnps.group(cls=DaemonGroup, prog="nps_actor", workdir=os.getcwd())
@@ -39,7 +47,7 @@ async def actor(ctx):
     default_config_file = os.path.join(os.path.dirname(__file__), "etc/lvmnps.yml")
     config_file = ctx.obj["config_file"] or default_config_file
 
-    lvmnps = NPSActor.from_config(config_file)
+    lvmnps = NPSActor.from_config(config_file, url=ctx.obj["rmq_url"], verbose=ctx.obj["verbose"])
 
     if ctx.obj["verbose"]:
         if lvmnps.log.fh:
