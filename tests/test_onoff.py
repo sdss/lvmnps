@@ -12,8 +12,6 @@ async def test_onoff(switches, actor: NPSActor):
 
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
-    assert switches[0].outlets[0].state == -1
-    switches[0].outlets[0].state = 0
     assert switches[0].outlets[0].state == 0
 
     # switch on nps_dummy_1 port1
@@ -37,7 +35,6 @@ async def test_onoff(switches, actor: NPSActor):
     # switch skye.nps port 1
     assert switches[1].name == "skye.nps"
     assert switches[1].outlets[0].name == "skye.pwi"
-    assert switches[1].outlets[0].state == -1
     switches[1].outlets[0].state = 0
     assert switches[1].outlets[0].state == 0
 
@@ -63,7 +60,6 @@ async def test_status_already_on(switches, actor: NPSActor):
 
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
-    assert switches[0].outlets[0].state == -1
     switches[0].outlets[0].state = 0
     assert switches[0].outlets[0].state == 0
 
@@ -84,7 +80,6 @@ async def test_status_already_off(switches, actor: NPSActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
-    assert switches[0].outlets[0].state == -1
     switches[0].outlets[0].state = 0
     assert switches[0].outlets[0].state == 0
 
@@ -112,6 +107,7 @@ async def test_on_fail(switches, actor: NPSActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
+    switches[0].outlets[0].state = -1
     assert switches[0].outlets[0].state == -1
 
     # switch on nps_dummy_1 port1
@@ -124,6 +120,7 @@ async def test_off_fail(switches, actor: NPSActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
+    switches[0].outlets[0].state = -1
     assert switches[0].outlets[0].state == -1
 
     # switch on nps_dummy_1 port1
@@ -136,7 +133,6 @@ async def test_status_off_after(switches, actor: NPSActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
-    assert switches[0].outlets[0].state == -1
     switches[0].outlets[0].state = 0
     assert switches[0].outlets[0].state == 0
 

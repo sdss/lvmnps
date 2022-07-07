@@ -16,14 +16,10 @@ async def test_async_onoff(switches, actor: NPSActor):
 
     assert switches[3].name == "slow"
     assert switches[3].outlets[0].name == "slow"
-    assert switches[3].outlets[0].state == -1
-    switches[3].outlets[0].state = 0
     assert switches[3].outlets[0].state == 0
 
     assert switches[4].name == "fast"
     assert switches[4].outlets[0].name == "fast"
-    assert switches[4].outlets[0].state == -1
-    switches[4].outlets[0].state = 0
     assert switches[4].outlets[0].state == 0
 
     task = []
