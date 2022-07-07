@@ -23,7 +23,8 @@ class PowerSwitch(PowerSwitchBase):
     def __init__(self, name: str, config: dict, log: SDSSLogger):
         super().__init__(name, config, log)
         self.delay = self.config_get("delay", 0.0)
-        for o in self.outlets: o.setState(0)
+        for o in self.outlets: 
+            o.setState(0)
 
     async def start(self):
         if not await self.isReachable():
