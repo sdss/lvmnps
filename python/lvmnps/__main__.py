@@ -47,7 +47,11 @@ async def actor(ctx):
     default_config_file = os.path.join(os.path.dirname(__file__), "etc/lvmnps.yml")
     config_file = ctx.obj["config_file"] or default_config_file
 
-    lvmnps = NPSActor.from_config(config_file, url=ctx.obj["rmq_url"], verbose=ctx.obj["verbose"])
+    lvmnps = NPSActor.from_config(
+        config_file,
+        url=ctx.obj["rmq_url"],
+        verbose=ctx.obj["verbose"],
+    )
 
     if ctx.obj["verbose"]:
         if lvmnps.log.fh:
