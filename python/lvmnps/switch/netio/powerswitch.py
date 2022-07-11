@@ -57,7 +57,7 @@ class PowerSwitch(PowerSwitchBase):
         if switch := await self.isReachable():
             relays = switch.get_outputs()
             for o in outlets:
-                o.setState(relays[o.portnum - 1].State if o.portnum < len(relays) else -1)
+                o.setState(relays[o.portnum - 1].State if o.portnum <= len(relays) else -1)
         else:
             for o in outlets:
                 o.setState(-1)
