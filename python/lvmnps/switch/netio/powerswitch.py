@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #
 # @Author: Florian Briegel (briegel@mpia.de)
-# @Date: 2021-06-24
-# @Filename: lvmnps/switch/dummy/powerswitch.py
+# @Date: 2022-07-11
+# @Filename: lvmnps/switch/netio/powerswitch.py
 # @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from __future__ import annotations
@@ -69,7 +69,6 @@ class PowerSwitch(PowerSwitchBase):
             self.log.debug(f"{self.name} {outlets}")
             for o in outlets:
                 o.setState(state)
-            
         else:
             for o in outlets:
                 o.setState(-1)
