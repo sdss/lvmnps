@@ -49,6 +49,8 @@ class PowerSwitch(PowerSwitchBase):
             "nothing continued to happen ..."
         )
 
+    # https://stackoverflow.com/questions/22190403/how-could-i-use-requests-in-asyncio
+
     async def isReachable(self):
         return Netio(self.con_url, **self.con_args)
 

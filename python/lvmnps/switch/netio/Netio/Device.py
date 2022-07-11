@@ -88,9 +88,10 @@ class Device(object):
 
 
 class JsonDevice(Device):
-    def __init__(self, url, auth_r=None, auth_rw=None, verify=None, skip_init=False):
+    def __init__(self, url, auth_r=None, auth_rw=None, verify=None, skip_init=False, timeout=2):
         self._url = url
         self._verify = verify
+        self.timeout = timeout
 
         # read-write can do read, so we don't need read-only permission
         if auth_rw:
@@ -153,6 +154,7 @@ class JsonDevice(Device):
                 data=json.dumps(body),
                 auth=requests.auth.HTTPBasicAuth(self._user, self._pass),
                 verify=self._verify,
+                timeout=self.timeout
             )
         except requests.exceptions.SSLError:
             raise AuthError("Invalid certificate")
@@ -163,7 +165,8 @@ class JsonDevice(Device):
         try:
             response = requests.get(
                 self._url, auth=requests.auth.HTTPBasicAuth(self._user, self._pass),
-                verify=self._verify
+                verify=self._verify,
+                timeout=self.timeout
             )
         except requests.exceptions.SSLError:
             raise AuthError("Invalid certificate")
