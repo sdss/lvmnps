@@ -103,7 +103,7 @@ async def test_status_already_off(switches, actor: NPSActor):
     assert command.status.did_succeed
 
 
-async def test_on_fail(switches, actor: NPSActor):
+async def test_on_succeed(switches, actor: NPSActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
@@ -113,10 +113,10 @@ async def test_on_fail(switches, actor: NPSActor):
     # switch on nps_dummy_1 port1
     command = await actor.invoke_mock_command("on nps_dummy_1 1")
     await command
-    assert command.status.did_fail
+    assert command.status.did_succeed
 
 
-async def test_off_fail(switches, actor: NPSActor):
+async def test_off_succeed(switches, actor: NPSActor):
     assert actor
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
@@ -126,7 +126,7 @@ async def test_off_fail(switches, actor: NPSActor):
     # switch on nps_dummy_1 port1
     command = await actor.invoke_mock_command("off nps_dummy_1 1")
     await command
-    assert command.status.did_fail
+    assert command.status.did_succeed
 
 
 async def test_status_off_after(switches, actor: NPSActor):

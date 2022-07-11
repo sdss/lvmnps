@@ -27,6 +27,7 @@ class PowerSwitch(PowerSwitchBase):
 
         for o in self.outlets:
             o.setState(0)
+
         hostname = self.config_get("hostname")
         username = self.config_get("username", "netio")
         password = self.config_get("password", "netio")
@@ -34,13 +35,10 @@ class PowerSwitch(PowerSwitchBase):
         self.con_url = f"http://{hostname}/netio.json"
         self.con_args = {"auth_rw": (username, password), "verify": True}
         self.portsnum = int(self.config_get("ports.num", "4"))
-        
-        print(self.outlets)
+
+        self.netio = Netio(self.con_url, **self.con_args, skip_init=True)
 
     async def start(self):
-        if not await self.isReachable():
-            self.log.warning(f"{self.name} not reachable on start up")
-
         await self.update(self.outlets)
 
     async def stop(self):
@@ -49,28 +47,40 @@ class PowerSwitch(PowerSwitchBase):
             "nothing continued to happen ..."
         )
 
-    # https://stackoverflow.com/questions/22190403/how-could-i-use-requests-in-asyncio
-
     async def isReachable(self):
-        return Netio(self.con_url, **self.con_args)
+        loop = asyncio.get_event_loop()
+        try:
+            await loop.run_in_executor(None, self.netio.init)
+            return True
+        except Exception as ex:
+            self.log.error(f"{self.name}: {ex}")
+            return False
 
     async def update(self, outlets):
-
-        if switch := await self.isReachable():
-            relays = switch.get_outputs()
+        loop = asyncio.get_event_loop()
+        try:
+            relays = await loop.run_in_executor(None, self.netio.get_outputs)
             for o in outlets:
-                o.setState(relays[o.portnum - 1].State if o.portnum <= len(relays) else -1)
-        else:
+                o.setState(relays[o.portnum - 1].State
+                           if o.portnum <= len(relays) else -1)
+
+        except Exception as ex:
+            self.log.error(f"{self.name}: {ex}")
             for o in outlets:
                 o.setState(-1)
 
     async def switch(self, state, outlets):
-        if switch := await self.isReachable():
-            switch.set_outputs({o.portnum: Netio.ACTION.ON if state else Netio.ACTION.OFF for o in outlets})
-
+        loop = asyncio.get_event_loop()
+        try:
+            await loop.run_in_executor(None, self.netio.set_outputs,
+                                       {o.portnum: Netio.ACTION.ON
+                                        if state else Netio.ACTION.OFF
+                                        for o in outlets})
             self.log.debug(f"{self.name} {outlets}")
             for o in outlets:
                 o.setState(state)
-        else:
+
+        except Exception as ex:
+            self.log.error(f"{self.name}: {ex}")
             for o in outlets:
                 o.setState(-1)

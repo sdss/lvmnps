@@ -88,7 +88,8 @@ class Device(object):
 
 
 class JsonDevice(Device):
-    def __init__(self, url, auth_r=None, auth_rw=None, verify=None, skip_init=False, timeout=2):
+    def __init__(self, url, auth_r=None, auth_rw=None, verify=None,
+                 skip_init=False, timeout=2):
         self._url = url
         self._verify = verify
         self.timeout = timeout

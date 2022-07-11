@@ -84,7 +84,7 @@ async def on(
     outletname_list = list(current_status.keys())
     outletname = outletname_list[0]
 
-    if current_status[outletname]["state"] == 0:
+    if current_status[outletname]["state"] != 1:
         current_status = await switch_control("on", the_switch, True, outlet, portnum)
     elif current_status[outletname]["state"] == 1:
         return command.finish(text=f"The outlet {outletname} is already ON")
@@ -142,7 +142,7 @@ async def off(
     outletname_list = list(current_status.keys())
     outletname = outletname_list[0]
 
-    if current_status[outletname]["state"] == 1:
+    if current_status[outletname]["state"] != 0:
         current_status = await switch_control("off", the_switch, False, outlet, portnum)
     elif current_status[outletname]["state"] == 0:
         return command.finish(text=f"The outlet {outletname} is already OFF")

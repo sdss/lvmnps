@@ -2,7 +2,8 @@
 switches:
   skye.nps:
     type: netio
-    hostname: '192.168.1.17'
+#    hostname: '192.168.1.17'
+    hostname: 'localhost:8080'
     username: 'netio'
     password: 'netio'
     ouo: False
