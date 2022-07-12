@@ -11,9 +11,8 @@ import asyncio
 
 from sdsstools.logger import SDSSLogger
 
-from lvmnps.switch.powerswitchbase import PowerSwitchBase
-
 from lvmnps.switch.netio.Netio import Netio
+from lvmnps.switch.powerswitchbase import PowerSwitchBase
 
 
 __all__ = ["PowerSwitch"]
