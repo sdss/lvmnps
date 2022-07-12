@@ -1,0 +1,24 @@
+# A dictionary of controller name to NPS controller connection parameters.
+switches:
+  skye.nps:
+    type: netio
+#    hostname: '192.168.1.17'
+    hostname: 'localhost:8080'
+    username: 'netio'
+    password: 'netio'
+    ouo: False
+    ports:
+      number_of_ports: 4
+      1:
+        name: 'skye.pwi'
+        desc: 'PlaneWavemount Skye'
+
+timeouts:
+  switch_connect: 1
+
+# Actor configuration for the AMQPActor class
+actor:
+  name: lvmnps
+  host: localhost
+  port: 5672
+  log_dir: '~/tmp/log'

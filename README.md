@@ -15,6 +15,7 @@ LVM Network Power Switch
 - Supports a Dummy PDU
 - Supports [iBOOT g2](https://dataprobe.com/iboot-g2/) with python code from [here](https://github.com/dprince/python-iboot)
 - Supports [Digital Loggers Web Power](https://www.digital-loggers.com/lpc7.html) with python code from [here](https://github.com/dwighthubbard/python-dlipower)
+- Supports [netio](https://github.com/netioproducts/PyNetio) with python code from [here](https://shop.netio.eu/netio-power-sockets/powerpdu-4ps--iec-320-c13-switched-power-distribution-unit/)
 
 
 ## Installation

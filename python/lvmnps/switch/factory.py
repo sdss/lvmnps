@@ -16,6 +16,8 @@ from lvmnps.exceptions import PowerException
 
 from .dli.powerswitch import DLIPowerSwitch
 from .dummy.powerswitch import PowerSwitch as DummyPowerSwitch
+from .iboot.powerswitch import PowerSwitch as IBootPowerSwitch
+from .netio.powerswitch import PowerSwitch as NetIOPowerSwitch
 
 
 if TYPE_CHECKING:
@@ -46,7 +48,8 @@ def powerSwitchFactory(name: str, config: dict, log: SDSSLogger):
 
     factorymap: dict[str, Type[PowerSwitchBase]] = {
         "dli": DLIPowerSwitch,
-        # "iboot": IBootPowerSwitch,
+        "netio": NetIOPowerSwitch,
+        "iboot": IBootPowerSwitch,
         "dummy": DummyPowerSwitch,
     }
 
