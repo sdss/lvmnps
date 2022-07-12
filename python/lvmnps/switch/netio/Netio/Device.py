@@ -29,12 +29,13 @@ class Device(object):
         NOCHANGE = 5
         IGNORED = 6
 
-    DeviceName: str = ''
-    SerialNumber: str = 'Unknown'
+    DeviceName: str = ""
+    SerialNumber: str = "Unknown"
     NumOutputs: int = 0
 
     OUTPUT = collections.namedtuple(
-        "Output", "ID Name State Action Delay Current PowerFactor Load Energy")
+        "Output", "ID Name State Action Delay Current PowerFactor Load Energy"
+    )
 
     @abstractmethod
     def __init__(self, *args, **kwargs):
@@ -42,14 +43,14 @@ class Device(object):
 
     @abstractmethod
     def _get_outputs(self) -> List[OUTPUT]:
-        """ Return list of all outputs in format of self.OUTPUT """
+        """Return list of all outputs in format of self.OUTPUT"""
 
     @abstractmethod
     def _set_outputs(self, actions: Dict[int, ACTION]) -> None:
-        """ Set multiple outputs. """
+        """Set multiple outputs."""
 
     def get_outputs(self) -> List[OUTPUT]:
-        """ Returns list of available sockets and their state"""
+        """Returns list of available sockets and their state"""
         return self._get_outputs()
 
     def get_outputs_filtered(self, ids):
@@ -62,7 +63,7 @@ class Device(object):
                 raise UnknownOutputId("Invalid output ID")
 
     def get_output(self, id: int) -> OUTPUT:
-        """ Get state of single socket by its id """
+        """Get state of single socket by its id"""
         outputs = self.get_outputs()
         try:
             return next(filter(lambda output: output.ID == id, outputs))
@@ -88,8 +89,9 @@ class Device(object):
 
 
 class JsonDevice(Device):
-    def __init__(self, url, auth_r=None, auth_rw=None, verify=None,
-                 skip_init=False, timeout=2):
+    def __init__(
+        self, url, auth_r=None, auth_rw=None, verify=None, skip_init=False, timeout=2
+    ):
         self._url = url
         self._verify = verify
         self.timeout = timeout
@@ -119,7 +121,7 @@ class JsonDevice(Device):
 
     def get_info(self):
         r_json = self._get()
-        r_json.pop('Outputs')
+        r_json.pop("Outputs")
         return r_json
 
     @staticmethod
@@ -130,13 +132,13 @@ class JsonDevice(Device):
         """
 
         if response.status_code == 400:
-            raise CommunicationError('Control command syntax error')
+            raise CommunicationError("Control command syntax error")
 
         if response.status_code == 401:
-            raise AuthError('Invalid Username or Password')
+            raise AuthError("Invalid Username or Password")
 
         if response.status_code == 403:
-            raise AuthError('Insufficient permissions to write')
+            raise AuthError("Insufficient permissions to write")
 
         if not response.ok:
             raise CommunicationError("Communication with device failed")
@@ -155,7 +157,7 @@ class JsonDevice(Device):
                 data=json.dumps(body),
                 auth=requests.auth.HTTPBasicAuth(self._user, self._pass),
                 verify=self._verify,
-                timeout=self.timeout
+                timeout=self.timeout,
             )
         except requests.exceptions.SSLError:
             raise AuthError("Invalid certificate")
@@ -165,9 +167,10 @@ class JsonDevice(Device):
     def _get(self) -> dict:
         try:
             response = requests.get(
-                self._url, auth=requests.auth.HTTPBasicAuth(self._user, self._pass),
+                self._url,
+                auth=requests.auth.HTTPBasicAuth(self._user, self._pass),
                 verify=self._verify,
-                timeout=self.timeout
+                timeout=self.timeout,
             )
         except requests.exceptions.SSLError:
             raise AuthError("Invalid certificate")
@@ -184,7 +187,7 @@ class JsonDevice(Device):
 
         outputs = list()
 
-        for output in r_json.get('Outputs'):
+        for output in r_json.get("Outputs"):
             state = self.OUTPUT(
                 ID=output.get("ID"),
                 Name=output.get("Name"),
@@ -202,7 +205,7 @@ class JsonDevice(Device):
     def _set_outputs(self, actions: dict) -> dict:
         outputs = []
         for id, action in actions.items():
-            outputs.append({'ID': id, 'Action': action})
+            outputs.append({"ID": id, "Action": action})
 
         body = {"Outputs": outputs}
 
