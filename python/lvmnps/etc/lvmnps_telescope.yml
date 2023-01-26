@@ -1,14 +1,21 @@
 # A dictionary of controller name to NPS controller connection parameters.
 switches:
   cab:
-    type: dummy
+    type: netio
+    hostname: '10.8.38.110:8080'
+    username: 'netio'
+    password: 'netio'
     num: 4
     ports:
       1:
         name: 'cab.mocon'
         desc: 'Mocon motor controller'
+
   sci:
-    type: dummy
+    type: netio
+    hostname: '10.8.38.106:8080'
+    username: 'netio'
+    password: 'netio'
     num: 4
     ports:
       1:
@@ -17,8 +24,12 @@ switches:
       2:
         name: 'sci.tpc'
         desc: 'Planewave tiny pc'
+
   skye:
-    type: dummy
+    type: netio
+    hostname: '10.8.38.107:8080'
+    username: 'netio'
+    password: 'netio'
     num: 4
     ports:
       1:
@@ -27,8 +38,12 @@ switches:
       2:
         name: 'skye.tpc'
         desc: 'Planewave tiny pc'
+
   skyw:
-    type: dummy
+    type: netio
+    hostname: '10.8.38.108:8080'
+    username: 'netio'
+    password: 'netio'
     num: 4
     ports:
       1:
@@ -37,8 +52,12 @@ switches:
       2:
         name: 'skyw.tpc'
         desc: 'Planewave tiny pc'
+
   spec:
-    type: dummy
+    type: netio
+    hostname: '10.8.38.109:8080'
+    username: 'netio'
+    password: 'netio'
     num: 4
     ports:
       1:

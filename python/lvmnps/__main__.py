@@ -31,11 +31,17 @@ from lvmnps.actor.actor import NPSActor
     count=True,
     help="Debug mode. Use additional v for more details.",
 )
+@click.option(
+    "-s",
+    "--simulate",
+    count=True,
+    help="Simulation mode. Overwrite configured nps device with a dummy device",
+)
 @click.pass_context
-def lvmnps(ctx, config_file, rmq_url, verbose):
+def lvmnps(ctx, config_file, rmq_url, verbose, simulate):
     """Nps Actor."""
 
-    ctx.obj = {"verbose": verbose, "config_file": config_file, "rmq_url": rmq_url}
+    ctx.obj = {"verbose": verbose, "config_file": config_file, "rmq_url": rmq_url, "simulate": simulate}
 
 
 @lvmnps.group(cls=DaemonGroup, prog="nps_actor", workdir=os.getcwd())
@@ -51,6 +57,7 @@ async def actor(ctx):
         config_file,
         url=ctx.obj["rmq_url"],
         verbose=ctx.obj["verbose"],
+        simulate=ctx.obj["simulate"],
     )
 
     if ctx.obj["verbose"]:

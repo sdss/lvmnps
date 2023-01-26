@@ -36,8 +36,13 @@ async def status(
     portnum: int | None = None,
     outlet: str | None = None,
 ):
-    """Returns the dictionary of a specific outlet."""
+    """
+    Returns the dictionary of a specific outlet.
 
+    \b
+    :param SWITCHNAME: Switch name.
+    :param PORTNUM: Portnumber.
+    """
     if switchname and switchname not in switches:
         return command.fail(f"Unknown switch {switchname}.")
 

@@ -60,7 +60,13 @@ async def on(
     switch: str | None = None,
     off_after: float | None = None,
 ):
-    """Turn on the outlet."""
+    """
+    Turn on the outlet.
+
+    \b
+    :param OUTLET: Outlet or switch name.
+    :param PORTNUM: Portnumber if switch name is provided.
+    """
 
     if portnum:
         command.info(text=f"Turning on {outlet} port {portnum} ...")
@@ -118,7 +124,13 @@ async def off(
     portnum: int | None = None,
     switch: str | None = None,
 ):
-    """Turn off the outlet."""
+    """
+    Turn off the outlet.
+
+    \b
+    :param OUTLET: Outlet or switch name.
+    :param PORTNUM: Portnumber if switch name is provided.
+    """
 
     if portnum:
         command.info(text=f"Turning off {outlet} port {portnum} ...")

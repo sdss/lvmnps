@@ -103,7 +103,7 @@ class NPSActor(AMQPActor):
         return await super().stop()
 
     @classmethod
-    def from_config(cls, config, *args, **kwargs):
+    def from_config(cls, config, *args, simulate:bool=False, **kwargs):
         """Creates an actor from a configuration file."""
 
         if config is None:
@@ -119,6 +119,8 @@ class NPSActor(AMQPActor):
         switches = {}
 
         if "switches" in instance.config:
+            if simulate:
+                instance.log.warn("In simulation mode !!!")
             for (key, swconfig) in instance.config["switches"].items():
                 if "name" in swconfig:
                     name = swconfig["name"]
@@ -127,7 +129,10 @@ class NPSActor(AMQPActor):
 
                 instance.log.info(f"Instance {name}: {swconfig}")
                 try:
-                    switches[name] = powerSwitchFactory(name, swconfig, instance.log)
+                    switches[name] = powerSwitchFactory(name,
+                                                        swconfig,
+                                                        instance.log,
+                                                        simulate=simulate)
                 except Exception as ex:
                     instance.log.error(f"Power switch factory error {type(ex)}: {ex}")
 
