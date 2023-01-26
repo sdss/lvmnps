@@ -129,10 +129,9 @@ class NPSActor(AMQPActor):
 
                 instance.log.info(f"Instance {name}: {swconfig}")
                 try:
-                    switches[name] = powerSwitchFactory(name,
-                                                        swconfig,
-                                                        instance.log,
-                                                        simulate=simulate)
+                    switches[name] = powerSwitchFactory(
+                        name, swconfig, instance.log, simulate=simulate
+                    )
                 except Exception as ex:
                     instance.log.error(f"Power switch factory error {type(ex)}: {ex}")
 
