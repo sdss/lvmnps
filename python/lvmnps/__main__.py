@@ -41,7 +41,10 @@ from lvmnps.actor.actor import NPSActor
 def lvmnps(ctx, config_file, rmq_url, verbose, simulate):
     """Nps Actor."""
 
-    ctx.obj = {"verbose": verbose, "config_file": config_file, "rmq_url": rmq_url, "simulate": simulate}
+    ctx.obj = {"verbose": verbose,
+               "config_file": config_file,
+               "rmq_url": rmq_url,
+               "simulate": simulate}
 
 
 @lvmnps.group(cls=DaemonGroup, prog="nps_actor", workdir=os.getcwd())

@@ -27,7 +27,10 @@ if TYPE_CHECKING:
 # from .iboot.powerswitch import PowerSwitch as IBootPowerSwitch
 
 
-def powerSwitchFactory(name: str, config: dict, log: SDSSLogger, simulate: bool=False):
+def powerSwitchFactory(name: str,
+                       config: dict,
+                       log: SDSSLogger,
+                       simulate: bool = False):
     """Power switch factory method which helps the user to select the `.PowerSwitch`
     class based on the configuration file that is selected.
 
@@ -56,6 +59,7 @@ def powerSwitchFactory(name: str, config: dict, log: SDSSLogger, simulate: bool=
     }
 
     log.info(f"{simulate:-}")
-    return factorymap.get(config["type"] if not simulate else "dummy", lambda n, c, _: throwError(n, c))(
+    return factorymap.get(config["type"] if not simulate else "dummy",
+                          lambda n, c, _: throwError(n, c))(
         name, config, log
     )
