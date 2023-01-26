@@ -103,7 +103,7 @@ class NPSActor(AMQPActor):
         return await super().stop()
 
     @classmethod
-    def from_config(cls, config, *args, simulate:bool = False, **kwargs):
+    def from_config(cls, config, *args, simulate: bool = False, **kwargs):
         """Creates an actor from a configuration file."""
 
         if config is None:
