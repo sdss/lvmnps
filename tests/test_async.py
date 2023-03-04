@@ -10,7 +10,6 @@ from lvmnps.actor.actor import NPSActor
 
 
 async def test_async_onoff(switches, actor: NPSActor):
-
     # status check of nps_dummy_1 port1
     assert actor
 

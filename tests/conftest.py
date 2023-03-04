@@ -17,17 +17,15 @@ from lvmnps.switch.factory import powerSwitchFactory
 
 @pytest.fixture()
 def test_config():
-
     yield read_yaml_file(os.path.join(os.path.dirname(__file__), "test_switch.yml"))
 
 
 @pytest.fixture
 def switches(test_config):
-
     assert "switches" in test_config
 
     switches = []
-    for (name, conf) in test_config["switches"].items():
+    for name, conf in test_config["switches"].items():
         try:
             switches.append(powerSwitchFactory(name, conf, get_logger("test")))
         except Exception as ex:
@@ -38,7 +36,6 @@ def switches(test_config):
 
 @pytest.fixture()
 async def actor(switches, test_config: dict):
-
     _actor = NPSActor.from_config(test_config)
     _actor = await clu.testing.setup_test_actor(_actor)  # type: ignore
 

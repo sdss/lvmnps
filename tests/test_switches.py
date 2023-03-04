@@ -16,7 +16,6 @@ if TYPE_CHECKING:
 
 
 async def test_command_switches(actor: NPSActor):
-
     cmd = await (await actor.invoke_mock_command("switches"))
     assert cmd.status.did_succeed
 

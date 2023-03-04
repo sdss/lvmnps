@@ -9,12 +9,10 @@ from lvmnps.actor.actor import AMQPActor, NPSActor
 
 
 async def test_actor(actor: NPSActor):
-
     assert actor
 
 
 async def test_ping(actor: NPSActor):
-
     command = await actor.invoke_mock_command("ping")
     await command
 
@@ -24,13 +22,11 @@ async def test_ping(actor: NPSActor):
 
 
 async def test_actor_no_config():
-
     with pytest.raises(RuntimeError):
         NPSActor.from_config(None)
 
 
 async def test_actor_start(switches, test_config: dict, mocker):
-
     actor = NPSActor.from_config(test_config)
     mocker.patch.object(AMQPActor, "start")
 
@@ -47,7 +43,6 @@ async def test_actor_start(switches, test_config: dict, mocker):
 
 
 async def test_actor_start_one_fails(switches, test_config: dict, mocker):
-
     actor = NPSActor.from_config(test_config)
     mocker.patch.object(AMQPActor, "start")
 

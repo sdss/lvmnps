@@ -14,7 +14,6 @@ from lvmnps.switch.dli.powerswitch import DLIPowerSwitch
 
 @pytest.fixture
 async def dli_switches(mocker):
-
     root = os.path.dirname(__file__)
     config = read_yaml_file(os.path.join(root, "test_dli_switch.yml"))
 
@@ -57,7 +56,6 @@ async def dli_switches(mocker):
 
 
 async def test_dli_power_switch(dli_switches: list[DLIPowerSwitch]):
-
     switch = dli_switches[0]
 
     assert switch.name == "DLI-01"
@@ -66,7 +64,6 @@ async def test_dli_power_switch(dli_switches: list[DLIPowerSwitch]):
 
 
 async def test_dli_power_switch_handle_undefined(dli_switches: list[DLIPowerSwitch]):
-
     switch = dli_switches[0]
     switch.onlyusedones = False
 
@@ -81,7 +78,6 @@ async def test_dli_power_switch_handle_undefined(dli_switches: list[DLIPowerSwit
 
 
 async def test_dli_on(dli_switches: list[DLIPowerSwitch]):
-
     switch = dli_switches[0]
 
     assert switch.outlets[0].state == 0
@@ -90,14 +86,12 @@ async def test_dli_on(dli_switches: list[DLIPowerSwitch]):
 
 
 async def test_dli_off(dli_switches: list[DLIPowerSwitch]):
-
     switch = dli_switches[0]
 
     await switch.switch(False, [switch.outlets[0]])
 
 
 async def test_dli_verify_fails(dli_switches: list[DLIPowerSwitch], mocker):
-
     switch = dli_switches[0]
     mocker.patch.object(switch.dli, "verify", side_effect=ValueError)
 
@@ -106,13 +100,11 @@ async def test_dli_verify_fails(dli_switches: list[DLIPowerSwitch], mocker):
 
 
 def test_dli_missing_credentials():
-
     with pytest.raises(ValueError):
         DLIPowerSwitch("test", {})
 
 
 async def test_dli_switch_fails(dli_switches: list[DLIPowerSwitch], mocker):
-
     switch = dli_switches[0]
     mocker.patch.object(switch.dli, "on", side_effect=ValueError)
 
@@ -121,7 +113,6 @@ async def test_dli_switch_fails(dli_switches: list[DLIPowerSwitch], mocker):
 
 
 async def test_dli_update_fails(dli_switches: list[DLIPowerSwitch], mocker):
-
     switch = dli_switches[0]
     mocker.patch.object(switch.dli, "status", side_effect=ValueError)
 
@@ -132,7 +123,6 @@ async def test_dli_update_fails(dli_switches: list[DLIPowerSwitch], mocker):
 
 
 async def test_dli_update_unreachable(dli_switches: list[DLIPowerSwitch], mocker):
-
     switch = dli_switches[0]
     switch.reachable = False
 

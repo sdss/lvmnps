@@ -9,7 +9,6 @@ from lvmnps.actor.actor import NPSActor
 
 
 async def test_status(switches, actor: NPSActor):
-
     # status check of nps_dummy_1 port1
     assert actor
     command = await actor.invoke_mock_command("status nps_dummy_1 1")
@@ -53,7 +52,6 @@ async def test_status(switches, actor: NPSActor):
 
 
 async def test_status_bad_switchname(actor: NPSActor):
-
     command = await actor.invoke_mock_command("status BLAH")
     await command
 
@@ -63,7 +61,6 @@ async def test_status_bad_switchname(actor: NPSActor):
 
 @pytest.mark.parametrize("switchname", ["", "nps_dummy_1"])
 async def test_status_not_reachable_error(actor: NPSActor, switchname, mocker):
-
     for switch in actor.parser_args[0].values():
         mocker.patch.object(switch, "isReachable", return_value=False)
 

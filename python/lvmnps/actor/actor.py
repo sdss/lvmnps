@@ -35,7 +35,6 @@ class NPSActor(AMQPActor):
     BASE_CONFIG: ClassVar[str | Dict | None] = None
 
     def __init__(self, *args, **kwargs):
-
         if "schema" not in kwargs:
             kwargs["schema"] = os.path.join(
                 os.path.dirname(__file__),
@@ -121,7 +120,7 @@ class NPSActor(AMQPActor):
         if "switches" in instance.config:
             if simulate:
                 instance.log.warn("In simulation mode !!!")
-            for (key, swconfig) in instance.config["switches"].items():
+            for key, swconfig in instance.config["switches"].items():
                 if "name" in swconfig:
                     name = swconfig["name"]
                 else:

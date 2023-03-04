@@ -112,7 +112,6 @@ class JsonDevice(Device):
             self.init()
 
     def init(self):
-
         # request information about the Device
         r_json = self._get()
 

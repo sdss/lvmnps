@@ -9,7 +9,6 @@ from lvmnps.actor.actor import NPSActor
 
 
 async def test_onoff(switches, actor: NPSActor):
-
     assert switches[0].name == "nps_dummy_1"
     assert switches[0].outlets[0].name == "port1"
     assert switches[0].outlets[0].state == 0

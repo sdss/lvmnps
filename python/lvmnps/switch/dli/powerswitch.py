@@ -40,7 +40,6 @@ class DLIPowerSwitch(PowerSwitchBase):
     """
 
     def __init__(self, name: str, config: dict, log: SDSSLogger | None = None):
-
         super().__init__(name, config, log)
 
         hostname = self.config_get("hostname")

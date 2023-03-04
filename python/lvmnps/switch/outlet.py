@@ -40,7 +40,6 @@ class Outlet(object):
         description: str | None = None,
         state: int = 0,
     ):
-
         self.switch = switch
         self.name = name if name else f"{self.switch.name}.port{portnum}"
         self.portnum = portnum

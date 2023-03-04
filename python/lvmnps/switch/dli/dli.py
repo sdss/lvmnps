@@ -51,7 +51,6 @@ class DLI(object):
         log: SDSSLogger | None = None,
         onoff_timeout=3,
     ):
-
         self.user = user
         self.hostname = hostname
         self.name = name or hostname

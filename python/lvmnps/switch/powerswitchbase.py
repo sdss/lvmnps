@@ -34,7 +34,6 @@ class PowerSwitchBase(object):
     """
 
     def __init__(self, name: str, config: dict, log: SDSSLogger | None = None):
-
         self.name = name
         self.log = log or SDSSLogger(f"powerswitchbase.{name}")
         self.config = config

@@ -16,7 +16,6 @@ if TYPE_CHECKING:
 
 
 async def test_command_outlets(actor: NPSActor):
-
     cmd = await (await actor.invoke_mock_command("outlets"))
     assert cmd.status.did_succeed
 
@@ -33,7 +32,6 @@ async def test_command_outlets(actor: NPSActor):
 
 
 async def test_command_outlets_switchname(actor: NPSActor):
-
     cmd = await (await actor.invoke_mock_command("outlets nps_dummy_1"))
     assert cmd.status.did_succeed
 
@@ -42,6 +40,5 @@ async def test_command_outlets_switchname(actor: NPSActor):
 
 
 async def test_command_outlets_switchname_unknown(actor: NPSActor):
-
     cmd = await (await actor.invoke_mock_command("outlets blah"))
     assert cmd.status.did_fail
