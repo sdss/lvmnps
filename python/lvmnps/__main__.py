@@ -1,12 +1,26 @@
+import asyncio
+import functools
 import os
 
 import click
 from click_default_group import DefaultGroup
 
-from clu.tools import cli_coro
 from sdsstools.daemonizer import DaemonGroup
 
 from lvmnps.actor.actor import NPSActor
+
+
+def cli_coro(f):
+    """Decorator function that allows defining coroutines with click."""
+
+    if hasattr(asyncio, "coroutine"):
+        f = getattr(asyncio, "coroutine")(f)
+
+    def wrapper(*args, **kwargs):
+        loop = asyncio.get_event_loop()
+        return loop.run_until_complete(f(*args, **kwargs))
+
+    return functools.update_wrapper(wrapper, f)
 
 
 @click.group(cls=DefaultGroup, default="actor", default_if_no_args=True)
@@ -74,5 +88,9 @@ async def actor(ctx):
     await lvmnps.run_forever()
 
 
+def main():
+    lvmnps(auto_envvar_prefix="LVMNPS")
+
+
 if __name__ == "__main__":
-    lvmnps()
+    main()
