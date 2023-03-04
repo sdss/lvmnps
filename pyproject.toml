@@ -28,8 +28,8 @@ include = ["python/lvmnps/etc/*"]
 lvmnps = "lvmnps.__main__:lvmnps"
 
 [tool.poetry.dependencies]
-python = "^3.7"
-sdsstools = ">=0.4.0"
+python = ">=3.8,<4.0"
+sdsstools = "^1.0.0"
 click-default-group = "^1.2.2"
 sdss-clu = "^1.0.3"
 httpx = "^0.18.1"
@@ -103,5 +103,5 @@ exclude_lines = [
 ]
 
 [build-system]
-requires = ["poetry-core>=1.1.0a7"]
+requires = ["poetry-core>=1.1.0"]
 build-backend = "poetry.core.masonry.api"
