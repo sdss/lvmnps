@@ -5,7 +5,7 @@ import os
 import click
 
 from clu.command import Command
-from clu.parsers.click import CluGroup, help_, ping, version
+from clu.parsers.click import CluGroup, get_command_model, help_, ping, version
 
 
 @click.group(cls=CluGroup)
@@ -16,6 +16,7 @@ def parser(*args):
 parser.add_command(ping)
 parser.add_command(version)
 parser.add_command(help_)
+parser.add_command(get_command_model)
 
 
 @parser.command(name="__commands")
