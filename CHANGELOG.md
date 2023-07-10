@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.0 - July 10, 2023
+
+### 🚀 New
+
+* [#34](https://github.com/sdss/lvmnps/pull/34) Add support for ``netio`` devices.
+
+### ✨ Improved
+
+* Bump `CLU` to 2.1.0.
+* Various Docker image and build modifications for deployment in Kubernetes.
+* Lock connections to DLI during a request.
+
+
 ## 0.3.0 - May 28, 2022
 
 ### 🔥 Breaking changes
