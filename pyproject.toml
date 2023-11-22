@@ -20,7 +20,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 packages = [
-    { include = "lvmnps", from = "python" }
+    { include = "lvmnps", from = "src" }
 ]
 include = ["python/lvmnps/etc/*"]
 
