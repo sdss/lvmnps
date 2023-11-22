@@ -8,8 +8,9 @@ import configparser
 import os
 import sys
 import traceback
-from typing import List
 from urllib.parse import urlparse, urlunparse
+
+from typing import List
 
 import pkg_resources
 import requests

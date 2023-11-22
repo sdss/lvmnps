@@ -2,6 +2,7 @@ import collections
 import json
 from abc import abstractmethod
 from enum import IntEnum
+
 from typing import Dict, List
 
 import requests

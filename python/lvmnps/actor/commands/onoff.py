@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import asyncio
+
 from typing import TYPE_CHECKING
 
 import click

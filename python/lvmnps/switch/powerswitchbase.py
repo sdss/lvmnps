@@ -109,7 +109,7 @@ class PowerSwitchBase(object):
                 else c
                 if len(k) < 2
                 else g(c, k[1], d)
-                if type(c) is dict
+                if isinstance(c, dict)
                 else d
             )
 
