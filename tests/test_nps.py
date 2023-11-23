@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-from lvmnps.nps.core import NPSClient
+from lvmnps.nps.core import NPSClient, OutletModel
 
 
 async def test_npsclient(nps_test_client: NPSClient):
@@ -69,3 +69,13 @@ async def test_outlet_cycle(nps_test_client: NPSClient):
     await nps_test_client.cycle(outlet, delay=0.1)
 
     assert outlet.state is True
+
+
+@pytest.mark.parametrize("outlet", [1, "test_1"])
+async def test_client_get(nps_test_client: NPSClient, outlet: str | int):
+    assert isinstance(nps_test_client.get(outlet), OutletModel)
+
+
+async def test_client_get_invalid_type(nps_test_client: NPSClient):
+    with pytest.raises(TypeError):
+        nps_test_client.get(None)  # type: ignore

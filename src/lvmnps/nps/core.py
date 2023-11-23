@@ -105,6 +105,16 @@ class NPSClient(abc.ABC):
 
         pass
 
+    def get(self, outlet: int | str):
+        """Retrieves an outlet by ID or name."""
+
+        if isinstance(outlet, int):
+            return get_outlet_by_id(self.outlets, outlet)
+        elif isinstance(outlet, str):
+            return get_outlet_by_name(self.outlets, outlet)
+        else:
+            raise TypeError("Invalid outlet type. Only int and str are allowed.")
+
     async def set_state(
         self,
         outlets: OutletArgType,
