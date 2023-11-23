@@ -35,8 +35,8 @@ def cli_coro(f):
 @click.option(
     "-v",
     "--verbose",
-    count=True,
-    help="Debug mode. Use additional v for more details.",
+    is_flag=True,
+    help="Debug mode.",
 )
 @click.pass_context
 def lvmnps(ctx: click.Context, config_file: str, verbose: bool = False):
