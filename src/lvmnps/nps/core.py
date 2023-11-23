@@ -76,6 +76,13 @@ class NPSClient(abc.ABC):
     async def setup(self):
         """Sets up the power supply, setting any required configuration options."""
 
+        pass
+
+    async def stop(self):
+        """Performs any necessary operations to gracefully disconnect from the NPS."""
+
+        pass
+
     @abc.abstractmethod
     async def verify(self):
         """Checks that the NPS is connected and responding."""
