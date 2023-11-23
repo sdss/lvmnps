@@ -46,7 +46,7 @@ jobs:
 
       - name: Test with pytest
         run: |
-          pip install pytest pytest-mock pytest-asyncio pytest-cov
+          pip install pytest pytest-mock pytest-asyncio pytest-cov pytest-httpx
           pytest
 
       - name: Upload coverage to Codecov
