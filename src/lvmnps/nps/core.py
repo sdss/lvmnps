@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import abc
+import asyncio
 
 from typing import Any, Sequence
 
@@ -131,3 +132,21 @@ class NPSClient(abc.ABC):
         and do it in a way that is safe and efficient given the hardware specifications.
 
         """
+
+    async def cycle(self, outlets: OutletArgType, delay: float = 3):
+        """Turns off the selected outlets and turns them on again after a delay.
+
+        Parameters
+        ----------
+        outlets
+            An outlet or list of outlets whose state will be set. An outlet
+            can be specified by its name, number, or model instance.
+        delay
+            Number of seconds the code will wait before turning on the
+            outlets again.
+
+        """
+
+        await self.set_state(outlets, on=False)
+        await asyncio.sleep(delay)
+        await self.set_state(outlets, on=True)
