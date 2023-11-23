@@ -97,7 +97,11 @@ class NPSClient(abc.ABC):
 
         pass
 
-    async def set_state(self, outlets: OutletArgType, on: bool = False):
+    async def set_state(
+        self,
+        outlets: OutletArgType,
+        on: bool = False,
+    ) -> list[OutletModel]:
         """Sets the state of an outlet or list of outlets.
 
         Parameters
@@ -132,6 +136,18 @@ class NPSClient(abc.ABC):
 
         await self.refresh()
 
+        # Gets the updated outlets we modified.
+        switched_outlets: list[OutletModel] = []
+        for _outlet in _outlets:
+            switched_outlets.append(
+                get_outlet_by_name(
+                    self.outlets,
+                    _outlet.normalised_name,
+                )
+            )
+
+        return switched_outlets
+
     @abc.abstractmethod
     async def _set_state_internal(self, outlets: list[OutletModel], on: bool = False):
         """Internal method for setting the outlet state.
@@ -142,7 +158,11 @@ class NPSClient(abc.ABC):
 
         """
 
-    async def cycle(self, outlets: OutletArgType, delay: float = 3):
+    async def cycle(
+        self,
+        outlets: OutletArgType,
+        delay: float = 3,
+    ) -> list[OutletModel]:
         """Turns off the selected outlets and turns them on again after a delay.
 
         Parameters
@@ -158,4 +178,6 @@ class NPSClient(abc.ABC):
 
         await self.set_state(outlets, on=False)
         await asyncio.sleep(delay)
-        await self.set_state(outlets, on=True)
+        switched_outlets = await self.set_state(outlets, on=True)
+
+        return switched_outlets
