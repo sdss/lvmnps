@@ -30,7 +30,7 @@ include = ["src/lvmnps/actor/schema.json"]
 lvmnps = "lvmnps.__main__:main"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0"
+python = ">=3.10,<4.0"
 sdsstools = "^1.0.0"
 click-default-group = "^1.2.2"
 sdss-clu = "^2.0.0"

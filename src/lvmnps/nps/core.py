@@ -11,7 +11,7 @@ from __future__ import annotations
 import abc
 import asyncio
 
-from typing import Any, Sequence, TypedDict, Union
+from typing import Any, Sequence, TypedDict
 
 from pydantic import BaseModel, ConfigDict
 
@@ -61,8 +61,7 @@ class OutletModel(BaseModel):
         await self._client.set_state(self, on=False)
 
 
-# Unions needed for Python 3.9
-OutletArgType = Union[OutletModel, int, str, Sequence[Union[str, int, OutletModel]]]
+OutletArgType = OutletModel | int | str | Sequence[str | int | OutletModel]
 
 
 class ImplementationsDict(TypedDict):
