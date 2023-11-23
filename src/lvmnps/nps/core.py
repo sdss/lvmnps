@@ -11,9 +11,9 @@ from __future__ import annotations
 import abc
 import asyncio
 
-from typing import Annotated, Any, Sequence, TypedDict
+from typing import Any, Sequence, TypedDict
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 from lvmnps import log
 from lvmnps.tools import get_outlet_by_id, get_outlet_by_name, normalise_outlet_name
@@ -32,32 +32,33 @@ class OutletModel(BaseModel):
     normalised_name: str = ""
     state: bool = False
 
-    client: Annotated[NPSClient | None, Field(None, repr=False, exclude=True)] = None
+    _client: NPSClient | None = None
 
     def model_post_init(self, __context: Any) -> None:
         self.normalised_name = normalise_outlet_name(self.name)
+
         return super().model_post_init(__context)
 
     def set_client(self, nps: NPSClient):
         """Sets the NPS client."""
 
-        self.client = nps
+        self._client = nps
 
     async def on(self):
         """Sets the state of the outlet to "on"."""
 
-        if not self.client:
+        if not self._client:
             raise RuntimeError("NPS client not set.")
 
-        await self.client.set_state(self, on=True)
+        await self._client.set_state(self, on=True)
 
     async def off(self):
         """Sets the state of the outlet to "off"."""
 
-        if not self.client:
+        if not self._client:
             raise RuntimeError("NPS client not set.")
 
-        await self.client.set_state(self, on=False)
+        await self._client.set_state(self, on=False)
 
 
 OutletArgType = OutletModel | int | str | Sequence[str | int | OutletModel]

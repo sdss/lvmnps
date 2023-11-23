@@ -53,7 +53,7 @@ async def test_outlet_on_off(nps_test_client: NPSClient, client: bool):
         assert outlet.state is False
 
     else:
-        outlet.client = None
+        outlet._client = None
 
         with pytest.raises(RuntimeError):
             await outlet.off()

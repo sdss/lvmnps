@@ -15,7 +15,7 @@ from pydantic import ConfigDict, SecretStr
 from pydantic.dataclasses import dataclass
 
 from lvmnps import log
-from lvmnps.exceptions import ResponseError, VerificationError
+from lvmnps.exceptions import NPSWarning, ResponseError, VerificationError
 from lvmnps.nps.core import NPSClient, OutletModel
 
 
@@ -82,7 +82,7 @@ class DLIClient(NPSClient):
         self.base_url = f"http://{self.host}:{self.port}/{self.api_route}"
         self.api_client = APIClient(self.base_url, self.user, self.password)
 
-        self.outlet: dict[str, DLIOutletModel] = {}
+        self.outlets: dict[str, DLIOutletModel] = {}
 
         self.nps_type = "dli"
         self.implementations = {"scripting": True}
@@ -97,7 +97,8 @@ class DLIClient(NPSClient):
         except VerificationError as err:
             warnings.warn(
                 "Cannot setup DLI. Power switch "
-                f"verification failed with error: {err}"
+                f"verification failed with error: {err}",
+                NPSWarning,
             )
             return
 
@@ -157,7 +158,7 @@ class DLIClient(NPSClient):
             outlet_data["index"] = outlet_id - 1
 
             outlet = DLIOutletModel(**outlet_data)
-            outlet.client = self
+            outlet.set_client(self)
             self.outlets[outlet.normalised_name] = outlet
 
     async def _set_state_internal(

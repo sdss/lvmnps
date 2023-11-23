@@ -8,8 +8,14 @@
 
 from __future__ import annotations
 
-import pytest
+import pathlib
 
+import pytest
+from pytest_httpx import HTTPXMock
+
+from sdsstools import read_yaml_file
+
+from lvmnps.nps import DLIClient
 from lvmnps.nps.core import NPSClient, OutletModel
 
 
@@ -42,3 +48,56 @@ async def nps_test_client():
     await _client.setup()
 
     yield _client
+
+
+dli_default_outlets = [
+    {
+        "critical": False,
+        "transient_state": False,
+        "state": False,
+        "physical_state": False,
+        "name": "Argon",
+        "locked": False,
+        "cycle_delay": None,
+    },
+    {
+        "critical": False,
+        "transient_state": True,
+        "state": True,
+        "physical_state": True,
+        "name": "Neon",
+        "locked": False,
+        "cycle_delay": None,
+    },
+]
+
+
+@pytest.fixture
+async def dli_client(httpx_mock: HTTPXMock):
+    config = read_yaml_file(pathlib.Path(__file__).parent / "./config.yaml")
+    init_parameters = config["nps.init_parameters"]
+
+    client = DLIClient(**init_parameters)
+
+    _base_url = f"http://{init_parameters['host']}:{init_parameters['port']}/restapi"
+
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{_base_url}/",
+        status_code=206,
+    )
+
+    httpx_mock.add_response(
+        method="PUT",
+        url=f"{_base_url}/relay/sequence_delay/",
+        status_code=204,
+    )
+
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{_base_url}/relay/outlets/",
+        json=dli_default_outlets,
+        status_code=200,
+    )
+
+    yield client
