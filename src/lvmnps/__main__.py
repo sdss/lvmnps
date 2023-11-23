@@ -29,15 +29,8 @@ def cli_coro(f):
     "--config",
     "config_file",
     type=click.Path(exists=True, dir_okay=False),
+    required=True,
     help="Path to the user configuration file.",
-)
-@click.option(
-    "-r",
-    "--rmq_url",
-    "rmq_url",
-    default=None,
-    type=str,
-    help="rabbitmq url, eg: amqp://guest:guest@localhost:5672/",
 )
 @click.option(
     "-v",
@@ -45,22 +38,11 @@ def cli_coro(f):
     count=True,
     help="Debug mode. Use additional v for more details.",
 )
-@click.option(
-    "-s",
-    "--simulate",
-    count=True,
-    help="Simulation mode. Overwrite configured nps device with a dummy device",
-)
 @click.pass_context
-def lvmnps(ctx, config_file, rmq_url, verbose, simulate):
-    """Nps Actor."""
+def lvmnps(ctx: click.Context, config_file: str, verbose: bool = False):
+    """Network Power Supply actor."""
 
-    ctx.obj = {
-        "verbose": verbose,
-        "config_file": config_file,
-        "rmq_url": rmq_url,
-        "simulate": simulate,
-    }
+    ctx.obj = {"verbose": verbose, "config_file": config_file}
 
 
 @lvmnps.group(cls=DaemonGroup, prog="nps_actor", workdir=os.getcwd())
@@ -69,15 +51,9 @@ def lvmnps(ctx, config_file, rmq_url, verbose, simulate):
 async def actor(ctx):
     """Runs the actor."""
 
-    default_config_file = os.path.join(os.path.dirname(__file__), "etc/lvmnps.yml")
-    config_file = ctx.obj["config_file"] or default_config_file
+    config_file = ctx.obj["config_file"]
 
-    lvmnps = NPSActor.from_config(
-        config_file,
-        url=ctx.obj["rmq_url"],
-        verbose=ctx.obj["verbose"],
-        simulate=ctx.obj["simulate"],
-    )
+    lvmnps = NPSActor.from_config(config_file, verbose=ctx.obj["verbose"])
 
     if ctx.obj["verbose"]:
         if lvmnps.log.fh:

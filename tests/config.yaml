@@ -1,0 +1,5 @@
+---
+actor:
+  name: lvmnps.test
+  host: localhost
+  port: 5672
