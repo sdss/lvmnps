@@ -38,7 +38,7 @@ def get_outlet_by_name(
     name
         The name of the outlet to retrieve.
     allow_non_normalised
-        If `True`, and ``name`` does match any normalised outlet name, tries to
+        If ``True``, and ``name`` does match any normalised outlet name, tries to
         find an outlet whose original name matches ``name``.
 
     Returns

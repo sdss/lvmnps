@@ -100,7 +100,7 @@ class NPSClient(abc.ABC):
             implementation. Outlets may be switched concurrently or sequentially,
             with a delay to avoid in-rush currents.
         on
-            Whether to turn the outlet on (if `True`) or off.
+            Whether to turn the outlet on (if ``True``) or off.
 
         """
 
