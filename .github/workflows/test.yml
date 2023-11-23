@@ -37,12 +37,12 @@ jobs:
       - name: Lint with ruff
         run: |
           pip install ruff
-          ruff check python/ tests/
+          ruff check src/ tests/
 
       - name: Lint with black
         run: |
           pip install black
-          black --check python/lvmnps
+          black --check src/lvmnps
 
       - name: Test with pytest
         run: |
