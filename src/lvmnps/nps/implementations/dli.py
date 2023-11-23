@@ -15,14 +15,14 @@ from pydantic import ConfigDict, SecretStr
 from pydantic.dataclasses import dataclass
 
 from lvmnps.exceptions import VerificationError
-from src.lvmnps.nps.core import NPSClient, OutletModel
+from lvmnps.nps.core import NPSClient, OutletModel
 
 
-__all__ = ["DLIClient"]
+__all__ = ["DLIClient", "DLIOutletModel"]
 
 
 class DLIOutletModel(OutletModel):
-    """A model for an outlet status."""
+    """A model for a DLI outlet status."""
 
     index: int = 0
     physical_state: bool = False
