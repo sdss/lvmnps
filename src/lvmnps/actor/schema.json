@@ -3,23 +3,39 @@
   "definitions": {},
   "type": "object",
   "properties": {
-    "text": { "type": "string" },
-    "status": {
-      "type": "object",
-      "switch": {
-        "type": "object",
-        "outlet": {
-          "type": "object",
-          "state": { "type": "integer" },
-          "descr": { "type": "string" },
-          "switch": { "type": "string" },
-          "port": { "type": "integer" }
-        }
-      }
+    "nps_type": { "type": "string", "description": "Type of NPS switch" },
+    "outlet_names": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of outlet names"
     },
-    "switches": { "type": "array", "items": { "type": "string" } },
-    "outlets": { "type": "array", "items": { "type": "string" } },
-    "error": { "type": "string" }
+    "outlets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Original name of the outlet"
+          },
+          "normalised_name": {
+            "type": "string",
+            "description": "Normalised outlet name"
+          },
+          "id": {
+            "type": "integer",
+            "description": "Numerical outlet identifier"
+          },
+          "state": {
+            "type": "boolean",
+            "description": "Outlet state (true=ON)"
+          }
+        },
+        "required": ["name", "normalised_name", "id", "state"],
+        "additionalProperties": true,
+        "description": "Properties of each outlet"
+      }
+    }
   },
   "additionalProperties": false
 }

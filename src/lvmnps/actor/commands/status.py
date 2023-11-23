@@ -22,6 +22,14 @@ __all__ = ["status"]
 
 @lvmnps_command_parser.command()
 async def status(command: NPSCommand):
-    """Returns the status of the network power switch."""
+    """Outputs the status of the network power switch."""
+
+    nps = command.actor.nps
+
+    command.info(nps_type=nps.nps_type)
+    command.info(outlet_names=list(nps.outlets))
+
+    outlets = [outlet.model_dump() for outlet in nps.outlets.values()]
+    command.info(outlets=outlets)
 
     command.finish()

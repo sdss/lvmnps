@@ -9,7 +9,10 @@
 from __future__ import annotations
 
 
-__all__ = ["DLIClient"]
+__all__ = ["DLIClient", "VALID_NPS_TYPES"]
+
+
+VALID_NPS_TYPES: list[str] = ["dli"]
 
 
 from .dli import DLIClient

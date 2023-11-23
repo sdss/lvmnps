@@ -84,6 +84,8 @@ class DLIClient(NPSClient):
 
         self.outlet: dict[str, DLIOutletModel] = {}
 
+        self.nps_type = "dli"
+
     async def setup(self):
         """Sets up the power supply, setting any required configuration options."""
 
@@ -151,7 +153,7 @@ class DLIClient(NPSClient):
 
             outlet = DLIOutletModel(**outlet_data)
             outlet.client = self
-            self.outlets[outlet.name_normalised] = outlet
+            self.outlets[outlet.normalised_name] = outlet
 
     async def _set_state_internal(
         self,

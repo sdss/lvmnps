@@ -15,10 +15,13 @@ from typing import TYPE_CHECKING
 
 from clu import Command
 from clu.actor import AMQPActor
+from sdsstools.configuration import Configuration
 
 from lvmnps import __version__
 from lvmnps import log as nps_log
 from lvmnps.actor.commands import lvmnps_command_parser
+from lvmnps.nps.core import NPSClient
+from lvmnps.nps.implementations import VALID_NPS_TYPES
 
 
 if TYPE_CHECKING:
@@ -29,6 +32,29 @@ __all__ = ["NPSActor"]
 
 
 AnyPath = str | PathLike[str]
+
+
+def get_nps_from_config(config: Configuration) -> NPSClient:
+    """Returns an `.NPSClient` instance from the configuration parameters."""
+
+    if "nps" not in config:
+        raise ValueError("nps section does not exist in the configuration.")
+
+    nps_type = config["nps.type"]
+    if nps_type is None:
+        raise ValueError("nps.type not defined.")
+
+    if nps_type not in VALID_NPS_TYPES:
+        raise ValueError(f"Invalid NPS {nps_type}. Valid types are {VALID_NPS_TYPES}.")
+
+    init_parameters = config.get("nps.init_parameters", {})
+
+    if nps_type == "dli":
+        from lvmnps.nps.implementations.dli import DLIClient
+
+        return DLIClient(**init_parameters)
+
+    raise RuntimeError("Failed creating NPS client from configuration.")
 
 
 class NPSActor(AMQPActor):
@@ -51,6 +77,25 @@ class NPSActor(AMQPActor):
         kwargs["version"] = __version__
 
         super().__init__(*args, log=log, schema=schema, **kwargs)
+
+        if not isinstance(self.config, Configuration):
+            self.config = Configuration(self.config)
+
+        self.nps = get_nps_from_config(self.config)
+
+    async def start(self, **kwargs):
+        """Starts the actor."""
+
+        await self.nps.setup()
+
+        return await super().start(**kwargs)
+
+    async def stop(self):
+        "Stops the actor."
+
+        await self.nps.stop()
+
+        return await super().stop()
 
 
 NPSCommand = Command[NPSActor]

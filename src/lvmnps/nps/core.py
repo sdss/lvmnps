@@ -13,7 +13,7 @@ import asyncio
 
 from typing import Any, Sequence
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from lvmnps import log
 from lvmnps.tools import get_outlet_by_id, get_outlet_by_name, normalise_outlet_name
@@ -29,13 +29,13 @@ class OutletModel(BaseModel):
 
     id: int
     name: str
-    name_normalised: str = ""
+    normalised_name: str = ""
     state: bool = False
 
-    client: NPSClient | None = None
+    client: NPSClient | None = Field(None, repr=False, exclude=True)
 
     def model_post_init(self, __context: Any) -> None:
-        self.name_normalised = normalise_outlet_name(self.name)
+        self.normalised_name = normalise_outlet_name(self.name)
         return super().model_post_init(__context)
 
     def set_client(self, nps: NPSClient):
@@ -65,6 +65,8 @@ OutletArgType = OutletModel | int | str | Sequence[str | int | OutletModel]
 
 class NPSClient(abc.ABC):
     """Base NPS client."""
+
+    nps_type: str
 
     def __init__(self):
         self.outlets: dict[str, OutletModel] = {}
