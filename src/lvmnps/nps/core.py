@@ -11,7 +11,7 @@ from __future__ import annotations
 import abc
 import asyncio
 
-from typing import Any, Sequence
+from typing import Any, Sequence, TypedDict
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -63,10 +63,17 @@ class OutletModel(BaseModel):
 OutletArgType = OutletModel | int | str | Sequence[str | int | OutletModel]
 
 
+class ImplementationsDict(TypedDict):
+    """Dictionary of NPS implementations."""
+
+    scripting: bool
+
+
 class NPSClient(abc.ABC):
     """Base NPS client."""
 
     nps_type: str
+    implementations: ImplementationsDict = {"scripting": False}
 
     def __init__(self):
         self.outlets: dict[str, OutletModel] = {}
@@ -181,3 +188,18 @@ class NPSClient(abc.ABC):
         switched_outlets = await self.set_state(outlets, on=True)
 
         return switched_outlets
+
+    async def run_script(self, name: str, *args, **kwargs) -> int:
+        """Runs a user script."""
+
+        raise NotImplementedError()
+
+    async def stop_script(self, thread_num: int | None = None):
+        """Stops a running script."""
+
+        raise NotImplementedError()
+
+    async def list_running_scripts(self) -> dict[int, str]:
+        """Returns a list of running scripts."""
+
+        raise NotImplementedError()

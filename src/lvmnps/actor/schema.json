@@ -1,6 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "definitions": {},
+  "definitions": {
+    "script": {
+      "type": "object",
+      "description": "Information about a user script",
+      "properties": {
+        "name": { "type": "string" },
+        "args": { "type": "array", "items": { "type": "string" } },
+        "running": { "type": "boolean" },
+        "thread_id": { "type": "integer" }
+      },
+      "required": ["name", "args", "running", "thread_id"],
+      "additionalProperties": false
+    }
+  },
   "type": "object",
   "properties": {
     "nps_type": { "type": "string", "description": "Type of NPS switch" },
@@ -35,7 +48,9 @@
         "additionalProperties": true,
         "description": "Properties of each outlet"
       }
-    }
+    },
+    "script": { "$ref": "#/definitions/script" },
+    "scripts": { "type": "array", "items": { "$ref": "#/definitions/script" } }
   },
   "additionalProperties": false
 }

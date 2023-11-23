@@ -85,6 +85,7 @@ class DLIClient(NPSClient):
         self.outlet: dict[str, DLIOutletModel] = {}
 
         self.nps_type = "dli"
+        self.implementations = {"scripting": True}
 
     async def setup(self):
         """Sets up the power supply, setting any required configuration options."""
@@ -261,3 +262,18 @@ class DLIClient(NPSClient):
             )
 
             self._validate_response(response, 200)
+
+    async def list_running_scripts(self) -> dict[int, str]:
+        """Returns a mapping of running thread number to script name."""
+
+        threads: dict[int, str] = {}
+
+        async with self.api_client as client:
+            response = await client.get(url="/script/threads/")
+            self._validate_response(response, 200)
+
+        for thread, description in response.json().items():
+            script_name = description["label"].split(" ")[0]
+            threads[int(thread)] = script_name
+
+        return threads
