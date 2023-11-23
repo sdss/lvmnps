@@ -1,5 +1,6 @@
 import asyncio
 import functools
+import logging
 import os
 
 import click
@@ -55,10 +56,13 @@ async def actor(ctx):
 
     lvmnps = NPSActor.from_config(config_file, verbose=ctx.obj["verbose"])
 
+    if lvmnps.log.fh:
+        lvmnps.log.fh.setLevel(logging.NOTSET)
+
     if ctx.obj["verbose"]:
-        if lvmnps.log.fh:
-            lvmnps.log.fh.setLevel(0)
-        lvmnps.log.sh.setLevel(0)
+        lvmnps.log.sh.setLevel(logging.NOTSET)
+    else:
+        lvmnps.log.sh.setLevel(logging.INFO)
 
     await lvmnps.start()
     await lvmnps.run_forever()

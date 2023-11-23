@@ -89,6 +89,8 @@ class DLIClient(NPSClient):
     async def setup(self):
         """Sets up the power supply, setting any required configuration options."""
 
+        log.info("Setting up DLI switch.")
+
         try:
             await self.verify()
         except VerificationError as err:
@@ -109,6 +111,8 @@ class DLIClient(NPSClient):
             self._validate_response(response, 204)
 
         await self.refresh()
+
+        log.info("Set up complete.")
 
     def _validate_response(self, response: httpx.Response, expected_code: int = 200):
         """Validates an HTTP response."""
