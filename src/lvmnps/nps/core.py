@@ -11,7 +11,7 @@ from __future__ import annotations
 import abc
 import asyncio
 
-from typing import Any, Sequence, TypedDict
+from typing import Annotated, Any, Sequence, TypedDict
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -32,7 +32,7 @@ class OutletModel(BaseModel):
     normalised_name: str = ""
     state: bool = False
 
-    client: NPSClient | None = Field(None, repr=False, exclude=True)
+    client: Annotated[NPSClient | None, Field(None, repr=False, exclude=True)] = None
 
     def model_post_init(self, __context: Any) -> None:
         self.normalised_name = normalise_outlet_name(self.name)

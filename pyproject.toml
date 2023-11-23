@@ -98,7 +98,9 @@ omit = [
 [tool.coverage.report]
 exclude_lines = [
     "pragma: no cover",
-    "if TYPE_CHECKING"
+    "if TYPE_CHECKING",
+    "raise NotImplementedError()",
+    "pass"
 ]
 
 [build-system]
