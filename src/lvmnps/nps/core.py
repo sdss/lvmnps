@@ -195,6 +195,13 @@ class NPSClient(abc.ABC):
 
         """
 
+        pass
+
+    async def all_off(self):
+        """Turns off all outlets."""
+
+        await self._set_state_internal(list(self.outlets.values()), on=False)
+
     async def cycle(
         self,
         outlets: OutletArgType,

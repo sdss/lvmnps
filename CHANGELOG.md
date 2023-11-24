@@ -1,5 +1,12 @@
 # Changelog
 
+## Next version
+
+### ✨ Improved
+
+* Added `NPSClient.all_off()` to turn off all outlets at once.
+
+
 ## 1.0.0 - November 24, 2023
 
 ### 🔥 Breaking changes

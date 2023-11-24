@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import pytest
+from pytest_mock import MockerFixture
 
 from lvmnps.nps.core import NPSClient, OutletModel
 
@@ -79,3 +80,14 @@ async def test_client_get(nps_test_client: NPSClient, outlet: str | int):
 async def test_client_get_invalid_type(nps_test_client: NPSClient):
     with pytest.raises(TypeError):
         nps_test_client.get(None)  # type: ignore
+
+
+async def test_all_off(nps_test_client: NPSClient, mocker: MockerFixture):
+    assert nps_test_client is not None
+
+    nps_test_client._set_state_internal = mocker.AsyncMock()
+
+    await nps_test_client.all_off()
+
+    outlets = list(nps_test_client.outlets.values())
+    nps_test_client._set_state_internal.assert_called_once_with(outlets, on=False)
