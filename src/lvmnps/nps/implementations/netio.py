@@ -128,7 +128,6 @@ class NetIOClient(NPSClient):
             response = await client.post(
                 url="/netio.json",
                 json={"Outputs": outputs},
-                timeout=5,
             )
 
         self._validate_response(response)
