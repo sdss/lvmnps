@@ -10,6 +10,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import click
+
+from lvmnps.actor.commands.onoff import OutletNameParamType
+
 from . import lvmnps_command_parser
 
 
@@ -21,12 +25,25 @@ __all__ = ["status"]
 
 
 @lvmnps_command_parser.command()
-async def status(command: NPSCommand):
-    """Outputs the status of the network power switch."""
+@click.argument("OUTLET", type=OutletNameParamType(), required=False)
+async def status(command: NPSCommand, outlet: int | str | None = None):
+    """Outputs the status of the network power switch.
+
+    If an OUTLET is passed, returns only the status of that outlet.
+
+    """
 
     nps = command.actor.nps
 
     await nps.refresh()
+
+    if outlet is not None:
+        try:
+            outlet_obj = nps.get(outlet)
+            return command.finish(outlet_info=outlet_obj.model_dump())
+        except Exception:
+            return command.fail(f"Invalid outlet {outlet!r}.")
+
     command.info(nps_type=nps.nps_type)
     command.info(outlet_names=list(nps.outlets))
 

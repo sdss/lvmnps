@@ -4,8 +4,8 @@ nps:
   init_parameters:
     host: 127.0.0.1
     port: 8088
-    user: admin
-    password: admin
+    user: lvm
+    password: lvm00
 
 actor:
   name: lvmnps.test

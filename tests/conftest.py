@@ -181,6 +181,8 @@ async def nps_actor(mocker: MockerFixture, lvmnps_config: Configuration):
     actor = NPSActor.from_config(lvmnps_config)
 
     actor.nps = mocker.MagicMock(spec=DLIClient)
+    actor.nps.get = mocker.MagicMock(side_effect=lambda x: actor.nps.outlets[x])
+
     actor.nps.nps_type = "dli"
     actor.nps.outlets = {"outlet_1": DLIOutletModel(id=1, name="outlet_1")}
 

@@ -49,7 +49,7 @@ async def test_actor_netio_nps(lvmnps_config: Configuration):
     assert isinstance(actor.nps, NetIOClient)
 
 
-async def test_command_status(nps_actor: NPSActor, mocker: MockerFixture):
+async def test_command_status(nps_actor: NPSActor):
     cmd = await nps_actor.invoke_mock_command("status")
     await cmd
 
@@ -73,7 +73,36 @@ async def test_command_status(nps_actor: NPSActor, mocker: MockerFixture):
     }
 
 
-async def test_command_refresh(nps_actor: NPSActor, mocker: MockerFixture):
+async def test_command_status_outlet(nps_actor: NPSActor):
+    cmd = await nps_actor.invoke_mock_command("status outlet_1")
+    await cmd
+
+    assert cmd.status.did_succeed
+    assert len(cmd.replies) == 2
+    assert cmd.replies[-1].body == {
+        "outlet_info": {
+            "critical": False,
+            "cycle_delay": None,
+            "id": 1,
+            "index": 0,
+            "locked": False,
+            "name": "outlet_1",
+            "normalised_name": "outlet_1",
+            "physical_state": False,
+            "state": False,
+            "transient_state": False,
+        }
+    }
+
+
+async def test_command_status_invalid_outlet(nps_actor: NPSActor):
+    cmd = await nps_actor.invoke_mock_command("status outlet_5")
+    await cmd
+
+    assert cmd.status.did_fail
+
+
+async def test_command_refresh(nps_actor: NPSActor):
     cmd = await nps_actor.invoke_mock_command("refresh")
     await cmd
 

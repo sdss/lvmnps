@@ -2,6 +2,10 @@
 
 ## 1.0.2
 
+### ✨ Improved
+
+* It's now possible to call `status` with an outlet and a summary of the status for only that outlet will be issued.
+
 ### 🔧 Fixed
 
 * Issue an NPS refresh before issuing any status.
