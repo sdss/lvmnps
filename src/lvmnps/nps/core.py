@@ -129,6 +129,7 @@ class NPSClient(abc.ABC):
         self,
         outlets: OutletArgType,
         on: bool = False,
+        off_after: float | None = None,
     ) -> list[OutletModel]:
         """Sets the state of an outlet or list of outlets.
 
@@ -142,6 +143,9 @@ class NPSClient(abc.ABC):
             with a delay to avoid in-rush currents.
         on
             Whether to turn the outlet on (if ``True``) or off.
+        off_after
+            Turns off the outlet after the specified number of seconds. Only
+            relevant if ``on=True``.
 
         """
 
@@ -160,7 +164,7 @@ class NPSClient(abc.ABC):
 
         names = [outlet.name for outlet in _outlets]
         log.debug(f"Setting outlets {names} to state on={on}.")
-        await self._set_state_internal(_outlets, on=on)
+        await self._set_state_internal(_outlets, on=on, off_after=off_after)
 
         await self.refresh()
 
@@ -177,7 +181,12 @@ class NPSClient(abc.ABC):
         return switched_outlets
 
     @abc.abstractmethod
-    async def _set_state_internal(self, outlets: list[OutletModel], on: bool = False):
+    async def _set_state_internal(
+        self,
+        outlets: list[OutletModel],
+        on: bool = False,
+        off_after: float | None = None,
+    ):
         """Internal method for setting the outlet state.
 
         This method is intended to be overridden by each specific implementation.

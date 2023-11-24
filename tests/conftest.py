@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import pathlib
 
 from typing import TYPE_CHECKING
@@ -48,9 +49,19 @@ class NPSTestClient(NPSClient):
     async def verify(self):
         pass
 
-    async def _set_state_internal(self, outlets: list[OutletModel], on: bool = False):
+    async def _set_state_internal(
+        self,
+        outlets: list[OutletModel],
+        on: bool = False,
+        off_after: float | None = None,
+    ):
         for outlet in outlets:
             outlet.state = on
+
+        if on is True and off_after is not None:
+            await asyncio.sleep(off_after)
+            for outlet in outlets:
+                outlet.state = False
 
 
 @pytest.fixture
@@ -173,9 +184,18 @@ async def nps_actor(mocker: MockerFixture, lvmnps_config: Configuration):
     actor.nps.nps_type = "dli"
     actor.nps.outlets = {"outlet_1": DLIOutletModel(id=1, name="outlet_1")}
 
-    async def _set_state_mock(outlets: list[int | str], on: bool = False):
+    async def _set_state_mock(
+        outlets: list[int | str],
+        on: bool = False,
+        off_after: float | None = None,
+    ):
         for outlet in actor.nps.outlets.values():
             outlet.state = on
+
+        if on is True and off_after is not None:
+            await asyncio.sleep(off_after)
+            for outlet in actor.nps.outlets.values():
+                outlet.state = False
 
         return list(actor.nps.outlets.values())
 

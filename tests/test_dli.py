@@ -76,6 +76,37 @@ async def test_dli_set_state(dli_client: DLIClient, httpx_mock: HTTPXMock):
     assert dli_client.outlets["argon"].state is True
 
 
+async def test_dli_set_state_off_after(dli_client: DLIClient, httpx_mock: HTTPXMock):
+    await dli_client.setup()
+
+    response_json = dli_default_outlets.copy()
+
+    httpx_mock.add_response(
+        method="PUT",
+        url=re.compile(r"http://.+?/restapi/relay/outlets/=0/state/"),
+        status_code=207,
+    )
+
+    httpx_mock.add_response(
+        method="PUT",
+        url=re.compile(r"http://.+?/restapi/relay/outlets/=0/state/"),
+        status_code=207,
+        json=response_json,
+    )
+
+    response_json[0]["state"] = False
+    httpx_mock.add_response(
+        method="GET",
+        url=re.compile(r"http://.+?/restapi/relay/outlets/"),
+        status_code=200,
+        json=response_json,
+    )
+
+    await dli_client.set_state("argon", on=True, off_after=1)
+
+    assert dli_client.outlets["argon"].state is False
+
+
 async def test_dli_list_scripts(dli_client: DLIClient, httpx_mock: HTTPXMock):
     await dli_client.setup()
 

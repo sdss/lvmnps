@@ -37,7 +37,12 @@ class OutletNameParamType(click.ParamType):
 
 @lvmnps_command_parser.command()
 @click.argument("OUTLETS", type=OutletNameParamType(), nargs=-1)
-async def on(command: NPSCommand, outlets: tuple[str | int, ...]):
+@click.option("--off-after", type=float, help="Turns the outlet off after N seconds.")
+async def on(
+    command: NPSCommand,
+    outlets: tuple[str | int, ...],
+    off_after: float | None = None,
+):
     """Turns an outlet or outlets on.
 
     OUTLETS can be a single outlet name or outlet ID, or a list of them that will
@@ -48,7 +53,7 @@ async def on(command: NPSCommand, outlets: tuple[str | int, ...]):
 
     nps = command.actor.nps
 
-    outlet_data = await nps.set_state(outlets, on=True)
+    outlet_data = await nps.set_state(outlets, on=True, off_after=off_after)
 
     command.finish(outlets=[outlet.model_dump() for outlet in outlet_data])
 

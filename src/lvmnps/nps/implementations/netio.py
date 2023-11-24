@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import warnings
 
+from typing import Any
+
 import httpx
 from pydantic import ConfigDict, SecretStr
 from pydantic.dataclasses import dataclass
@@ -116,13 +118,17 @@ class NetIOClient(NPSClient):
         self,
         outlets: list[NetIOOutLetModel],
         on: bool = False,
+        off_after: float | None = None,
     ):
         """Sets the state of a list of outlets."""
 
-        outputs: list[dict[str, str | int]] = []
+        outputs: list[dict[str, Any]] = []
 
         for outlet in outlets:
-            outputs.append({"ID": outlet.id, "Action": int(on)})
+            outlet_action: dict[str, Any] = {"ID": outlet.id, "Action": int(on)}
+            if on is True and off_after is not None:
+                outlet_action["Delay"] = off_after * 1000
+            outputs.append(outlet_action)
 
         async with self.api_client as client:
             response = await client.post(

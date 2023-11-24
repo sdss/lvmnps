@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import warnings
 
 import httpx
@@ -130,6 +131,7 @@ class DLIClient(NPSClient):
         self,
         outlets: list[DLIOutletModel],
         on: bool = False,
+        off_after: float | None = None,
     ):
         """Sets the state of a list of outlets."""
 
@@ -145,6 +147,10 @@ class DLIClient(NPSClient):
                 headers={"X-CSRF": "x"},
             )
             self._validate_response(response, 207)
+
+        if on is True and off_after is not None:
+            await asyncio.sleep(off_after)
+            return await self._set_state_internal(outlets, on=False)
 
         return
 

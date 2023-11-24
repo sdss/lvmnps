@@ -77,3 +77,34 @@ async def test_netio_set_state(netio_client: NetIOClient, httpx_mock: HTTPXMock)
     await netio_client.set_state(3, on=True)
 
     assert netio_client.get(3).state is True
+
+
+async def test_dli_set_state_off_after(
+    netio_client: NetIOClient,
+    httpx_mock: HTTPXMock,
+):
+    await netio_client.setup()
+
+    response_json = netio_default_outlets.copy()
+
+    httpx_mock.add_response(
+        method="POST",
+        url=re.compile(r"http://.+?/netio.json"),
+        status_code=200,
+    )
+
+    response_json["Outputs"][2]["State"] = False
+    httpx_mock.add_response(
+        method="GET",
+        url=re.compile(r"http://.+?/netio.json"),
+        status_code=200,
+        json=response_json,
+    )
+
+    await netio_client.set_state(3, on=True, off_after=1)
+
+    requests = httpx_mock.get_requests()
+    body = requests[-2].read()
+    assert body == b'{"Outputs": [{"ID": 3, "Action": 1, "Delay": 1000}]}'
+
+    assert netio_client.get(3).state is False
