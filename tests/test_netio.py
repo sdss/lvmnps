@@ -105,6 +105,6 @@ async def test_dli_set_state_off_after(
 
     requests = httpx_mock.get_requests()
     body = requests[-2].read()
-    assert body == b'{"Outputs": [{"ID": 3, "Action": 1, "Delay": 1000}]}'
+    assert body == b'{"Outputs": [{"ID": 3, "Action": 3, "Delay": 1000}]}'
 
     assert netio_client.get(3).state is False
