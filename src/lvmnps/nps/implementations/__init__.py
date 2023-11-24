@@ -18,7 +18,7 @@ __all__ = [
 ]
 
 
-VALID_NPS_TYPES: list[str] = ["dli"]
+VALID_NPS_TYPES: list[str] = ["dli", "netio"]
 
 
 from .dli import DLIClient, DLIOutletModel
