@@ -33,6 +33,12 @@ NetIO
 .. autoclass:: lvmnps.nps.implementations.netio.NetIOClient
 
 
+Actor
+-----
+
+.. autoclass:: lvmnps.actor.NPSActor
+
+
 Tools
 -----
 
