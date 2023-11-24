@@ -14,6 +14,7 @@ import pytest
 from pytest_mock import MockerFixture
 
 from lvmnps.actor.actor import NPSActor
+from lvmnps.nps.implementations.netio import NetIOClient
 
 
 if TYPE_CHECKING:
@@ -39,6 +40,13 @@ async def test_actor_config_missing(lvmnps_config: Configuration):
 
     with pytest.raises(ValueError):
         NPSActor.from_config(lvmnps_config)
+
+
+async def test_actor_netio_nps(lvmnps_config: Configuration):
+    lvmnps_config["nps"]["type"] = "netio"
+
+    actor = NPSActor.from_config(lvmnps_config)
+    assert isinstance(actor.nps, NetIOClient)
 
 
 async def test_command_status(nps_actor: NPSActor, mocker: MockerFixture):

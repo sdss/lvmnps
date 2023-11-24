@@ -54,7 +54,13 @@ def get_nps_from_config(config: Configuration) -> NPSClient:
 
         return DLIClient(**init_parameters)
 
-    raise RuntimeError("Failed creating NPS client from configuration.")
+    elif nps_type == "netio":
+        from lvmnps.nps.implementations.netio import NetIOClient
+
+        return NetIOClient(**init_parameters)
+
+    else:  # pragma: no cover - This should unreachable.
+        raise ValueError(f"Invalid NPS {nps_type}. Valid types are {VALID_NPS_TYPES}.")
 
 
 class NPSActor(AMQPActor):
