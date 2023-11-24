@@ -23,6 +23,7 @@ from lvmnps.actor.actor import NPSActor
 from lvmnps.nps import DLIClient
 from lvmnps.nps.core import NPSClient, OutletModel
 from lvmnps.nps.implementations.dli import DLIOutletModel
+from lvmnps.nps.implementations.netio import NetIOClient
 
 
 if TYPE_CHECKING:
@@ -111,6 +112,53 @@ async def dli_client(httpx_mock: HTTPXMock, lvmnps_config: Configuration):
         method="GET",
         url=f"{_base_url}/relay/outlets/",
         json=dli_default_outlets,
+        status_code=200,
+    )
+
+    yield client
+
+
+netio_default_outlets = {
+    "Agent": {
+        "Model": "4PS",
+        "DeviceName": "PowerPDU SkyW",
+        "MAC": "24:A4:2C:39:9D:27",
+        "SerialNumber": "24A42C399D27",
+        "JSONVer": "2.3",
+        "Time": "1970-01-02T04:24:59+01:00",
+        "Uptime": 55499,
+        "Version": "3.0.1",
+        "OemID": 100,
+        "VendorID": 0,
+        "NumOutputs": 4,
+        "NumInputs": 0,
+    },
+    "Outputs": [
+        {"ID": 1, "Name": "PW Mount", "State": 1, "Action": 6, "Delay": 5000},
+        {"ID": 2, "Name": "PW MiniPC", "State": 1, "Action": 6, "Delay": 5000},
+        {"ID": 3, "Name": "Power output 3", "State": 0, "Action": 6, "Delay": 5000},
+        {"ID": 4, "Name": "Power output 4", "State": 0, "Action": 6, "Delay": 5000},
+    ],
+}
+
+
+@pytest.fixture
+async def netio_client(httpx_mock: HTTPXMock):
+    client = NetIOClient(host="127.0.0.1")
+
+    _base_url = "http://127.0.0.1:80"
+
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{_base_url}/netio.json",
+        json=netio_default_outlets,
+        status_code=200,
+    )
+
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{_base_url}/netio.json",
+        json=netio_default_outlets,
         status_code=200,
     )
 

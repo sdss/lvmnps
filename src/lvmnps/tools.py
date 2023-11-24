@@ -8,14 +8,74 @@
 
 from __future__ import annotations
 
+import asyncio
+
 from typing import TYPE_CHECKING
+
+import httpx
+from pydantic import SecretStr
+from pydantic.dataclasses import dataclass
+from typing_extensions import Literal
+
+from lvmnps import log
 
 
 if TYPE_CHECKING:
     from lvmnps.nps.core import OutletModel
 
 
-__all__ = ["normalise_outlet_name", "get_outlet_by_name", "get_outlet_by_id"]
+__all__ = [
+    "APIClient",
+    "normalise_outlet_name",
+    "get_outlet_by_name",
+    "get_outlet_by_id",
+]
+
+
+@dataclass
+class APIClient:
+    """A wrapper around ``httpx.AsyncClient`` to yield a new client."""
+
+    base_url: str
+    user: str
+    password: SecretStr
+
+    auth_method: Literal["digest", "basic"] = "digest"
+
+    def __post_init__(self):
+        self.client: httpx.AsyncClient | None = None
+        self.lock = asyncio.Lock()
+
+    async def __aenter__(self):
+        """Yields a new client."""
+
+        await self.lock.acquire()
+
+        log.debug(f"Creating async client to {self.base_url!r} with digest.")
+
+        if self.auth_method == "digest":
+            auth = httpx.DigestAuth(self.user, self.password.get_secret_value())
+        elif self.auth_method == "basic":
+            auth = (self.user, self.password.get_secret_value())
+        else:
+            raise ValueError(f"Invalud authentication method {self.auth_method!r}.")
+
+        self.client = httpx.AsyncClient(
+            auth=auth,
+            base_url=self.base_url,
+            headers={},
+        )
+
+        return self.client
+
+    async def __aexit__(self, exc_type, exc, tb):
+        """Closes the client."""
+
+        self.lock.release()
+
+        if self.client and not self.client.is_closed:
+            log.debug("Closing async client.")
+            await self.client.aclose()
 
 
 def normalise_outlet_name(name: str):

@@ -13,9 +13,11 @@ import asyncio
 
 from typing import Any, Sequence, TypedDict
 
+import httpx
 from pydantic import BaseModel, ConfigDict
 
 from lvmnps import log
+from lvmnps.exceptions import VerificationError
 from lvmnps.tools import get_outlet_by_id, get_outlet_by_name, normalise_outlet_name
 
 
@@ -104,6 +106,14 @@ class NPSClient(abc.ABC):
         """Refreshes the list of outlets."""
 
         pass
+
+    def _validate_response(self, response: httpx.Response, expected_code: int = 200):
+        """Validates an HTTP response."""
+
+        if response.status_code != expected_code:
+            raise VerificationError(
+                f"Request returned response with status code {response.status_code}."
+            )
 
     def get(self, outlet: int | str):
         """Retrieves an outlet by ID or name."""

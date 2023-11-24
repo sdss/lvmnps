@@ -8,7 +8,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import warnings
 
 import httpx
@@ -18,6 +17,7 @@ from pydantic.dataclasses import dataclass
 from lvmnps import log
 from lvmnps.exceptions import NPSWarning, ResponseError, VerificationError
 from lvmnps.nps.core import NPSClient, OutletModel
+from lvmnps.tools import APIClient
 
 
 __all__ = ["DLIClient", "DLIOutletModel"]
@@ -34,45 +34,6 @@ class DLIOutletModel(OutletModel):
     cycle_delay: float | None = None
 
 
-@dataclass
-class APIClient:
-    """A wrapper around ``httpx.AsyncClient`` to yield a new client."""
-
-    base_url: str
-    user: str
-    password: SecretStr
-
-    def __post_init__(self):
-        self.client: httpx.AsyncClient | None = None
-
-        self.lock = asyncio.Lock()
-
-    async def __aenter__(self):
-        """Yields a new client."""
-
-        await self.lock.acquire()
-
-        log.debug(f"Creating async client to {self.base_url!r} with digest.")
-
-        auth = httpx.DigestAuth(self.user, self.password.get_secret_value())
-        self.client = httpx.AsyncClient(
-            auth=auth,
-            base_url=self.base_url,
-            headers={},
-        )
-
-        return self.client
-
-    async def __aexit__(self, exc_type, exc, tb):
-        """Closes the client."""
-
-        self.lock.release()
-
-        if self.client and not self.client.is_closed:
-            log.debug("Closing async client.")
-            await self.client.aclose()
-
-
 @dataclass(config=ConfigDict(extra="forbid"))
 class DLIClient(NPSClient):
     """An NPS client for a Digital Loggers switch."""
@@ -87,7 +48,12 @@ class DLIClient(NPSClient):
         super().__init__()
 
         self.base_url = f"http://{self.host}:{self.port}/{self.api_route}"
-        self.api_client = APIClient(self.base_url, self.user, self.password)
+        self.api_client = APIClient(
+            self.base_url,
+            self.user,
+            self.password,
+            auth_method="digest",
+        )
 
         self.outlets: dict[str, DLIOutletModel] = {}
 
@@ -122,14 +88,6 @@ class DLIClient(NPSClient):
         await self.refresh()
 
         log.info("Set up complete.")
-
-    def _validate_response(self, response: httpx.Response, expected_code: int = 200):
-        """Validates an HTTP response."""
-
-        if response.status_code != expected_code:
-            raise VerificationError(
-                f"Request returned response with status code {response.status_code}."
-            )
 
     async def verify(self):
         """Checks that the NPS is connected and responding."""

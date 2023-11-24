@@ -12,10 +12,11 @@ import re
 
 from typing import TYPE_CHECKING
 
+import httpx
 import pytest
 from pytest_httpx import HTTPXMock
 
-from lvmnps.exceptions import NPSWarning, ResponseError
+from lvmnps.exceptions import NPSWarning, ResponseError, VerificationError
 
 from .conftest import dli_default_outlets
 
@@ -38,6 +39,17 @@ async def test_dli_verification_fails(dli_client: DLIClient, httpx_mock: HTTPXMo
         await dli_client.setup()
 
     assert len(dli_client.outlets) == 0
+
+
+async def test_dli_verification_connection_error(
+    dli_client: DLIClient,
+    httpx_mock: HTTPXMock,
+):
+    httpx_mock.reset(False)
+    httpx_mock.add_exception(httpx.ConnectError("Connection failed"))
+
+    with pytest.raises(VerificationError):
+        await dli_client.verify()
 
 
 async def test_dli_set_state(dli_client: DLIClient, httpx_mock: HTTPXMock):

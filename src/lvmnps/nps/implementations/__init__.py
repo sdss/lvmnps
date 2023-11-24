@@ -9,10 +9,17 @@
 from __future__ import annotations
 
 
-__all__ = ["DLIClient", "VALID_NPS_TYPES"]
+__all__ = [
+    "DLIClient",
+    "DLIOutletModel",
+    "NetIOClient",
+    "NetIOOutLetModel",
+    "VALID_NPS_TYPES",
+]
 
 
 VALID_NPS_TYPES: list[str] = ["dli"]
 
 
-from .dli import DLIClient
+from .dli import DLIClient, DLIOutletModel
+from .netio import NetIOClient, NetIOOutLetModel
