@@ -127,6 +127,7 @@ class NetIOClient(NPSClient):
         for outlet in outlets:
             outlet_action: dict[str, Any] = {"ID": outlet.id, "Action": int(on)}
             if on is True and off_after is not None:
+                outlet_action["Action"] = 3
                 outlet_action["Delay"] = off_after * 1000
             outputs.append(outlet_action)
 
