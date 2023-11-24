@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0
+
+### 🔥 Breaking changes
+
+* [#36](https://github.com/sdss/lvmnps/pull/36) Complete rewrite, mostly to simplify the code and to take advantage of some additional features in the DLI REST API and to support calling DLI user scripts.
+  * The main difference in this version is that the code has been significantly simplified by requiring that one instance of the `lvmnps` actor can only control one NPS. This means that all the `switch` flags and parameters have been deprecated.
+  * The code has been simplified. It still follows the approach of a core, abstract `NPSClient` class with multiple implementations for different switches, but some options that were not used have been removed.
+  * It's now possible to switch multiple outlets at the same time. This takes advantage of the DLI and NetIO implementations to turn on several outlets as quickly as possible without risking an in-rush overcurrent.
+  * The DLI client now allows to command user functions (scripts).
+
+
 ## 0.4.0 - July 10, 2023
 
 ### 🚀 New
