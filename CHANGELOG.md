@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0
+## 1.0.0 - November 24, 2023
 
 ### 🔥 Breaking changes
 
