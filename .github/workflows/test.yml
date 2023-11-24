@@ -5,7 +5,6 @@ name: Test
 
 on:
   push:
-    branches: [main]
     paths-ignore:
       - 'docs/**'
   pull_request:
@@ -19,52 +18,36 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.10', '3.11', '3.12']
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Cache Setup
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-
-      - name: Install poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
+          cache: 'pip'
 
       - name: Install dependencies
         run: |
-          poetry env use python
-          poetry run pip install -U pip setuptools wheel
-          poetry --no-ansi install --without helpers
+          pip install --upgrade wheel pip setuptools
+          pip install .
 
-      - name: Lint with flake8
+      - name: Lint with ruff
         run: |
-          # stop the build if there are Python syntax errors or undefined names
-          poetry run pip install flake8
-          poetry run flake8 . --count --show-source --statistics
+          pip install ruff
+          ruff check src/ tests/
 
       - name: Lint with black
         run: |
-          poetry run pip install black
-          poetry run black --check .
-
-      - name: Lint with isort
-        run: |
-          poetry run pip install isort
-          poetry run isort -c . -vvv
+          pip install black
+          black --check src/lvmnps
 
       - name: Test with pytest
         run: |
-          poetry --no-ansi install --only test
-          poetry run pytest
+          pip install pytest pytest-mock pytest-asyncio pytest-cov pytest-httpx
+          pytest
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

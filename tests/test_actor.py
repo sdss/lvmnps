@@ -1,62 +1,162 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+#
+# @Author: José Sánchez-Gallego (gallegoj@uw.edu)
+# @Date: 2023-11-23
+# @Filename: test_actor.py
+# @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
+from pytest_mock import MockerFixture
 
-from lvmnps.actor.actor import AMQPActor, NPSActor
-
-
-async def test_actor(actor: NPSActor):
-    assert actor
+from lvmnps.actor.actor import NPSActor
 
 
-async def test_ping(actor: NPSActor):
-    command = await actor.invoke_mock_command("ping")
-    await command
-
-    assert command.status.did_succeed
-    assert len(command.replies) == 2
-    assert command.replies[1].message["text"] == "Pong."
+if TYPE_CHECKING:
+    from sdsstools import Configuration
 
 
-async def test_actor_no_config():
-    with pytest.raises(RuntimeError):
-        NPSActor.from_config(None)
+async def test_actor(nps_actor: NPSActor):
+    assert isinstance(nps_actor, NPSActor)
+
+    await nps_actor.stop()
 
 
-async def test_actor_start(switches, test_config: dict, mocker):
-    actor = NPSActor.from_config(test_config)
-    mocker.patch.object(AMQPActor, "start")
+@pytest.mark.parametrize("nps_type", [None, "bad_name"])
+async def test_actor_invalid_type(nps_type: str | None, lvmnps_config: Configuration):
+    lvmnps_config["nps"]["type"] = nps_type
 
-    actor.parser_args = [{switch.name: switch for switch in switches}]
-
-    for switch in switches:
-        mocker.patch.object(switch, "start")
-
-    await actor.start()
-
-    assert len(actor.parser_args[0].keys()) == len(switches)
-
-    await actor.stop()
+    with pytest.raises(ValueError):
+        NPSActor.from_config(lvmnps_config)
 
 
-async def test_actor_start_one_fails(switches, test_config: dict, mocker):
-    actor = NPSActor.from_config(test_config)
-    mocker.patch.object(AMQPActor, "start")
+async def test_actor_config_missing(lvmnps_config: Configuration):
+    del lvmnps_config["nps"]
 
-    actor.parser_args = [{switch.name: switch for switch in switches}]
+    with pytest.raises(ValueError):
+        NPSActor.from_config(lvmnps_config)
 
-    for ii, switch in enumerate(switches):
-        mocker.patch.object(
-            switch,
-            "start",
-            side_effect=None if ii != 1 else RuntimeError,
-        )
 
-    await actor.start()
+async def test_command_status(nps_actor: NPSActor, mocker: MockerFixture):
+    cmd = await nps_actor.invoke_mock_command("status")
+    await cmd
 
-    assert len(actor.parser_args[0].keys()) == len(switches) - 1
+    assert cmd.status.did_succeed
+    assert len(cmd.replies) == 5
+    assert cmd.replies[-2].body == {
+        "outlets": [
+            {
+                "critical": False,
+                "cycle_delay": None,
+                "id": 1,
+                "index": 0,
+                "locked": False,
+                "name": "outlet_1",
+                "normalised_name": "outlet_1",
+                "physical_state": False,
+                "state": False,
+                "transient_state": False,
+            }
+        ]
+    }
 
-    await actor.stop()
+
+async def test_command_refresh(nps_actor: NPSActor, mocker: MockerFixture):
+    cmd = await nps_actor.invoke_mock_command("refresh")
+    await cmd
+
+    assert cmd.status.did_succeed
+
+
+@pytest.mark.parametrize("on", [True, False])
+@pytest.mark.parametrize("outlet", [1, "outlet_1"])
+async def test_command_onoff(nps_actor: NPSActor, outlet: str | int, on: bool):
+    cmd = await nps_actor.invoke_mock_command(f"on {outlet}" if on else f"off {outlet}")
+    await cmd
+
+    assert cmd.status.did_succeed
+    assert nps_actor.nps.outlets["outlet_1"].state is on
+
+
+async def test_command_cycle(nps_actor: NPSActor):
+    cmd = await nps_actor.invoke_mock_command("cycle 1")
+    await cmd
+
+    assert cmd.status.did_succeed
+
+
+async def test_command_script_list(nps_actor: NPSActor):
+    cmd = await nps_actor.invoke_mock_command("scripts list")
+    await cmd
+
+    assert cmd.status.did_succeed
+
+
+async def test_command_script_list_invalid(nps_actor: NPSActor):
+    nps_actor.nps.implementations = {"scripting": False}
+
+    cmd = await nps_actor.invoke_mock_command("scripts list")
+    await cmd
+
+    assert cmd.status.did_fail
+
+
+async def test_command_script_run(nps_actor: NPSActor):
+    cmd = await nps_actor.invoke_mock_command("scripts run user_function1")
+    await cmd
+
+    assert cmd.status.did_succeed
+
+
+async def test_command_script_run_not_enough_args(nps_actor: NPSActor):
+    cmd = await nps_actor.invoke_mock_command("scripts run")
+    await cmd
+
+    assert cmd.status.did_fail
+
+
+async def test_command_script_run_invalid(nps_actor: NPSActor):
+    nps_actor.nps.implementations = {"scripting": False}
+
+    cmd = await nps_actor.invoke_mock_command("scripts run user_function1")
+    await cmd
+
+    assert cmd.status.did_fail
+
+
+async def test_command_script_run_fails(nps_actor: NPSActor, mocker: MockerFixture):
+    nps_actor.nps.run_script = mocker.AsyncMock(side_effect=RuntimeError)
+
+    cmd = await nps_actor.invoke_mock_command("scripts run user_function1")
+    await cmd
+
+    assert cmd.status.did_fail
+
+
+async def test_command_script_stop(nps_actor: NPSActor):
+    cmd = await nps_actor.invoke_mock_command("scripts stop")
+    await cmd
+
+    assert cmd.status.did_succeed
+
+
+async def test_command_script_stop_invalid(nps_actor: NPSActor):
+    nps_actor.nps.implementations = {"scripting": False}
+
+    cmd = await nps_actor.invoke_mock_command("scripts stop")
+    await cmd
+
+    assert cmd.status.did_fail
+
+
+async def test_command_script_stop_fails(nps_actor: NPSActor, mocker: MockerFixture):
+    nps_actor.nps.stop_script = mocker.AsyncMock(side_effect=RuntimeError)
+
+    cmd = await nps_actor.invoke_mock_command("scripts stop")
+    await cmd
+
+    assert cmd.status.did_fail

@@ -1,11 +1,11 @@
 coverage:
-  range: 80...95
+  range: 90...100
   round: up
   precision: 1
   status:
     project:
       default:
-        target: 85%
+        target: 90%
         if_not_found: success
         if_ci_failed: error
         informational: false

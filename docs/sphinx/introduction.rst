@@ -3,209 +3,66 @@
 Introduction
 ============
 
-An NPS (Network Power Switch) is a device that can control multiple power switches through a network. By connecting the power of the LVM-I Spectroograph Box and subsystem through this device, the power of each device can be controlled through the network.
+``lvmnps`` allows for basic, homogeneous control of a variety of network power supplies (NPS). Currently the supported NPS are
 
-LVM-I selected two models for NPS.
-In the LVM-I SCP, we decide to use “web power switch pro” by digital loggers(dli) for NPS. More details can be found through `dli <https://dlidirect.com/products/new-pro-switch>`_
-In the LVM-I TCP, we're using iboot web power switch in dataprobe Co.(iboot). More details can be found through `iboot <https://dataprobe.com/iboot/>`_
-We updated *switch* moduel for the nps control library applicable to both models. The powerswitch class is created for the basic modules of dli and iboot and used in the actor command.
+- `Digital Loggers Inc devices <http://www.digital-loggers.com>`__, in particular the `Pro Switch <http://www.digital-loggers.com/pro.html>`__
+- `NetIO devices <https://www.netio-products.com/en>`__.
 
-DLI
----
-
-The Digital Loggers provides a library made to control the power switch for the above models. Based on this module, the KHU team redefines and asynchronously changes the functions required for the command in SCP. This module plays a role in web crawling from the index web page that provides information about the power switch and controlling the power. For asynchronous web crawling, the asynchronous class provided by httpx was used instead of the default requests library. We also overridden the rest of the functions asynchronously. A new module for controlling power switch is defined as *lvmpower.py*.
-
-.. image:: _static/dlinps.png
-    :align: center
-
-iboot
------
-
-.. image:: _static/ibootnps.png
-    :align: center
+The code allows to retrieve the status of the various outlets, set outlet status (on, off, cycle), and execute user functions (only for DLI devices).
 
 
-Start the actor
----------------
+Installation
+------------
 
-Start ``lvmnps`` actor.
+``lvmscp`` can be installed using ``pip`` as
 
-::
+.. code:: shell
 
-    $ lvmnps start
+    pip install sdss-lvmnps
 
-In another terminal, type ``clu`` and ``lvmnps ping`` for test.
+To install ``lvmnps`` for development, first clone the `repository <https://github.com/sdss/lvmnps>`__
 
-::
+.. code:: shell
 
-    $ clu
-    lvmnps ping
-         07:41:22.636 lvmnps >
-         07:41:22.645 lvmnps : {
-             "text": "Pong."
-             }
+    git clone https://github.com/sdss/lvmnps
 
-Stop ``lvmnps`` actor.
+and then install using `poetry <https://python-poetry.org>`__
 
-::
+.. code:: shell
 
-    $ lvmnps stop
+    poetry install
 
-Config file structure
----------------------
+Configuration files
+-------------------
 
-::
+To run as an actor, a YAML configuration file is required. An example of a valid configuration file is
 
-    switches:
-        name_your_switch_here:    # should be a unique name
-            type: dummy           # currently dummy, iboot, dli
-            num: 8                # number of ports
-            ports:
-              1:
-                name: "skyw.pwi"  # should also be a unique name
-                desc: "Something that make sense"
-        should_be_a_unique_name:
-            type: dummy
-            ports:
-              1:
-                name: "skye.pwi"
-                desc: "PlaneWavemount Skye"
+.. code:: yaml
 
-Status return for all commands
-------------------------------
+    nps:
+        type: dli
+        init_parameters:
+            host: 127.0.0.1
+            port: 8088
+            user: admin
+            password: admin
 
--  if 'name' is not defined then the port name will be 'switch
-   name'.'port number' eg nps\_dummy\_1.port1 otherwise 'name' from the
-   config file will be used.
--  STATE: 1: ON, 0: OFF, -1: UNKNOWN
+    actor:
+        name: lvmnps.test
+        host: localhost
+        port: 5672
 
-   ::
+The ``actor`` section is common to other CLU actors, and we refer the reader to the `CLU documentation <https://clu.readthedocs.io/en/latest/getting-started.html#configuration-files>`__. An ``nps`` section is required, defining the type of the power supply (valid types are ``dli`` and ``netio``) and the parameters necessary to initialise the relevant client class.
 
-            "STATUS": {
-             "nps_dummy_1.port1": {
-                 "STATE": -1,
-                 "DESCR": "was 1",
-                 "SWITCH": "nps_dummy_1",
-                 "PORT": 1
-             },
+Running the actor
+-----------------
 
-Run the example lvmnps\_dummy
------------------------------
+The actor can be run by executing
 
-::
+.. code:: shell
 
-    #> cd lvmnps
-    #> poetry run lvmnps -vvv -c $(pwd)/python/lvmnps/etc/lvmnps_dummy.yml start
+    lvmnps -c CONFIG-FILE start [--debug]
 
-    #> poetry run clu
+where ``--debug`` allows to run the actor without detaching the running instance. To stop the actor use ``lvmnps stop``.
 
--  status command without parameter returns all ports of all switches.
--  the default is to return only configured ports, otherwise define
-   'ouo' false in the config file, see
-   `lvmnps\_dummy.yml <https://github.com/sdss/lvmnps/blob/master/python/lvmnps/etc/lvmnps_dummy.yml>`__
-
-   ::
-
-            lvmnps statu
-
-            12:02:08.649 lvmnps >
-            12:02:08.660 lvmnps i {
-                "STATUS": {
-                    "nps\_dummy\_1.port1": {
-                        "STATE": -1,
-                        "DESCR": "was 1",
-                        "SWITCH": "nps\_dummy\_1",
-                        "PORT": 1
-                        },
-                     "skye.what.ever": {
-                         "STATE": -1,
-                         "DESCR": "whatever is connected to skye",
-                         "SWITCH": "nps\_dummy\_1",
-                         "PORT": 2
-                         },
-                     "skyw.what.ever": {
-                         "STATE": -1,
-                         "DESCR": "Something @ skyw",
-                         "SWITCH": "nps\_dummy\_1",
-                         "PORT": 4
-                         },
-                     "skye.pwi": {
-                         "STATE":-1,
-                         "DESCR": "PlaneWavemount Skye",
-                         "SWITCH": "skye.nps",
-                         "PORT": 1
-                         },
-                     "skyw.pwi": {
-                         "STATE": -1,
-                         "DESCR": "PlaneWavemount Skyw",
-                         "SWITCH": "nps\_dummy\_3",
-                         "PORT": 1
-                         }
-                    }
-                }
-
--  status command with port name skyw.what.ever
-
-   ::
-
-            lvmnps status what skyw.what.ever
-
-            12:07:12.349 lvmnps >
-            12:07:12.377 lvmnps i {
-                "STATUS": {
-                    "skyw.what.ever": {
-                        "STATE": -1,
-                        "DESCR": "Something @ skyw",
-                        "SWITCH": "nps\_dummy\_1",
-                        "PORT": 4
-                        }
-
--  status command with switch name nps\_dummy\_1
-
-   ::
-
-            lvmnps status what nps\_dummy\_1
-
-            12:07:12.349 lvmnps >
-            12:12:21.349 lvmnps i {
-                "STATUS": {
-                    "nps\_dummy\_1.port1": {
-                        "STATE": -1,
-                        "DESCR": "was 1",
-                        "SWITCH": "nps\_dummy\_1",
-                        "PORT": 1
-                        },
-                    "skye.what.ever": {
-                        "STATE": -1,
-                        "DESCR": "whatever is connected to skye",
-                        "SWITCH": "nps\_dummy\_1",
-                        "PORT": 2
-                        },
-                    "skyw.what.ever": {
-                        "STATE": -1,
-                        "DESCR": "Something @ skyw",
-                        "SWITCH": "nps\_dummy\_1",
-                        "PORT": 4
-                        }
-                    }
-                }
-
--  status command with switch name nps\_dummy\_1 and port 4 returns
-
-   ::
-
-            lvmnps status what nps\_dummy\_1 4
-
-            12:07:12.349 lvmnps >
-            12:12:21.349 lvmnps i {
-                "STATUS": {
-                    "skyw.what.ever": {
-                        "STATE": -1,
-                        "DESCR": "Something @ skyw",
-                        "SWITCH": "nps\_dummy\_1",
-                        "PORT": 4
-                        }
-                    }
-                }
-
--  the commands on and off use the same addressing scheme as status
+To test the communication with the actor you can install the CLU command line interface, then execute ``clu`` and issue ``lvmnps status``.

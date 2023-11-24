@@ -1,131 +1,184 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+#
+# @Author: José Sánchez-Gallego (gallegoj@uw.edu)
+# @Date: 2023-11-23
+# @Filename: test_dli.py
+# @License: BSD 3-clause (http://www.opensource.org/licenses/BSD-3-Clause)
 
 from __future__ import annotations
 
-import os
+import re
 
+from typing import TYPE_CHECKING
+
+import httpx
 import pytest
+from pytest_httpx import HTTPXMock
 
-from sdsstools import read_yaml_file
+from lvmnps.exceptions import NPSWarning, ResponseError, VerificationError
 
-from lvmnps.switch.dli.powerswitch import DLIPowerSwitch
+from .conftest import dli_default_outlets
 
 
-@pytest.fixture
-async def dli_switches(mocker):
-    root = os.path.dirname(__file__)
-    config = read_yaml_file(os.path.join(root, "test_dli_switch.yml"))
+if TYPE_CHECKING:
+    from lvmnps.nps import DLIClient
 
-    switches = []
-    for switch_name in config["switches"]:
-        switch = DLIPowerSwitch(switch_name, config["switches"][switch_name])
 
-        # Fake the client reply to a get(/relay/outlets)
-        get_mock = mocker.MagicMock(status_code=200)
+async def test_dli(dli_client: DLIClient):
+    await dli_client.setup()
 
-        # Build a fake reply with two outlets defined and six empty ones
-        get_mock.json.return_value = [
-            {"state": False, "name": "Outlet 1"},
-            {"state": True, "name": "Outlet 2"},
-        ]
-        get_mock.json.return_value += 6 * [{"state": False, "name": ""}]
+    assert len(dli_client.outlets) == 2
 
-        # Patch the client to use the mocked get method.
-        mocker.patch.object(
-            switch.dli.client,
-            "get",
-            return_value=get_mock,
+
+async def test_dli_verification_fails(dli_client: DLIClient, httpx_mock: HTTPXMock):
+    httpx_mock.reset(False)
+    httpx_mock.add_response(url=re.compile(r"http://.+?/restapi/"), status_code=500)
+
+    with pytest.warns(NPSWarning):
+        await dli_client.setup()
+
+    assert len(dli_client.outlets) == 0
+
+
+async def test_dli_verification_connection_error(
+    dli_client: DLIClient,
+    httpx_mock: HTTPXMock,
+):
+    httpx_mock.reset(False)
+    httpx_mock.add_exception(httpx.ConnectError("Connection failed"))
+
+    with pytest.raises(VerificationError):
+        await dli_client.verify()
+
+
+async def test_dli_set_state(dli_client: DLIClient, httpx_mock: HTTPXMock):
+    await dli_client.setup()
+
+    httpx_mock.add_response(
+        method="PUT",
+        url=re.compile(r"http://.+?/restapi/relay/outlets/=0/state/"),
+        status_code=207,
+    )
+
+    response_json = dli_default_outlets.copy()
+    response_json[0]["state"] = True
+
+    httpx_mock.add_response(
+        method="GET",
+        url=re.compile(r"http://.+?/restapi/relay/outlets/"),
+        status_code=200,
+        json=response_json,
+    )
+
+    await dli_client.set_state("argon", on=True)
+
+    assert dli_client.outlets["argon"].state is True
+
+
+async def test_dli_list_scripts(dli_client: DLIClient, httpx_mock: HTTPXMock):
+    await dli_client.setup()
+
+    httpx_mock.add_response(
+        method="GET",
+        url=re.compile(r"http://.+?/restapi/script/user_functions/"),
+        status_code=200,
+        json={"user_function1": {}, "user_function2": {}},
+    )
+
+    user_functions = await dli_client.list_scripts()
+    assert len(user_functions) == 2
+
+
+async def test_dli_list_running_scripts(dli_client: DLIClient, httpx_mock: HTTPXMock):
+    await dli_client.setup()
+
+    httpx_mock.add_response(
+        method="GET",
+        url=re.compile(r"http://.+?/restapi/script/threads/"),
+        status_code=200,
+        json={"1": {"label": "user_function1 (blah)"}},
+    )
+
+    running_threads = await dli_client.list_running_scripts()
+    assert running_threads == {1: "user_function1"}
+
+
+@pytest.mark.parametrize("check_exists", [True, False])
+@pytest.mark.parametrize("function_args", [[1, 2], []])
+async def test_dli_run_script(
+    dli_client: DLIClient,
+    httpx_mock: HTTPXMock,
+    check_exists: bool,
+    function_args: list,
+):
+    await dli_client.setup()
+
+    if check_exists:
+        httpx_mock.add_response(
+            method="GET",
+            url=re.compile(r"http://.+?/restapi/script/user_functions/"),
+            status_code=200,
+            json={"user_function1": {}, "user_function2": {}},
         )
 
-        # Also mock PUT
-        mocker.patch.object(
-            switch.dli.client,
-            "put",
-            return_value=mocker.MagicMock(status_code=204),
-        )
+    httpx_mock.add_response(
+        method="POST",
+        url=re.compile(r"http://.+?/restapi/script/start/"),
+        status_code=200,
+        json="1",
+    )
 
-        await switch.start()
-
-        switches.append(switch)
-
-    yield switches
-
-    for switch in switches:
-        await switch.stop()
+    await dli_client.run_script(
+        "user_function1",
+        *function_args,
+        check_exists=check_exists,
+    )
 
 
-async def test_dli_power_switch(dli_switches: list[DLIPowerSwitch]):
-    switch = dli_switches[0]
+async def test_dli_run_script_does_not_exist(
+    dli_client: DLIClient,
+    httpx_mock: HTTPXMock,
+):
+    await dli_client.setup()
 
-    assert switch.name == "DLI-01"
-    assert len(switch.outlets) == 8
-    assert switch.outlets[1].inuse is False
+    httpx_mock.add_response(
+        method="GET",
+        url=re.compile(r"http://.+?/restapi/script/user_functions/"),
+        status_code=200,
+        json={"user_function3": {}},
+    )
 
-
-async def test_dli_power_switch_handle_undefined(dli_switches: list[DLIPowerSwitch]):
-    switch = dli_switches[0]
-    switch.onlyusedones = False
-
-    await switch.start()
-
-    assert switch.name == "DLI-01"
-    assert len(switch.outlets) == 8
-
-    assert switch.outlets[1].name == "Outlet 2"
-    assert switch.outlets[1].inuse is True
-    assert (await switch.isReachable()) is True
-
-
-async def test_dli_on(dli_switches: list[DLIPowerSwitch]):
-    switch = dli_switches[0]
-
-    assert switch.outlets[0].state == 0
-
-    await switch.switch(True, [switch.outlets[0]])
-
-
-async def test_dli_off(dli_switches: list[DLIPowerSwitch]):
-    switch = dli_switches[0]
-
-    await switch.switch(False, [switch.outlets[0]])
-
-
-async def test_dli_verify_fails(dli_switches: list[DLIPowerSwitch], mocker):
-    switch = dli_switches[0]
-    mocker.patch.object(switch.dli, "verify", side_effect=ValueError)
-
-    with pytest.raises(RuntimeError):
-        await switch.start()
-
-
-def test_dli_missing_credentials():
     with pytest.raises(ValueError):
-        DLIPowerSwitch("test", {})
+        await dli_client.run_script("user_function1")
 
 
-async def test_dli_switch_fails(dli_switches: list[DLIPowerSwitch], mocker):
-    switch = dli_switches[0]
-    mocker.patch.object(switch.dli, "on", side_effect=ValueError)
+async def test_dli_run_script_invalid(dli_client: DLIClient, httpx_mock: HTTPXMock):
+    await dli_client.setup()
 
-    with pytest.raises(RuntimeError):
-        await switch.switch(True, [switch.outlets[0]])
+    httpx_mock.add_response(
+        method="POST",
+        url=re.compile(r"http://.+?/restapi/script/start/"),
+        status_code=409,
+        json="1",
+    )
 
-
-async def test_dli_update_fails(dli_switches: list[DLIPowerSwitch], mocker):
-    switch = dli_switches[0]
-    mocker.patch.object(switch.dli, "status", side_effect=ValueError)
-
-    with pytest.raises(RuntimeError):
-        await switch.update([switch.outlets[0]])
-
-    assert switch.outlets[0].state == -1
+    with pytest.raises(ResponseError):
+        await dli_client.run_script("user_function1", check_exists=False)
 
 
-async def test_dli_update_unreachable(dli_switches: list[DLIPowerSwitch], mocker):
-    switch = dli_switches[0]
-    switch.reachable = False
+@pytest.mark.parametrize("thread_num", [None, 1])
+async def test_dli_stop_script(
+    dli_client: DLIClient,
+    httpx_mock: HTTPXMock,
+    thread_num: int | None,
+):
+    await dli_client.setup()
 
-    await switch.update([switch.outlets[0]])
+    httpx_mock.add_response(
+        method="POST",
+        url=re.compile(r"http://.+?/restapi/script/stop/"),
+        status_code=200,
+    )
 
-    assert switch.outlets[0].state == -1
+    await dli_client.stop_script(thread_num)

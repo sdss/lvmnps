@@ -2,33 +2,33 @@
 lvmnps's documentation
 ======================
 
+.. warning::
+  Version 1.0 introduces breaking changes with respect to previous versions, both in the API and the actor commands. The main difference is that the actor in 1.0 only supports controlling one switch per instance. See the :ref:`actor commands page <commands>` for more deails.
+
+
 Contents
 --------
 
 .. toctree::
   :caption: Contents
+  :maxdepth: 1
 
   introduction
-  examples
+  commands
 
 .. toctree::
-  :caption: API
   :maxdepth: 3
 
-  actor
-  switch
-  commands
-  actor-schema
-  exceptions
+  api
 
 .. toctree::
   :caption: Development
-  :maxdepth: 3
+  :maxdepth: 1
 
-  developer-env
   Changelog <changelog>
   GitHub Repository <https://github.com/sdss/lvmnps>
   Issues  <https://github.com/sdss/lvmnps/issues>
+
 
 Indices and tables
 ------------------

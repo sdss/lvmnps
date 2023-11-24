@@ -13,13 +13,7 @@ import os
 
 from pkg_resources import parse_version
 
-
-try:
-    from lvmnps import __version__
-except ModuleNotFoundError:
-    from sdsstools import get_package_version
-
-    __version__ = get_package_version(__file__, "sdss-lvmnps") or "dev"
+from lvmnps import __version__
 
 
 # Are we building in RTD?
@@ -51,6 +45,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx.ext.autosummary",
+    "sphinx_autodoc_typehints",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
@@ -58,12 +53,16 @@ extensions = [
     "sphinx.ext.inheritance_diagram",
     "myst_parser",
     "sphinx_copybutton",
-    "sphinx_click",
+    "sphinx_click.ext",
     "sphinx-jsonschema",
+    "sphinxcontrib.autodoc_pydantic",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
+
+pygments_style = "lovelace"
+pygments_dark_style = "one-dark"
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -80,8 +79,8 @@ master_doc = "index"
 
 # General information about the project.
 project = "lvmnps"
-copyright = "{0}, {1}".format("2021", "SDSS LVMI softwareteam in Kyung Hee university")
-author = "Mingyeong Yang"
+copyright = "{0}, {1}".format("2021-", "Sloan Digital Sky Survey")
+author = "Mingyeong Yang and others"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -97,7 +96,7 @@ release = __version__
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -133,27 +132,24 @@ todo_include_todos = False
 
 # Intersphinx mappings
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3.6", None),
-    "astropy": ("http://docs.astropy.org/en/latest", None),
-    "numpy": ("http://docs.scipy.org/doc/numpy/", None),
-    "click": ("https://click.palletsprojects.com/en/7.x/", None),
-    "aio_pika": ("https://aio-pika.readthedocs.io/en/latest/", None),
+    "python": ("https://docs.python.org/3.12", None),
 }
 
 autodoc_mock_imports = ["_tkinter", "asynctest", "numpy", "pymodbus"]
 autodoc_member_order = "groupwise"
 autodoc_default_options = {"members": None, "show-inheritance": None}
-autodoc_typehints = "description"
+# autodoc_typehints = "description"
 
-napoleon_use_rtype = False
-napoleon_use_ivar = True
+# napoleon_use_rtype = False
+# napoleon_use_ivar = True
+
+simplify_optional_unions = True
+typehints_use_signature_return = True
 
 copybutton_prompt_text = r">>> |\$ "
 copybutton_prompt_is_regexp = True
 
 rst_epilog = f"""
-.. |numpy_array| replace:: Numpy array
-.. |HDUList| replace:: :class:`~astropy.io.fits.HDUList`
 .. |npsactor_version| replace:: {__version__}
 """
 
@@ -166,8 +162,13 @@ rst_epilog = f"""
 
 html_theme = "furo"
 html_logo = "_static/sdssv_logo.png"
-html_title = "lvmnps"
+html_title = "lvmnps documentation"
 html_favicon = "./_static/favicon.ico"
+html_theme_options = {
+    "source_repository": "https://github.com/sdss/lvmnps/",
+    "source_branch": "main",
+    "source_directory": "docs/sphinx",
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
