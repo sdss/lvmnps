@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import warnings
 
 import httpx
@@ -44,8 +45,12 @@ class APIClient:
     def __post_init__(self):
         self.client: httpx.AsyncClient | None = None
 
+        self.lock = asyncio.Lock()
+
     async def __aenter__(self):
         """Yields a new client."""
+
+        await self.lock.acquire()
 
         log.debug(f"Creating async client to {self.base_url!r} with digest.")
 
@@ -60,6 +65,8 @@ class APIClient:
 
     async def __aexit__(self, exc_type, exc, tb):
         """Closes the client."""
+
+        self.lock.release()
 
         if self.client and not self.client.is_closed:
             log.debug("Closing async client.")

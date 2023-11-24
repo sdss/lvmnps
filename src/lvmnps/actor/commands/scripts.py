@@ -26,7 +26,7 @@ def validate_nps(command: NPSCommand):
     """Checks that the NPS implements scripting."""
 
     nps = command.actor.nps
-    print(nps.implementations.get("scripting"))
+
     if nps.implementations.get("scripting", False) is False:
         command.fail("Scripting not allowed for this NPS.")
         return False
