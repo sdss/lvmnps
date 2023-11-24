@@ -10,6 +10,10 @@
 
 * Issue an NPS refresh before issuing any status.
 
+### 📖 Documentation
+
+* Added section on how to use the library.
+
 
 ## 1.0.1 - November 24, 2023
 
