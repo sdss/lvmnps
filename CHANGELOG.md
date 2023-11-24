@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2
+
+### 🔧 Fixed
+
+* Issue an NPS refresh before issuing any status.
+
+
 ## 1.0.1 - November 24, 2023
 
 ### ✨ Improved

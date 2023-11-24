@@ -26,6 +26,7 @@ async def status(command: NPSCommand):
 
     nps = command.actor.nps
 
+    await nps.refresh()
     command.info(nps_type=nps.nps_type)
     command.info(outlet_names=list(nps.outlets))
 
