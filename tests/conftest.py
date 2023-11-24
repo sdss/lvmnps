@@ -10,13 +10,23 @@ from __future__ import annotations
 
 import pathlib
 
+from typing import TYPE_CHECKING
+
 import pytest
 from pytest_httpx import HTTPXMock
+from pytest_mock import MockerFixture
 
+from clu.testing import setup_test_actor
 from sdsstools import read_yaml_file
 
+from lvmnps.actor.actor import NPSActor
 from lvmnps.nps import DLIClient
 from lvmnps.nps.core import NPSClient, OutletModel
+from lvmnps.nps.implementations.dli import DLIOutletModel
+
+
+if TYPE_CHECKING:
+    from sdsstools import Configuration
 
 
 class NPSTestClient(NPSClient):
@@ -73,9 +83,13 @@ dli_default_outlets = [
 
 
 @pytest.fixture
-async def dli_client(httpx_mock: HTTPXMock):
-    config = read_yaml_file(pathlib.Path(__file__).parent / "./config.yaml")
-    init_parameters = config["nps.init_parameters"]
+def lvmnps_config():
+    yield read_yaml_file(pathlib.Path(__file__).parent / "./config.yaml")
+
+
+@pytest.fixture
+async def dli_client(httpx_mock: HTTPXMock, lvmnps_config: Configuration):
+    init_parameters = lvmnps_config["nps.init_parameters"]
 
     client = DLIClient(**init_parameters)
 
@@ -101,3 +115,24 @@ async def dli_client(httpx_mock: HTTPXMock):
     )
 
     yield client
+
+
+@pytest.fixture
+async def nps_actor(mocker: MockerFixture, lvmnps_config: Configuration):
+    actor = NPSActor.from_config(lvmnps_config)
+
+    actor.nps = mocker.MagicMock(spec=DLIClient)
+    actor.nps.nps_type = "dli"
+    actor.nps.outlets = {"outlet_1": DLIOutletModel(id=1, name="outlet_1")}
+
+    async def _set_state_mock(outlets: list[int | str], on: bool = False):
+        for outlet in actor.nps.outlets.values():
+            outlet.state = on
+
+        return list(actor.nps.outlets.values())
+
+    actor.nps.set_state = mocker.MagicMock(side_effect=_set_state_mock)
+
+    await setup_test_actor(actor)  # type: ignore
+
+    yield actor

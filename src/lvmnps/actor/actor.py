@@ -83,7 +83,7 @@ class NPSActor(AMQPActor):
 
         self.nps = get_nps_from_config(self.config)
 
-    async def start(self, **kwargs):
+    async def start(self, **kwargs):  # pragma: no cover
         """Starts the actor."""
 
         await self.nps.setup()

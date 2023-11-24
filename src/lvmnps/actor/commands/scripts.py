@@ -26,7 +26,7 @@ def validate_nps(command: NPSCommand):
     """Checks that the NPS implements scripting."""
 
     nps = command.actor.nps
-
+    print(nps.implementations.get("scripting"))
     if nps.implementations.get("scripting", False) is False:
         command.fail("Scripting not allowed for this NPS.")
         return False
@@ -53,6 +53,9 @@ async def run(command: NPSCommand, script: tuple[str, ...]):
 
     if not validate_nps(command):
         return
+
+    if len(script) == 0:
+        return command.fail("Not enough parameters.")
 
     nps = command.actor.nps
 

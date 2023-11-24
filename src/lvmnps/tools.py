@@ -24,11 +24,7 @@ def normalise_outlet_name(name: str):
     return name.lower().replace(" ", "_")
 
 
-def get_outlet_by_name(
-    outlet_data: dict[str, OutletModel],
-    name: str,
-    allow_non_normalised: bool = True,
-):
+def get_outlet_by_name(outlet_data: dict[str, OutletModel], name: str):
     """Gets an outlet from a list of outlets.
 
     Parameters
@@ -37,9 +33,6 @@ def get_outlet_by_name(
         The mapping of outlet name to outlet model data.
     name
         The name of the outlet to retrieve.
-    allow_non_normalised
-        If ``True``, and ``name`` does match any normalised outlet name, tries to
-        find an outlet whose original name matches ``name``.
 
     Returns
     -------
@@ -57,11 +50,6 @@ def get_outlet_by_name(
 
     if normalised_name in outlet_data:
         return outlet_data[normalised_name]
-
-    if allow_non_normalised:
-        for outlet in outlet_data.values():
-            if outlet.name == name:
-                return outlet
 
     raise ValueError(f"Cannot find outlet with name {name!r}.")
 
