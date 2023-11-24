@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.3 - November 24, 2023
+
+### ✨ Improved
+
+* Added `all-off` command.
+
+
 ## 1.0.2 - November 24, 2023
 
 ### ✨ Improved

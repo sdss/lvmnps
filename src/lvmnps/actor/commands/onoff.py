@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from src.lvmnps.actor.actor import NPSCommand
 
 
-__all__ = ["on", "off", "cycle"]
+__all__ = ["on", "off", "cycle", "all_off"]
 
 
 class OutletNameParamType(click.ParamType):
@@ -98,3 +98,14 @@ async def cycle(command: NPSCommand, outlets: tuple[str | int, ...], delay: floa
     outlet_data = await nps.cycle(outlets, delay=delay)
 
     command.finish(outlets=[outlet.model_dump() for outlet in outlet_data])
+
+
+@lvmnps_command_parser.command()
+async def all_off(command: NPSCommand):
+    """Turns all outlets off."""
+
+    nps = command.actor.nps
+
+    await nps.all_off()
+
+    return command.finish()

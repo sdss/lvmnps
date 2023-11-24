@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from clu.parsers.click import command_parser as lvmnps_command_parser
 
-from .onoff import cycle, off, on
+from .onoff import all_off, cycle, off, on
 from .refresh import refresh
 from .scripts import scripts
 from .status import status

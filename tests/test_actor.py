@@ -126,6 +126,13 @@ async def test_command_cycle(nps_actor: NPSActor):
     assert cmd.status.did_succeed
 
 
+async def test_command_all_off(nps_actor: NPSActor):
+    cmd = await nps_actor.invoke_mock_command("all-off")
+    await cmd
+
+    assert cmd.status.did_succeed
+
+
 async def test_command_script_list(nps_actor: NPSActor):
     cmd = await nps_actor.invoke_mock_command("scripts list")
     await cmd
