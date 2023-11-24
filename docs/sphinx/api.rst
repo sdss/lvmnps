@@ -18,11 +18,19 @@ Base client
 Implementations
 ---------------
 
+Digital Loggers Inc
+^^^^^^^^^^^^^^^^^^^
+
 .. autoclass:: lvmnps.nps.implementations.dli.DLIClient
 
 .. autopydantic_model:: lvmnps.nps.implementations.dli.DLIOutletModel
    :model-show-json: false
    :exclude-members: model_post_init
+
+NetIO
+^^^^^
+
+.. autoclass:: lvmnps.nps.implementations.netio.NetIOClient
 
 
 Tools

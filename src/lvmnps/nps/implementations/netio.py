@@ -28,7 +28,7 @@ class NetIOOutLetModel(OutletModel):
 
 @dataclass(config=ConfigDict(extra="forbid"))
 class NetIOClient(NPSClient):
-    """An NPS client for a Digital Loggers switch.
+    """An NPS client for a NetIO switch.
 
     This implementation uses the JSON API, see
     https://www.netio-products.com/files/NETIO-M2M-API-Protocol-JSON.pdf
