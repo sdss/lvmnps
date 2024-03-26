@@ -35,6 +35,8 @@ __all__ = ["NPSActor"]
 AnyPath = str | PathLike[str]
 
 
+CHECK_INTERVAL: float = 30
+
 NPSErrorCodes = create_error_codes(
     {
         "VERIFICATION_FAILED": ErrorData(
@@ -102,6 +104,9 @@ class NPSActor(LVMActor):
 
         self.nps = get_nps_from_config(self.config)
 
+        self.restart_after = 30
+        self.restart_mode = "exit"
+
     async def start(self, **kwargs):  # pragma: no cover
         """Starts the actor."""
 
@@ -124,8 +129,10 @@ class NPSActor(LVMActor):
             if result is False:
                 raise VerificationError("NPS verification failed.")
         except Exception as err:
+            self.check_interval = 5  # Speed up checks
             raise CheckError(str(err), error_code=NPSErrorCodes.VERIFICATION_FAILED)
 
+        self.check_interval = CHECK_INTERVAL
         return True
 
     async def _troubleshoot_internal(
