@@ -13,14 +13,14 @@ from os import PathLike
 
 from typing import TYPE_CHECKING
 
-from lvmopstools.actor import ErrorCodes, LVMActor
-
 from clu import Command
+from lvmopstools.actor import CheckError, ErrorData, LVMActor, create_error_codes
 from sdsstools.configuration import Configuration
 
 from lvmnps import __version__
 from lvmnps import log as nps_log
 from lvmnps.actor.commands import lvmnps_command_parser
+from lvmnps.exceptions import VerificationError
 from lvmnps.nps.core import NPSClient
 from lvmnps.nps.implementations import VALID_NPS_TYPES
 
@@ -33,6 +33,18 @@ __all__ = ["NPSActor"]
 
 
 AnyPath = str | PathLike[str]
+
+
+NPSErrorCodes = create_error_codes(
+    {
+        "VERIFICATION_FAILED": ErrorData(
+            1,
+            critical=True,
+            description="NPS verification failed.",
+        )
+    },
+    name="NPSErrorCodes",
+)
 
 
 def get_nps_from_config(config: Configuration) -> NPSClient:
@@ -105,14 +117,26 @@ class NPSActor(LVMActor):
         return await super().stop()
 
     async def _check_internal(self):
-        return await super()._check_internal()
+        """Checks the NPS status."""
+
+        try:
+            result = await self.nps.verify()
+            if result is False:
+                raise VerificationError("NPS verification failed.")
+        except Exception as err:
+            raise CheckError(str(err), error_code=NPSErrorCodes.VERIFICATION_FAILED)
+
+        return True
 
     async def _troubleshoot_internal(
         self,
-        error_code: ErrorCodes,
+        error_code,
         exception: Exception | None = None,
     ):
-        return await super()._troubleshoot_internal(error_code, exception)
+        """Handles internal troubleshooting."""
+
+        if error_code.value == NPSErrorCodes.VERIFICATION_FAILED:
+            await self.restart(mode="exit")
 
 
 NPSCommand = Command[NPSActor]

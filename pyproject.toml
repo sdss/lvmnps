@@ -84,7 +84,7 @@ section-order = ["future", "standard-library", "typing", "third-party", "sdss", 
 
 [tool.ruff.isort.sections]
 typing = ["typing"]
-sdss = ["sdsstools", "clu"]
+sdss = ["sdsstools", "clu", "lvmopstools"]
 
 [tool.pytest.ini_options]
 addopts = "--cov lvmnps --cov-report xml --cov-report html --cov-report term"

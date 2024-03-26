@@ -913,7 +913,7 @@ ds9 = ["pyds9 (>=1.8.1,<2.0.0)"]
 type = "git"
 url = "https://github.com/sdss/lvmopstools.git"
 reference = "main"
-resolved_reference = "1d3ced52c1b133f76bd50bde6d5cd0fa9a014ccb"
+resolved_reference = "9a62a226fdbf73ba91f4b572d2783ddf2b1fa663"
 
 [[package]]
 name = "makefun"
