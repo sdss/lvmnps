@@ -5,6 +5,9 @@ LABEL org.opencontainers.image.source https://github.com/sdss/lvmnps
 
 WORKDIR /opt
 
+RUN apt-get update
+RUN apt-get install -y git
+
 COPY . lvmnps
 
 RUN pip3 install -U pip setuptools wheel
