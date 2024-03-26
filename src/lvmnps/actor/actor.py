@@ -13,8 +13,9 @@ from os import PathLike
 
 from typing import TYPE_CHECKING
 
+from lvmopstools.actor import LVMActor
+
 from clu import Command
-from clu.actor import AMQPActor
 from sdsstools.configuration import Configuration
 
 from lvmnps import __version__
@@ -63,7 +64,7 @@ def get_nps_from_config(config: Configuration) -> NPSClient:
         raise ValueError(f"Invalid NPS {nps_type}. Valid types are {VALID_NPS_TYPES}.")
 
 
-class NPSActor(AMQPActor):
+class NPSActor(LVMActor):
     """LVM network power switches base actor."""
 
     parser = lvmnps_command_parser

@@ -36,6 +36,7 @@ click-default-group = "^1.2.2"
 sdss-clu = "^2.0.0"
 httpx = ">=0.18.1"
 pydantic = "^2.5.2"
+lvmopstools = { git = "https://github.com/sdss/lvmopstools.git",  branch = "main"}
 
 [tool.poetry.group.dev.dependencies]
 ipython = ">=7.11.0"
