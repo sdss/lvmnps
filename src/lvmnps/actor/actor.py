@@ -13,7 +13,7 @@ from os import PathLike
 
 from typing import TYPE_CHECKING
 
-from lvmopstools.actor import LVMActor
+from lvmopstools.actor import ErrorCodes, LVMActor
 
 from clu import Command
 from sdsstools.configuration import Configuration
@@ -103,6 +103,16 @@ class NPSActor(LVMActor):
         await self.nps.stop()
 
         return await super().stop()
+
+    async def _check_internal(self):
+        return await super()._check_internal()
+
+    async def _troubleshoot_internal(
+        self,
+        error_code: ErrorCodes,
+        exception: Exception | None = None,
+    ):
+        return await super()._troubleshoot_internal(error_code, exception)
 
 
 NPSCommand = Command[NPSActor]
