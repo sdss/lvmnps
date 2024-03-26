@@ -893,27 +893,23 @@ tornado = {version = "*", markers = "python_version > \"2.7\""}
 
 [[package]]
 name = "lvmopstools"
-version = "0.1.1a0"
+version = "0.2.0"
 description = "LVM tools and utilities for operations"
 optional = false
-python-versions = "^3.10"
-files = []
-develop = false
+python-versions = "<4.0,>=3.10"
+files = [
+    {file = "lvmopstools-0.2.0-py3-none-any.whl", hash = "sha256:b5f9acc01270c56e1111f78f5cda0a3d5e06173bf0c80efc8b0644542d4d2a54"},
+    {file = "lvmopstools-0.2.0.tar.gz", hash = "sha256:388ef0c6c15c10064116d0244b30589c93e9e0f0895444c157316e53c5b7a70f"},
+]
 
 [package.dependencies]
-astropy = "^6.0.0"
-click = "^8.1.7"
-sdss-clu = "^2.2.3"
-sdsstools = "^1.3.1"
+astropy = ">=6.0.0,<7.0.0"
+click = ">=8.1.7,<9.0.0"
+sdss-clu = ">=2.2.3,<3.0.0"
+sdsstools = ">=1.3.1,<2.0.0"
 
 [package.extras]
 ds9 = ["pyds9 (>=1.8.1,<2.0.0)"]
-
-[package.source]
-type = "git"
-url = "https://github.com/sdss/lvmopstools.git"
-reference = "main"
-resolved_reference = "033369cf7094833f06ae65638bb2ce9a2bafaea4"
 
 [[package]]
 name = "makefun"
@@ -2566,4 +2562,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4.0"
-content-hash = "634a76a8f493bfa9871c073ac6b20381c789e040c6a2203e8d693aeab228b209"
+content-hash = "c37567c02a07afe283510f535ec73b8e4f1e5d54e82fdcc5125038b080504821"
