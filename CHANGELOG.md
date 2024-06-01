@@ -1,5 +1,14 @@
 # Changelog
 
+## Next version
+
+### ✨ Improved
+
+* Use `LVMActor` class.
+* Added `_check_internal` and `_troubleshoot_internal` methods for automated troubleshooting.
+* Speed up checks when verification fails.
+
+
 ## 1.0.3 - November 24, 2023
 
 ### ✨ Improved
