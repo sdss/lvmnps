@@ -104,7 +104,7 @@ class NPSActor(LVMActor):
 
         self.nps = get_nps_from_config(self.config)
 
-        self.restart_after = 30
+        self.restart_after = 300
         self.restart_mode = "exit"
 
     async def start(self, **kwargs):  # pragma: no cover
