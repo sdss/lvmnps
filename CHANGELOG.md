@@ -10,6 +10,7 @@
 ### 🔧 Fixed
 
 * Restart the actor if it fails to set up the NPS.
+* Upgrade to `lvmopstools>=0.5.6` to fix a bug that could cause the actor to hang when trying to restart it.
 
 ### ⚙️ Engineering
 

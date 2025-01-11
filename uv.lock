@@ -805,7 +805,7 @@ wheels = [
 
 [[package]]
 name = "lvmopstools"
-version = "0.5.5"
+version = "0.5.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aio-pika" },
@@ -823,9 +823,9 @@ dependencies = [
     { name = "strenum" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cb/f2/3586a60bc52d847715b5bd1edac479e0ab334101c976cec52af3f387528a/lvmopstools-0.5.5.tar.gz", hash = "sha256:35ba56f68e9a2ae03ad372387cf5d6e233da203a779fd216c275ad055fbdc980", size = 130720 }
+sdist = { url = "https://files.pythonhosted.org/packages/27/a5/adac19ec225a6ff758e1524c970c621e220fe3cae1d01da948498dbbb3e7/lvmopstools-0.5.6.tar.gz", hash = "sha256:6b8a19c665199e98878c326537967541d251578f19f56a3a71c8eef5ba87238b", size = 130717 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e9/b8/c4489945d1dcbe46b4c33c1754139e641da53fd230f86ca38548b0c543eb/lvmopstools-0.5.5-py3-none-any.whl", hash = "sha256:8913772cde5ce744ac03e0bac0aa34455b799734057d712501867fba063a41d1", size = 138911 },
+    { url = "https://files.pythonhosted.org/packages/2e/7d/e165190d49e3b4610ab8f4bc7bd1fe84831b20e4c6bb74d8dec36d50f8ce/lvmopstools-0.5.6-py3-none-any.whl", hash = "sha256:ec2a1043e7816065e9909432d194bf0baa6231ac6930c1a6b254fb58baf6a029", size = 138902 },
 ]
 
 [[package]]
@@ -1806,7 +1806,7 @@ dev = [
 requires-dist = [
     { name = "click-default-group", specifier = ">=1.2.2" },
     { name = "httpx", specifier = ">=0.28.1" },
-    { name = "lvmopstools", specifier = ">=0.2.0" },
+    { name = "lvmopstools", specifier = ">=0.5.6" },
     { name = "pydantic", specifier = ">=2.5.2" },
     { name = "sdss-clu", specifier = ">=2.4.3" },
     { name = "sdsstools", specifier = ">=1.9.1" },

@@ -19,7 +19,7 @@ dependencies = [
     "sdss-clu>=2.4.3",
     "httpx>=0.28.1",
     "pydantic>=2.5.2",
-    "lvmopstools>=0.2.0",
+    "lvmopstools>=0.5.6",
 
 ]
 
