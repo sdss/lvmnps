@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import pathlib
 from os import PathLike
 
@@ -35,7 +36,7 @@ __all__ = ["NPSActor"]
 AnyPath = str | PathLike[str]
 
 
-CHECK_INTERVAL: float = 30
+CHECK_INTERVAL: float = 5
 
 NPSErrorCodes = create_error_codes(
     {
@@ -110,7 +111,14 @@ class NPSActor(LVMActor):
     async def start(self, **kwargs):  # pragma: no cover
         """Starts the actor."""
 
-        await self.nps.setup()
+        try:
+            await self.nps.setup()
+        except Exception as err:
+            self.log.error(f"Failed to setup NPS: {err}")
+            self.log.error("Waiting 10 seconds and restarting ...")
+
+            await asyncio.sleep(10)
+            await self.restart()
 
         return await super().start(**kwargs)
 

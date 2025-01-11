@@ -7,6 +7,10 @@
 * Restart the actor when it has been errored for 300 seconds instead of 30
 * Set default DLI request timeout to 3 seconds.
 
+### 🔧 Fixed
+
+* Restart the actor if it fails to set up the NPS.
+
 ### ⚙️ Engineering
 
 * Use `uv` for package management. Updated workflows and Dockerfile.
