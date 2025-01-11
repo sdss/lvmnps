@@ -6,6 +6,10 @@
 
 * Restart the actor when it has been errored for 300 seconds instead of 30
 
+### ⚙️ Engineering
+
+* Use `uv` for package management. Updated workflows and Dockerfile.
+
 
 ## 1.1.0 - June 1, 2024
 

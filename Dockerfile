@@ -1,18 +1,18 @@
-FROM python:3.11-slim-bullseye
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
 
-MAINTAINER Jose Sanchez-Gallego, gallegoj@uw.ed
-LABEL org.opencontainers.image.source https://github.com/sdss/lvmnps
+LABEL org.opencontainers.image.authors="Jose Sanchez-Gallego, gallegoj@uw.edu"
+LABEL org.opencontainers.image.source=https://github.com/sdss/lvmnps
 
 WORKDIR /opt
 
-# RUN apt-get update
-# RUN apt-get install -y git
-
 COPY . lvmnps
 
-RUN pip3 install -U pip setuptools wheel
-RUN cd lvmnps && pip3 install .
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 
-RUN rm -Rf lvmnps
+ENV PATH="$PATH:/opt/lvmnps/.venv/bin"
+
+# Sync the project
+RUN cd lvmnps && uv sync --frozen --no-cache
 
 ENTRYPOINT lvmnps actor start --debug

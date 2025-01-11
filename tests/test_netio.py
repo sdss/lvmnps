@@ -35,7 +35,7 @@ async def test_netio_verification_fails(
     netio_client: NetIOClient,
     httpx_mock: HTTPXMock,
 ):
-    httpx_mock.reset(False)
+    httpx_mock.reset()
     httpx_mock.add_response(url=re.compile(r"http://.+?/netio.json"), status_code=500)
 
     with pytest.warns(NPSWarning):
@@ -48,7 +48,7 @@ async def test_netio_verification_connection_error(
     netio_client: NetIOClient,
     httpx_mock: HTTPXMock,
 ):
-    httpx_mock.reset(False)
+    httpx_mock.reset()
     httpx_mock.add_exception(httpx.ConnectError("Connection failed"))
 
     with pytest.raises(VerificationError):
@@ -105,6 +105,6 @@ async def test_dli_set_state_off_after(
 
     requests = httpx_mock.get_requests()
     body = requests[-2].read()
-    assert body == b'{"Outputs": [{"ID": 3, "Action": 3, "Delay": 1000}]}'
+    assert body == b'{"Outputs":[{"ID":3,"Action":3,"Delay":1000}]}'
 
     assert netio_client.get(3).state is False

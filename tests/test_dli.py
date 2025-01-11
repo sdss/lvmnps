@@ -32,7 +32,7 @@ async def test_dli(dli_client: DLIClient):
 
 
 async def test_dli_verification_fails(dli_client: DLIClient, httpx_mock: HTTPXMock):
-    httpx_mock.reset(False)
+    httpx_mock.reset()
     httpx_mock.add_response(url=re.compile(r"http://.+?/restapi/"), status_code=500)
 
     with pytest.warns(NPSWarning):
@@ -45,7 +45,7 @@ async def test_dli_verification_connection_error(
     dli_client: DLIClient,
     httpx_mock: HTTPXMock,
 ):
-    httpx_mock.reset(False)
+    httpx_mock.reset()
     httpx_mock.add_exception(httpx.ConnectError("Connection failed"))
 
     with pytest.raises(VerificationError):
