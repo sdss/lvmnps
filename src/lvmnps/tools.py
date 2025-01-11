@@ -39,6 +39,7 @@ class APIClient:
     base_url: str
     user: str
     password: SecretStr
+    timeout: float = 3
 
     auth_method: Literal["digest", "basic"] = "digest"
 
@@ -64,6 +65,7 @@ class APIClient:
             auth=auth,
             base_url=self.base_url,
             headers={},
+            timeout=self.timeout,
         )
 
         return self.client

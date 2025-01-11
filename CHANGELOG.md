@@ -5,6 +5,7 @@
 ### 🏷️ Changed
 
 * Restart the actor when it has been errored for 300 seconds instead of 30
+* Set default DLI request timeout to 3 seconds.
 
 ### ⚙️ Engineering
 
