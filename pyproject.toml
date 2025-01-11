@@ -1,6 +1,6 @@
 [project]
 name = "sdss-lvmnps"
-version = "1.1.1a0"
+version = "1.2.0"
 description = "A library and actor to communicate with an SDSS-V LVM network power switch"
 authors = [
     { name = "Florian Briegel", email = "briegel@mpia.de" },
