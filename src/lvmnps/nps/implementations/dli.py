@@ -54,7 +54,6 @@ class DLIClient(NPSClient):
             self.user,
             self.password,
             auth_method="digest",
-            timeout=3,
         )
 
         self.outlets: dict[str, DLIOutletModel] = {}
