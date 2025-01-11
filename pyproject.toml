@@ -29,7 +29,7 @@ Repository = "https://github.com/sdss/lvmnps"
 Documentation = "https://lvmnps.readthedocs.org"
 
 
-[scripts]
+[project.scripts]
 lvmnps = "lvmnps.__main__:main"
 
 [dependency-groups]
