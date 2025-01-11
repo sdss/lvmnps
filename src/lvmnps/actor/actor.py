@@ -129,7 +129,6 @@ class NPSActor(LVMActor):
             if result is False:
                 raise VerificationError("NPS verification failed.")
         except Exception as err:
-            self.check_interval = 5  # Speed up checks
             raise CheckError(str(err), error_code=NPSErrorCodes.VERIFICATION_FAILED)
 
         self.check_interval = CHECK_INTERVAL
