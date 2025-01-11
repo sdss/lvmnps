@@ -15,4 +15,4 @@ ENV PATH="$PATH:/opt/lvmnps/.venv/bin"
 # Sync the project
 RUN cd lvmnps && uv sync --frozen --no-cache
 
-ENTRYPOINT lvmnps actor start --debug
+ENTRYPOINT ["/opt/lvmnps/.venv/bin/lvmnps", "actor", "start", "--debug"]
