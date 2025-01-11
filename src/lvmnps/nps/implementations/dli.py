@@ -54,6 +54,7 @@ class DLIClient(NPSClient):
             self.user,
             self.password,
             auth_method="digest",
+            timeout=3,
         )
 
         self.outlets: dict[str, DLIOutletModel] = {}
@@ -70,8 +71,7 @@ class DLIClient(NPSClient):
             await self.verify()
         except VerificationError as err:
             warnings.warn(
-                "Cannot setup DLI. Power switch "
-                f"verification failed with error: {err}",
+                f"Cannot setup DLI. Power switch verification failed with error: {err}",
                 NPSWarning,
             )
             return
@@ -155,7 +155,7 @@ class DLIClient(NPSClient):
         return
 
     async def list_scripts(self):
-        "Retrieves the list of user scripts." ""
+        "Retrieves the list of user scripts."
 
         async with self.api_client as client:
             response = await client.get(url="/script/user_functions/")
