@@ -1,5 +1,12 @@
 # Changelog
 
+## Next release
+
+### ✨ Improved
+
+* Change default check interval to 60 seconds. This can be configured using the `check_interval` parameter when initializing the actor.
+
+
 ## 1.2.0 - January 11, 2025
 
 ### 🏷️ Changed

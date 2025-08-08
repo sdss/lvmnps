@@ -36,8 +36,6 @@ __all__ = ["NPSActor"]
 AnyPath = str | PathLike[str]
 
 
-CHECK_INTERVAL: float = 5
-
 NPSErrorCodes = create_error_codes(
     {
         "VERIFICATION_FAILED": ErrorData(
@@ -84,11 +82,14 @@ class NPSActor(LVMActor):
 
     parser = lvmnps_command_parser
 
+    CHECK_INTERVAL: float | None = None
+
     def __init__(
         self,
         *args,
         schema: AnyPath | None = None,
         log: SDSSLogger | None = None,
+        check_interval: float | None = None,
         **kwargs,
     ):
         cwd = pathlib.Path(__file__).parent
@@ -107,6 +108,8 @@ class NPSActor(LVMActor):
 
         self.restart_after = 300
         self.restart_mode = "exit"
+
+        self.CHECK_INTERVAL = check_interval or 60
 
     async def start(self, **kwargs):  # pragma: no cover
         """Starts the actor."""
@@ -139,7 +142,7 @@ class NPSActor(LVMActor):
         except Exception as err:
             raise CheckError(str(err), error_code=NPSErrorCodes.VERIFICATION_FAILED)
 
-        self.check_interval = CHECK_INTERVAL
+        self.check_interval = self.CHECK_INTERVAL
         return True
 
     async def _troubleshoot_internal(
