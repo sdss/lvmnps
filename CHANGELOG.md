@@ -5,6 +5,7 @@
 ### ✨ Improved
 
 * Change default check interval to 60 seconds. This can be configured using the `check_interval` parameter when initializing the actor.
+* Update `lvmopstools` to 0.5.18.
 
 
 ## 1.2.0 - January 11, 2025
