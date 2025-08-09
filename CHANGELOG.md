@@ -1,6 +1,6 @@
 # Changelog
 
-## Next release
+## 1.2.1 - August 9, 2025
 
 ### ✨ Improved
 
