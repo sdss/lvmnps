@@ -18,7 +18,7 @@ from pytest_httpx import HTTPXMock
 from pytest_mock import MockerFixture
 
 from clu.testing import setup_test_actor
-from sdsstools import read_yaml_file
+from sdsstools import Configuration, read_yaml_file
 
 from lvmnps.actor.actor import NPSActor
 from lvmnps.nps import DLIClient
@@ -96,7 +96,10 @@ dli_default_outlets = [
 
 @pytest.fixture
 def lvmnps_config():
-    yield read_yaml_file(pathlib.Path(__file__).parent / "./config.yaml")
+    yield read_yaml_file(
+        pathlib.Path(__file__).parent / "./config.yaml",
+        return_class=Configuration,
+    )
 
 
 @pytest.fixture
